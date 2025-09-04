@@ -796,3 +796,6 @@ set_property SLEW SLOW [get_ports led_light]
 
 set_property PACKAGE_PIN C3 [get_ports CLK25MHZ]
 set_property IOSTANDARD LVCMOS18 [get_ports CLK25MHZ]
+
+set_property PACKAGE_PIN AB10 [get_ports uart_tx]
+set_property IOSTANDARD LVCMOS33 [get_ports uart_tx]
