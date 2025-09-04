@@ -68,7 +68,6 @@
 #set_property PACKAGE_PIN W14      [get_ports "som240_2_b54"] ;# Bank  44 VCCO - som240_2_d59 - IO_L9P_AD11P_44
 #set_property PACKAGE_PIN AB14     [get_ports "som240_2_b58"] ;# Bank  44 VCCO - som240_2_d59 - IO_L8N_HDGC_44
 #set_property IOSTANDARD LVCMOS33 [get_ports "som240_2_b58"]
-set_property IOSTANDARD LVCMOS33 [get_ports led_light]
 #set_property PACKAGE_PIN AB15     [get_ports "som240_2_b57"] ;# Bank  44 VCCO - som240_2_d59 - IO_L8P_HDGC_44
 #set_property PACKAGE_PIN AB13     [get_ports "som240_2_b53"] ;# Bank  44 VCCO - som240_2_d59 - IO_L7N_HDGC_44
 #set_property PACKAGE_PIN AA13     [get_ports "som240_2_b52"] ;# Bank  44 VCCO - som240_2_d59 - IO_L7P_HDGC_44
@@ -788,11 +787,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports led_light]
 ##Other net   PACKAGE_PIN T18      - VCC_PS_1V20               Bank 999 - VCC_PSPLL
 
 
-set_property DRIVE 12 [get_ports led_light]
-set_property PACKAGE_PIN AG14 [get_ports led_light]
 
 
-set_property SLEW SLOW [get_ports led_light]
 
-set_property PACKAGE_PIN C3 [get_ports CLK25MHZ]
-set_property IOSTANDARD LVCMOS18 [get_ports CLK25MHZ]
+
+set_property PACKAGE_PIN AG14 [get_ports led]
+set_property IOSTANDARD LVCMOS33 [get_ports led]
+set_property SLEW SLOW [get_ports led]

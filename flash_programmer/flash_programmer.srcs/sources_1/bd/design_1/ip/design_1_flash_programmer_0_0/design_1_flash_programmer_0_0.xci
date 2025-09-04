@@ -1,0 +1,48 @@
+{
+  "schema": "xilinx.com:schema:json_instance:1.0",
+  "ip_inst": {
+    "xci_name": "design_1_flash_programmer_0_0",
+    "cell_name": "flash_programmer_0",
+    "component_reference": "xilinx.com:module_ref:flash_programmer:1.0",
+    "ip_revision": "1",
+    "gen_directory": "../../../../../../flash_programmer.gen/sources_1/bd/design_1/ip/design_1_flash_programmer_0_0",
+    "parameters": {
+      "component_parameters": {
+        "MAX_COUNT": [ { "value": "25000000", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "Component_Name": [ { "value": "design_1_flash_programmer_0_0", "resolve_type": "user", "usage": "all" } ]
+      },
+      "model_parameters": {
+        "MAX_COUNT": [ { "value": "25000000", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+      },
+      "project_parameters": {
+        "ARCHITECTURE": [ { "value": "zynquplus" } ],
+        "BASE_BOARD_PART": [ { "value": "xilinx.com:kr260_som:part0:1.1" } ],
+        "BOARD_CONNECTIONS": [ { "value": "" } ],
+        "DEVICE": [ { "value": "xck26" } ],
+        "PACKAGE": [ { "value": "sfvc784" } ],
+        "PREFHDL": [ { "value": "VERILOG" } ],
+        "SILICON_REVISION": [ { "value": "" } ],
+        "SIMULATOR_LANGUAGE": [ { "value": "MIXED" } ],
+        "SPEEDGRADE": [ { "value": "-2LV" } ],
+        "STATIC_POWER": [ { "value": "" } ],
+        "TEMPERATURE_GRADE": [ { "value": "C" } ]
+      },
+      "runtime_parameters": {
+        "IPCONTEXT": [ { "value": "IP_Integrator" } ],
+        "IPREVISION": [ { "value": "1" } ],
+        "MANAGED": [ { "value": "TRUE" } ],
+        "OUTPUTDIR": [ { "value": "../../../../../../flash_programmer.gen/sources_1/bd/design_1/ip/design_1_flash_programmer_0_0" } ],
+        "SELECTEDSIMMODEL": [ { "value": "" } ],
+        "SHAREDDIR": [ { "value": "../../ipshared" } ],
+        "SWVERSION": [ { "value": "2025.1" } ],
+        "SYNTHESISFLOW": [ { "value": "OOC_HIERARCHICAL" } ]
+      }
+    },
+    "boundary": {
+      "ports": {
+        "led_light": [ { "direction": "out" } ],
+        "CLK25MHZ": [ { "direction": "in" } ]
+      }
+    }
+  }
+}
