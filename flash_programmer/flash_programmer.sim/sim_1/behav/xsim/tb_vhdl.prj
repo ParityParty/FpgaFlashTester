@@ -1,0 +1,10 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../flash_programmer.srcs/sources_1/imports/VHDL/onfi_package.vhd" \
+"../../../../flash_programmer.srcs/sources_1/imports/VHDL/io_unit.vhd" \
+"../../../../flash_programmer.srcs/sources_1/imports/VHDL/latch_unit.vhd" \
+"../../../../flash_programmer.srcs/sources_1/imports/VHDL/nand_master.vhd" \
+"../../../../flash_programmer.srcs/sim_1/imports/VHDL/testbench.vhd" \
+
+# Do not sort compile order
+nosort

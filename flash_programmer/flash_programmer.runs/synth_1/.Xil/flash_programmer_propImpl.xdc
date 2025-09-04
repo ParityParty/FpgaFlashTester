@@ -1,0 +1,5 @@
+set_property SRC_FILE_INFO {cfile:/home/agata/flash_programmer/flash_programmer.srcs/constrs_1/imports/new/constaint.xdc rfile:../../../flash_programmer.srcs/constrs_1/imports/new/constaint.xdc id:1} [current_design]
+set_property src_info {type:XDC file:1 line:792 export:INPUT save:INPUT read:READ} [current_design]
+set_property PACKAGE_PIN AG14 [get_ports led_light]
+set_property src_info {type:XDC file:1 line:797 export:INPUT save:INPUT read:READ} [current_design]
+set_property PACKAGE_PIN C3 [get_ports CLK25MHZ]

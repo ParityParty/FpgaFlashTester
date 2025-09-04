@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Wed May 21 22:58:25 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Thu Sep  4 11:01:47 2025
+# Process ID         : 10034
+# Current directory  : /home/agata/flash_programmer/flash_programmer.runs/synth_1
+# Command line       : vivado -log flash_programmer.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source flash_programmer.tcl
+# Log file           : /home/agata/flash_programmer/flash_programmer.runs/synth_1/flash_programmer.vds
+# Journal file       : /home/agata/flash_programmer/flash_programmer.runs/synth_1/vivado.jou
+# Running On         : agata
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.2 LTS
+# Processor Detail   : 12th Gen Intel(R) Core(TM) i5-1235U
+# CPU Frequency      : 399.502 MHz
+# CPU Physical cores : 10
+# CPU Logical cores  : 12
+# Host memory        : 7996 MB
+# Swap memory        : 2147 MB
+# Total Virtual      : 10143 MB
+# Available Virtual  : 1238 MB
+#-----------------------------------------------------------
+source flash_programmer.tcl -notrace
