@@ -153,7 +153,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity flash_programmer is
     Generic (
-        MAX_COUNT : integer := 25000000;
+        MAX_COUNT : integer := 25000000 * 5;
         DELAY_MAX_COUNT : integer := 25000000
     );
     Port (
@@ -170,7 +170,10 @@ entity flash_programmer is
     nand_nre				: out std_logic := '1';
     nand_rnb				: in	std_logic;
     -- NAND chip data hardware interface. These signals should be boiund to physical pins.
-    nand_data			: inout	std_logic_vector(15 downto 0)
+    nand_data			: inout	std_logic_vector(15 downto 0);
+    
+    -- Debug
+        dbg_state   : out std_logic_vector(3 downto 0)
     );
 end flash_programmer;
 
@@ -218,9 +221,12 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, ENABLE_ARM, ENABLE_RELEASE, READ_ARM, READ_RELEASE, DELAY);
+	type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV, READ, EXTRACT, EXTRACT_READBYTE, DELAY);
 	signal state : STATE_TYPE := INIT;
+	signal next_state : STATE_TYPE;
 	signal delay_counter : integer := 0;
+	
+	signal startup_done : std_logic := '0';
 begin
     uart_tx_inst : entity work.UART_TX
         port map (
@@ -252,11 +258,29 @@ begin
 		activate => activate,
 		cmd_in   => cmd_in
 	);
+	
+	process(state)
+    begin
+        case state is
+            when INIT             => dbg_state <= "0000";
+            when RELEASE          => dbg_state <= "0001";
+            when CTRL_BUSY        => dbg_state <= "0010";
+            when RESET_DEV        => dbg_state <= "0011";
+            when ENABLE_DEV           => dbg_state <= "0100";
+            when READ             => dbg_state <= "0101";
+            when EXTRACT          => dbg_state <= "0110";
+            when EXTRACT_READBYTE => dbg_state <= "0111";
+            when DELAY            => dbg_state <= "1000";
+            when others           => dbg_state <= "1111";
+        end case;
+    end process;
         
     process(CLK25MHZ)
     begin
     clk_monitor <= CLK25MHZ;
     if CLK25MHZ'event and CLK25MHZ = '1' then
+    
+        led_light <= '0';
     
         if i_TX_DV = '1' then
             i_TX_DV <= '0';
@@ -264,13 +288,14 @@ begin
         
         if counter = MAX_COUNT then
             counter <= 1;
-            led_light <= led_state;
-            led_state <= not led_state;
+--            led_light <= led_state;
+--            led_state <= not led_state;
             
-            if o_TX_Active = '0' and i_TX_DV = '0' then
-                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
-                i_TX_DV <= '1';
-            end if;
+--            if o_TX_Active = '0' and i_TX_DV = '0' then
+--                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
+--                i_TX_DV <= '1';
+--            end if;
+            startup_done <= '1';
         else 
             counter <= counter + 1;
         end if;
@@ -282,29 +307,58 @@ begin
             when INIT =>
                 nreset <= '1';
                 nand_data <= "ZZZZZZZZZZZZZZZZ";
-                state <= ENABLE_ARM;
                 
-            when ENABLE_ARM =>
-                cmd_in <= x"09";
-                state <= ENABLE_RELEASE;
-                
-            when ENABLE_RELEASE =>
+                if startup_done = '1' then
+                    cmd_in <= x"00";
+                    next_state <= ENABLE_DEV;
+                    state <= RELEASE;
+               end if;         
+            when RELEASE =>
                 activate <= '1';
-                state <= READ_ARM;
+                state <= CTRL_BUSY;
+            
+            when CTRL_BUSY =>
+                if busy = '0' then
+                    state <= next_state;
+                end if;
                 
-            when READ_ARM =>
+            when ENABLE_DEV =>
+                cmd_in <= x"09";
+                next_state <= RESET_DEV;
+                state <= RELEASE;
+            
+            when RESET_DEV =>
+                cmd_in <= x"01";
+                next_state <= READ;
+                state <= RELEASE;
+                
+            when READ =>
                 data_in <= x"00";
 		        cmd_in <= x"03";
-		        state <= READ_RELEASE;
-            
-            when READ_RELEASE =>
-                activate <= '1';
+		        next_state <= EXTRACT;
+		        state <= RELEASE;
+                
+            when EXTRACT =>
+                cmd_in <= x"08";
+--                cmd_in <= x"0e";
+                next_state <= EXTRACT_READBYTE;
+                state <= RELEASE;
+                
+            when EXTRACT_READBYTE =>
+                if o_TX_Active = '0' and i_TX_DV = '0' then
+                    i_TX_Byte <= data_out;
+                    i_TX_DV <= '1';
+                end if;
                 state <= DELAY;
                 
             when DELAY =>
+                led_light <= '1';
+                
                 if delay_counter = DELAY_MAX_COUNT then
                     delay_counter <= 0;
-                    state <= READ_ARM;
+--                    cmd_in <= x"00";
+                    state <= READ;
+--                    state <= RELEASE;
                 else 
                     delay_counter <= delay_counter + 1;
                 end if;
