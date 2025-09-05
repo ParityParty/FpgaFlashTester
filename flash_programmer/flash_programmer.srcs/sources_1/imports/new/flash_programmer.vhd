@@ -153,24 +153,74 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity flash_programmer is
     Generic (
-        MAX_COUNT : integer := 25000000
+        MAX_COUNT : integer := 25000000;
+        DELAY_MAX_COUNT : integer := 25000000
     );
     Port (
     led_light : out STD_LOGIC;
     CLK25MHZ  : in  STD_LOGIC;
-    uart_tx : out STD_LOGIC
+    uart_tx : out STD_LOGIC;
+    clk_monitor : out std_logic;
+    
+    nand_cle				: out	std_logic := '0';
+    nand_ale				: out	std_logic := '0';
+    nand_nwe				: out	std_logic := '1';
+    nand_nwp				: out	std_logic := '0';
+    nand_nce				: out	std_logic := '1';
+    nand_nre				: out std_logic := '1';
+    nand_rnb				: in	std_logic;
+    -- NAND chip data hardware interface. These signals should be boiund to physical pins.
+    nand_data			: inout	std_logic_vector(15 downto 0)
     );
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
-     signal state : std_logic := '0';
+     signal led_state : std_logic := '0';
      
  signal i_TX_DV : std_logic := '0';         -- Data Valid for Transmission
     signal i_TX_Byte : std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
     signal o_TX_Active : std_logic := '0';
     signal o_TX_Serial : std_logic := '1';
     signal o_TX_Done : std_logic := '0';
+    
+    component nand_master
+		port
+		(
+			-- System clock
+			clk					: in	std_logic;
+			enable : in std_logic;
+			-- NAND chip control hardware interface. These signals should be bound to physical pins.
+			nand_cle				: out	std_logic := '0';
+			nand_ale				: out	std_logic := '0';
+			nand_nwe				: out	std_logic := '1';
+			nand_nwp				: out	std_logic := '0';
+			nand_nce				: out	std_logic := '1';
+			nand_nre				: out std_logic := '1';
+			nand_rnb				: in	std_logic;
+			-- NAND chip data hardware interface. These signals should be boiund to physical pins.
+			nand_data			: inout	std_logic_vector(15 downto 0);
+			
+			-- Component interface
+			nreset				: in	std_logic := '1';
+			data_out				: out	std_logic_vector(7 downto 0);
+			data_in				: in	std_logic_vector(7 downto 0);
+			busy					: out	std_logic := '0';
+			activate				: in	std_logic := '0';
+			cmd_in				: in	std_logic_vector(7 downto 0)
+		);
+	end component;
+	
+	signal nreset   : std_logic := '1';
+	signal data_out : std_logic_vector(7 downto 0);
+	signal data_in  : std_logic_vector(7 downto 0);
+	signal busy     : std_logic;
+	signal activate : std_logic;
+	signal cmd_in   : std_logic_vector(7 downto 0);
+	
+	type STATE_TYPE is (INIT, ENABLE_ARM, ENABLE_RELEASE, READ_ARM, READ_RELEASE, DELAY);
+	signal state : STATE_TYPE := INIT;
+	signal delay_counter : integer := 0;
 begin
     uart_tx_inst : entity work.UART_TX
         port map (
@@ -182,8 +232,30 @@ begin
             o_TX_Done   => o_TX_Done
         );
         
+    NM:nand_master
+	port map
+	(
+		clk => CLK25MHZ,
+		enable => '0',
+		nand_cle => nand_cle,
+		nand_ale => nand_ale,
+		nand_nwe => nand_nwe,
+		nand_nwp => nand_nwp,
+		nand_nce => nand_nce,
+		nand_nre => nand_nre,
+		nand_rnb => nand_rnb,
+		nand_data=> nand_data,
+		nreset   => nreset,
+		data_out => data_out,
+		data_in  => data_in,
+		busy     => busy,
+		activate => activate,
+		cmd_in   => cmd_in
+	);
+        
     process(CLK25MHZ)
     begin
+    clk_monitor <= CLK25MHZ;
     if CLK25MHZ'event and CLK25MHZ = '1' then
     
         if i_TX_DV = '1' then
@@ -192,8 +264,8 @@ begin
         
         if counter = MAX_COUNT then
             counter <= 1;
-            led_light <= state;
-            state <= not state;
+            led_light <= led_state;
+            led_state <= not led_state;
             
             if o_TX_Active = '0' and i_TX_DV = '0' then
                 i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
@@ -201,6 +273,44 @@ begin
             end if;
         else 
             counter <= counter + 1;
+        end if;
+        
+        if activate = '1' then
+            activate <= '0';
+        else
+            case state is
+            when INIT =>
+                nreset <= '1';
+                nand_data <= "ZZZZZZZZZZZZZZZZ";
+                state <= ENABLE_ARM;
+                
+            when ENABLE_ARM =>
+                cmd_in <= x"09";
+                state <= ENABLE_RELEASE;
+                
+            when ENABLE_RELEASE =>
+                activate <= '1';
+                state <= READ_ARM;
+                
+            when READ_ARM =>
+                data_in <= x"00";
+		        cmd_in <= x"03";
+		        state <= READ_RELEASE;
+            
+            when READ_RELEASE =>
+                activate <= '1';
+                state <= DELAY;
+                
+            when DELAY =>
+                if delay_counter = DELAY_MAX_COUNT then
+                    delay_counter <= 0;
+                    state <= READ_ARM;
+                else 
+                    delay_counter <= delay_counter + 1;
+                end if;
+                
+--            when others => null;
+            end case;
         end if;
     end if;
     end process;

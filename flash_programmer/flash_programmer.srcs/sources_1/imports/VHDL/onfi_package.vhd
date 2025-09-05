@@ -17,7 +17,7 @@ use ieee.std_logic_1164.all;
 package onfi is
 	-- Clock cycle length in ns
 	-- IMPORTANT!!! The 'clock_cycle' is configured for 400MHz, change it appropriately!
-	constant clock_cycle	: real := 2.5;
+	constant clock_cycle	: real := 40.0;
 
 	-- NAND interface delays.
 	-- Delays of 7.5ns may need to be fixed to 7.0.
