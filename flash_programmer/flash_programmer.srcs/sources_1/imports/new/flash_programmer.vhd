@@ -223,13 +223,24 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV, RESET_CTRL, READ_PARAM, READ_ID, EXTRACT, EXTRACT_READBYTE, DELAY);
+	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, DELAY);
+	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
+	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ);
+	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, ENABLE_WP);
+	
 --    type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV,  READ, EXTRACT, EXTRACT_READBYTE, DELAY);
 	signal state : STATE_TYPE := INIT;
+	signal init_substate :INIT_SUBSTATE_TYPE := INIT_START;
+	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
+	signal write_substate : WRITE_SUBSTATE_TYPE := WRITE_START;
+	
 	signal next_state : STATE_TYPE;
 	signal delay_counter : integer := 0;
 	
 	signal startup_done : std_logic := '0';
+	signal address_bytes_counter : integer := 0;
+	signal data_bytes_counter : integer := 0;
+	signal reset_index : std_logic := '0';
 begin
     uart_tx_inst : entity work.UART_TX
         port map (
@@ -319,53 +330,153 @@ begin
         else
             case state is
             when INIT =>
-                nreset <= '1';
-                nand_data <= "ZZZZZZZZZZZZZZZZ";
-                
-                if startup_done = '1' then
-                    cmd_in <= x"00";
-                    next_state <= ENABLE_DEV;
+            
+                case init_substate is
+                when INIT_START =>
+                    nreset <= '1';
+                    nand_data <= "ZZZZZZZZZZZZZZZZ";
+                    next_state <= INIT;
+                    
+                    if startup_done = '1' then
+                        cmd_in <= x"00";
+                        init_substate <= ENABLE_DEV;
+                        state <= RELEASE;
+                   end if;
+                   
+               -- Enable device
+                when ENABLE_DEV =>
+                    cmd_in <= x"09";
+                    init_substate <= RESET_DEV;
                     state <= RELEASE;
-               end if;         
+                
+                -- Reset device
+                when RESET_DEV =>
+                    cmd_in <= x"01";
+                    init_substate <= READ_PARAM;
+                    state <= RELEASE;
+                
+                -- Read the parameter page
+                when READ_PARAM =>
+                    data_in <= x"00";
+                    cmd_in <= x"02";
+                    init_substate <= READ_ID;
+                    state <= RELEASE;
+                
+                -- Read the device ID
+                when READ_ID =>
+                    data_in <= x"00";
+                    cmd_in <= x"03";
+                    next_state <= WRITE_PAGE;
+                    state <= RELEASE;
+               end case;
+            
+            -- These two states are responsible for releasing the command in cmd_in
+            -- and waitng until done
             when RELEASE =>
                 activate <= '1';
                 state <= CTRL_BUSY;
-            
             when CTRL_BUSY =>
                 if busy = '0' then
-                    state <= next_state;
+                    if reset_index = '1' then
+                        state <= INDEX_RESET;
+                    else
+                        state <= next_state;
+                    end if;
                 end if;
-                
-            when ENABLE_DEV =>
-                cmd_in <= x"09";
-                next_state <= RESET_DEV;
+            when INDEX_RESET =>
+                cmd_in <= x"0d";
+                reset_index <= '0';
                 state <= RELEASE;
-            
-            when RESET_DEV =>
-                cmd_in <= x"01";
-                next_state <= READ_PARAM;
-                state <= RELEASE;
-            
-            when READ_PARAM =>
-                data_in <= x"00";
-		        cmd_in <= x"02";
-		        next_state <= READ_ID;
-		        state <= RELEASE;
                 
-            when READ_ID =>
-                data_in <= x"00";
-		        cmd_in <= x"03";
-		        next_state <= RESET_CTRL;
-		        state <= RELEASE;
+            when WRITE_PAGE =>
+                case write_substate is
+                when WRITE_START =>
+                    address_bytes_counter <= 5;
+                    write_substate <= ERASE_LOAD_ADDR;
+                    state <= INDEX_RESET;
+                    
+                when ERASE_LOAD_ADDR =>
+                    data_in <= x"00";
+                    cmd_in <= x"13";
+                    address_bytes_counter <= address_bytes_counter - 1;
+                    state <= RELEASE;
+                    if address_bytes_counter = 1 then
+                      write_substate <= DISABLE_WP;
+                    end if;
+                
+                when DISABLE_WP =>
+                    cmd_in <= x"0c";
+                    write_substate <= ERASE;
+                    state <= RELEASE;
+                    
+                when ERASE =>
+                    cmd_in <= x"04";
+                    write_substate <= PROGRAM_LOAD_ADDR;
+                    reset_index <= '1';
+                    address_bytes_counter <= 5;
+                    state <= RELEASE;
+                    
+                when PROGRAM_LOAD_ADDR =>
+                    data_in <= x"00";
+                    cmd_in <= x"13";
+                    address_bytes_counter <= address_bytes_counter - 1;
+                    state <= RELEASE;
+                    if address_bytes_counter = 1 then
+                      write_substate <= PROGRAM_WRITE_BYTE;
+                      data_bytes_counter <= 8640;
+                      reset_index <= '1';
+                    end if;
+                
+                when PROGRAM_WRITE_BYTE =>
+                    data_in <= x"AA";
+                    cmd_in <= x"11";
+                    data_bytes_counter <= data_bytes_counter - 1;
+                    state <= RELEASE;
+                    if data_bytes_counter = 1 then
+                      write_substate <= PROGRAM;
+                    end if;
+                    
+                when PROGRAM =>
+                    cmd_in <= x"07";
+                    write_substate <= ENABLE_WP;
+                    state <= RELEASE;
+                    
+                when ENABLE_WP =>
+                    cmd_in <= x"0b";
+                    next_state <= READ_PAGE;
+                    state <= RELEASE;
+                    
+                end case;
+                
+            when READ_PAGE =>
+                case read_substate is
+                
+                when READ_START =>
+                    address_bytes_counter <= 5;
+                    read_substate <= READ_LOAD_ADDR;
+                    state <= INDEX_RESET;
+                    
+                
+                when READ_LOAD_ADDR =>
+                    data_in <= x"00";
+                    cmd_in <= x"13";
+                    address_bytes_counter <= address_bytes_counter - 1;
+                    state <= RELEASE;
+                    if address_bytes_counter = 1 then
+                      read_substate <= READ;
+                    end if;
 		    
-		    when RESET_CTRL =>
-		        cmd_in <= x"0d";
-		        next_state <= EXTRACT;
-		        state <= RELEASE;
+                when READ =>
+                    data_in <= x"00";
+                    cmd_in <= x"06";
+                    reset_index <= '1';
+                    next_state <= EXTRACT;
+                    state <= RELEASE;
+                end case;
                 
             when EXTRACT =>
-                cmd_in <= x"08";
---                cmd_in <= x"0e";
+--                cmd_in <= x"08";
+                cmd_in <= x"10";
                 next_state <= EXTRACT_READBYTE;
                 state <= RELEASE;
                 
@@ -373,7 +484,8 @@ begin
                 if o_TX_Active = '0' and i_TX_DV = '0' then
                     i_TX_Byte <= data_out;
                     i_TX_DV <= '1';
-                    state <= DELAY;
+--                    state <= DELAY;
+                    state <= EXTRACT;
                 end if;
                 
             when DELAY =>

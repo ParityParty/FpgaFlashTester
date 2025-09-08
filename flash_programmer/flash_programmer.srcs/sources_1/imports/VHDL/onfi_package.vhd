@@ -99,11 +99,13 @@ package onfi is
 		MS_END
 	);
 	
-	type page_t is array (0 to 8628) of std_logic_vector(7 downto 0);
+	--type page_t is array (0 to 8628) of std_logic_vector(7 downto 0);
+	type page_t is array (0 to 8640) of std_logic_vector(7 downto 0);
 	type param_page_t is array (0 to 255) of std_logic_vector(7 downto 0);
 	type nand_id_t is array (0 to 4) of std_logic_vector(7 downto 0);
 	type nand_address_t is array (0 to 4) of std_logic_vector(7 downto 0);
 	type states_t is array (0 to 255) of master_state_t;
 	
-	constant	max_page_idx	:	integer	:=	8626;
+	--constant	max_page_idx	:	integer	:=	8626;
+	constant	max_page_idx	:	integer	:=	8638;
 end onfi;
