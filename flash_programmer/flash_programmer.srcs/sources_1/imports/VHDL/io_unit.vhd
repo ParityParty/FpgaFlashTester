@@ -84,9 +84,9 @@ begin
 							data_reg 	<= data_in;
 						end if;
 					else
---						if(io_type = IO_READ and n_state = IO_IDLE)then
---							data_reg		<= data_in;									-- This thing needs to be checked with real hardware. Assignment may be needed somewhat earlier.
---						end if;
+						if(io_type = IO_READ and n_state = IO_IDLE)then
+							data_reg		<= data_in;									-- This thing needs to be checked with real hardware. Assignment may be needed somewhat earlier.
+						end if;
 						state 			<= n_state;
 					end if;
 				

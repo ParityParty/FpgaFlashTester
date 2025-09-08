@@ -48,6 +48,7 @@ architecture test of tb is
 			cmd_in				: in	std_logic_vector(7 downto 0)
 		);
 	end component;
+
 	-- Internal interface
 	signal nand_cle : std_logic;
 	signal nand_ale : std_logic;
@@ -64,6 +65,10 @@ architecture test of tb is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	signal clk	: std_logic := '1';
+
+	-- Timing constants
+	constant ACT_PULSE : time := 100 ns;
+
 begin
 	NM:nand_master
 	port map
@@ -89,9 +94,9 @@ begin
 	CLOCK:process
 	begin
 		clk <= '1';
-		wait for 1.25ns;
+		wait for 50ns;
 		clk <= '0';
-		wait for 1.25ns;
+		wait for 50ns;
 	end process;
 
 	TP: process
@@ -101,68 +106,70 @@ begin
 		nand_data <= "ZZZZZZZZZZZZZZZZ";
 		
 		-- Enable the chip
-		wait for 5ns;
+		wait for ACT_PULSE * 2;
 		cmd_in <= x"09";
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
 		
 		
 		-- Read JEDEC ID
 		data_in <= x"00";
 		cmd_in <= x"03";
-		wait for 5ns;
+		wait for ACT_PULSE * 2;
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
 		
 		-- Provide ID
-		wait for 155ns;
+		wait for 1400ns;
 		nand_data <= x"002c";
-		wait for 32.5ns;
+		wait for ACT_PULSE * 6;
 		nand_data <= x"00e5";
-		wait for 32.5ns;
+		wait for ACT_PULSE * 6;
 		nand_data <= x"00ff";
-		wait for 32.5ns;
+		wait for ACT_PULSE * 6;
 		nand_data <= x"0003";
-		wait for 32.5ns;
+		wait for ACT_PULSE * 6;
 		nand_data <= x"0086";
-		wait for 32.5ns;
-		nand_data <= "ZZZZZZZZZZZZZZZZ";
-		wait for 5ns;
+		wait for ACT_PULSE * 6;
+--		nand_data <= "ZZZZZZZZZZZZZZZZ";
+		wait for ACT_PULSE * 2;
 		
 		-- Read the bytes of the ID
 		cmd_in <= x"0e";
 		-- 1
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		-- 2
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		-- 3
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		-- 4
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		-- 5
 		activate <= '1';
-		wait for 2.5ns;
+		wait for ACT_PULSE;
 		activate <= '0';
+		wait for ACT_PULSE;
 		
-		cmd_in <= x"08";
-		wait for 2.5ns;
-		activate <= '1';
-		wait for 2.5ns;
-		activate <= '0';
+		
+--		cmd_in <= x"08";
+--		wait for ACT_PULSE;
+--		activate <= '1';
+--		wait for ACT_PULSE;
+--		activate <= '0';
 		
 		
 		wait;

@@ -173,7 +173,9 @@ entity flash_programmer is
     nand_data			: inout	std_logic_vector(15 downto 0);
     
     -- Debug
-        dbg_state   : out std_logic_vector(3 downto 0)
+        dbg_state   : out std_logic_vector(3 downto 0);
+        dbg_data_out : out	std_logic_vector(7 downto 0);
+        dbg_activate : out std_logic
     );
 end flash_programmer;
 
@@ -221,7 +223,8 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV, READ, EXTRACT, EXTRACT_READBYTE, DELAY);
+	type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV, RESET_CTRL, READ, EXTRACT, EXTRACT_READBYTE, DELAY);
+--    type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV,  READ, EXTRACT, EXTRACT_READBYTE, DELAY);
 	signal state : STATE_TYPE := INIT;
 	signal next_state : STATE_TYPE;
 	signal delay_counter : integer := 0;
@@ -259,6 +262,16 @@ begin
 		cmd_in   => cmd_in
 	);
 	
+	process(data_out)
+	begin
+	   dbg_data_out <= data_out;
+	end process;
+	
+    process(activate)
+	begin
+	   dbg_activate <= activate;
+	end process;
+	
 	process(state)
     begin
         case state is
@@ -267,6 +280,7 @@ begin
             when CTRL_BUSY        => dbg_state <= "0010";
             when RESET_DEV        => dbg_state <= "0011";
             when ENABLE_DEV           => dbg_state <= "0100";
+            when RESET_CTRL => dbg_state <= "1001";
             when READ             => dbg_state <= "0101";
             when EXTRACT          => dbg_state <= "0110";
             when EXTRACT_READBYTE => dbg_state <= "0111";
@@ -335,12 +349,17 @@ begin
             when READ =>
                 data_in <= x"00";
 		        cmd_in <= x"03";
+		        next_state <= RESET_CTRL;
+		        state <= RELEASE;
+		    
+		    when RESET_CTRL =>
+		        cmd_in <= x"0d";
 		        next_state <= EXTRACT;
 		        state <= RELEASE;
                 
             when EXTRACT =>
-                cmd_in <= x"08";
---                cmd_in <= x"0e";
+--                cmd_in <= x"08";
+                cmd_in <= x"0e";
                 next_state <= EXTRACT_READBYTE;
                 state <= RELEASE;
                 
@@ -348,8 +367,8 @@ begin
                 if o_TX_Active = '0' and i_TX_DV = '0' then
                     i_TX_Byte <= data_out;
                     i_TX_DV <= '1';
+                    state <= DELAY;
                 end if;
-                state <= DELAY;
                 
             when DELAY =>
                 led_light <= '1';
@@ -357,7 +376,7 @@ begin
                 if delay_counter = DELAY_MAX_COUNT then
                     delay_counter <= 0;
 --                    cmd_in <= x"00";
-                    state <= READ;
+                    state <= EXTRACT;
 --                    state <= RELEASE;
                 else 
                     delay_counter <= delay_counter + 1;

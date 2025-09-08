@@ -10,7 +10,7 @@ architecture sim of tb_flash_programmer is
     component flash_programmer
         generic (
             MAX_COUNT       : integer := 25;
-            DELAY_MAX_COUNT : integer := 50
+            DELAY_MAX_COUNT : integer := 10
         );
         port (
             led_light   : out STD_LOGIC;
@@ -27,7 +27,8 @@ architecture sim of tb_flash_programmer is
             nand_rnb    : in  std_logic;
             nand_data   : inout std_logic_vector(15 downto 0);
             
-            dbg_state   : out std_logic_vector(3 downto 0)
+            dbg_state   : out std_logic_vector(3 downto 0);
+            dbg_data_out : out std_logic_vector(7 downto 0)
         );
     end component;
 
@@ -46,13 +47,14 @@ architecture sim of tb_flash_programmer is
     signal nand_data  : std_logic_vector(15 downto 0) := (others => 'Z');
     
     signal dbg_state   : std_logic_vector(3 downto 0);
+    signal dbg_data_out : std_logic_vector(7 downto 0);
 
 begin
     -- DUT instantiation
     DUT: flash_programmer
         generic map (
             MAX_COUNT       => 25,   -- shorten counters for sim
-            DELAY_MAX_COUNT => 50
+            DELAY_MAX_COUNT => 10
         )
         port map (
             led_light   => led,
@@ -69,7 +71,8 @@ begin
             nand_rnb    => nand_rnb,
             nand_data   => nand_data,
             
-            dbg_state => dbg_state
+            dbg_state => dbg_state,
+            dbg_data_out => dbg_data_out
         );
 
     -- generate 25 MHz clock (40 ns period)
@@ -86,15 +89,29 @@ begin
     -- stimulus process
     stim_proc : process
     begin
-        -- Let the design initialize
-        wait for 200 ns;
+--        -- Let the design initialize
+--        wait for 200 ns;
+        
+        wait_loop: loop
+            if nand_nre = '0' then  -- mem_done comes from memory entity
+                exit wait_loop;
+            end if;
+            wait for 5ns;
+        end loop wait_loop;
 
-        -- Toggle nand_rnb to simulate busy/ready NAND behavior
-        nand_rnb <= '0';
-        wait for 200 ns;
-        nand_rnb <= '1';
-        wait for 500 ns;
-
+--        wait for 155ns;
+		nand_data <= x"002c";
+		wait for 240ns;
+		nand_data <= x"00e5";
+		wait for 240ns;
+		nand_data <= x"00ff";
+		wait for 240ns;
+		nand_data <= x"0003";
+		wait for 240ns;
+		nand_data <= x"0086";
+		wait for 240ns;
+		nand_data <= "ZZZZZZZZZZZZZZZZ";
+		wait for 5ns;
         -- Let the FSM cycle a few times
         wait for 2 us;
 
