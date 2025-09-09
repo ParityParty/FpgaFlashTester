@@ -223,7 +223,7 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, DELAY, DONE);
+	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, SEND_ERR, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ);
 	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, ENABLE_WP);
@@ -243,6 +243,7 @@ architecture Behavioral of flash_programmer is
 	signal reset_index : std_logic := '0';
 	
 	signal cycles : integer := 3;
+	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 begin
     uart_tx_inst : entity work.UART_TX
         port map (
@@ -420,7 +421,19 @@ begin
                     state <= RELEASE;
                     
                 when PROGRAM_LOAD_ADDR =>
-                    data_in <= x"00";
+                    case address_bytes_counter is
+                        when 5 =>
+                            data_in <= x"00";
+                        when 4 =>
+                            data_in <= x"00";
+                        when 3 =>
+                            data_in <= std_logic_vector(to_unsigned(page_address, 19)(7 downto 0));
+                        when 2 =>
+                            data_in <= std_logic_vector(to_unsigned(page_address, 19)(15 downto 8));
+                        when 1 =>
+                            data_in <= "00000" & std_logic_vector(to_unsigned(page_address, 19)(18 downto 16));
+                        when others => data_in <= x"00";
+                    end case;
                     cmd_in <= x"13";
                     address_bytes_counter <= address_bytes_counter - 1;
                     state <= RELEASE;
@@ -494,10 +507,17 @@ begin
                 end if;             
             
             when EXTRACT_READBYTE =>
+                if data_out = x"AA" then
+                    state <= EXTRACT;
+                else
+                    state <= SEND_ERR; 
+                end if;
+            
+            when SEND_ERR =>
                 if o_TX_Active = '0' and i_TX_DV = '0' then
                     i_TX_Byte <= data_out;
                     i_TX_DV <= '1';
---                    state <= DELAY;
+    --                    state <= DELAY;
                     state <= EXTRACT;
                 end if;
                 
@@ -517,6 +537,7 @@ begin
                     state <= WRITE_PAGE;
                     next_state <= WRITE_PAGE;
                     cycles <= cycles - 1;
+                    page_address <= page_address + 1;
                 else
                    led_light <= '1'; 
                 end if;
