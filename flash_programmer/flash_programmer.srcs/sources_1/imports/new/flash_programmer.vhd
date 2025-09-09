@@ -157,7 +157,7 @@ entity flash_programmer is
         DELAY_MAX_COUNT : integer := 25000000
     );
     Port (
-    led_light : out STD_LOGIC;
+    led_light : out STD_LOGIC := '0';
     CLK25MHZ  : in  STD_LOGIC;
     uart_tx : out STD_LOGIC;
     clk_monitor : out std_logic;
@@ -223,7 +223,7 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, DELAY);
+	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ);
 	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, ENABLE_WP);
@@ -241,6 +241,8 @@ architecture Behavioral of flash_programmer is
 	signal address_bytes_counter : integer := 0;
 	signal data_bytes_counter : integer := 0;
 	signal reset_index : std_logic := '0';
+	
+	signal cycles : integer := 3;
 begin
     uart_tx_inst : entity work.UART_TX
         port map (
@@ -305,7 +307,7 @@ begin
     clk_monitor <= CLK25MHZ;
     if CLK25MHZ'event and CLK25MHZ = '1' then
     
-        led_light <= '0';
+--        led_light <= '0';
     
         if i_TX_DV = '1' then
             i_TX_DV <= '0';
@@ -367,6 +369,7 @@ begin
                     data_in <= x"00";
                     cmd_in <= x"03";
                     next_state <= WRITE_PAGE;
+                    write_substate <= WRITE_START;
                     state <= RELEASE;
                end case;
             
@@ -444,6 +447,7 @@ begin
                 when ENABLE_WP =>
                     cmd_in <= x"0b";
                     next_state <= READ_PAGE;
+                    read_substate <= READ_START;
                     state <= RELEASE;
                     
                 end case;
@@ -471,6 +475,8 @@ begin
                     cmd_in <= x"06";
                     reset_index <= '1';
                     next_state <= EXTRACT;
+--                    next_state <= DONE;
+                    data_bytes_counter <= 0;
                     state <= RELEASE;
                 end case;
                 
@@ -479,7 +485,14 @@ begin
                 cmd_in <= x"10";
                 next_state <= EXTRACT_READBYTE;
                 state <= RELEASE;
-                
+                data_bytes_counter <= data_bytes_counter + 1;
+                if data_bytes_counter = 8640 then
+                    state <= DONE;
+--                    state <= WRITE_PAGE;
+--                    write_substate <= WRITE_START;
+--                    led_light <= '1'; 
+                end if;             
+            
             when EXTRACT_READBYTE =>
                 if o_TX_Active = '0' and i_TX_DV = '0' then
                     i_TX_Byte <= data_out;
@@ -489,8 +502,6 @@ begin
                 end if;
                 
             when DELAY =>
-                led_light <= '1';
-                
                 if delay_counter = DELAY_MAX_COUNT then
                     delay_counter <= 0;
 --                    cmd_in <= x"00";
@@ -498,6 +509,16 @@ begin
 --                    state <= RELEASE;
                 else 
                     delay_counter <= delay_counter + 1;
+                end if;
+            
+            when DONE => --null;
+                if cycles > 1 then
+                    write_substate <= WRITE_START;
+                    state <= WRITE_PAGE;
+                    next_state <= WRITE_PAGE;
+                    cycles <= cycles - 1;
+                else
+                   led_light <= '1'; 
                 end if;
                 
 --            when others => null;
