@@ -156,7 +156,7 @@ entity flash_programmer is
         MAX_COUNT : integer := 25000000 / 1000;
         DELAY_MAX_COUNT : integer := 25000000;
         PAGE_SIZE : integer := 8640;
-        PAGES_TO_TEST : integer := 3
+        PAGES_TO_TEST : integer := 5
     );
     Port (
     led_light : out STD_LOGIC := '0';
@@ -225,9 +225,9 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, READ_BLOCK, WRITE_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, SEND_ERR, DELAY, DONE);
+	type STATE_TYPE is (INIT, READ_BLOCK, WRITE_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
-	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ);
+	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	
 --    type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV,  READ, EXTRACT, EXTRACT_READBYTE, DELAY);
@@ -481,12 +481,26 @@ begin
                 
                 when READ_START =>
                     address_bytes_counter <= 5;
+                    page_address <= 0;
+                    pages_left <= PAGES_TO_TEST;
                     read_substate <= READ_LOAD_ADDR;
                     state <= INDEX_RESET;
                     
                 
                 when READ_LOAD_ADDR =>
-                    data_in <= x"00";
+                    case address_bytes_counter is
+                        when 5 =>
+                            data_in <= x"00";
+                        when 4 =>
+                            data_in <= x"00";
+                        when 3 =>
+                            data_in <= std_logic_vector(to_unsigned(page_address, 19)(7 downto 0));
+                        when 2 =>
+                            data_in <= std_logic_vector(to_unsigned(page_address, 19)(15 downto 8));
+                        when 1 =>
+                            data_in <= "00000" & std_logic_vector(to_unsigned(page_address, 19)(18 downto 16));
+                        when others => data_in <= x"00";
+                    end case;
                     cmd_in <= x"13";
                     address_bytes_counter <= address_bytes_counter - 1;
                     state <= RELEASE;
@@ -498,45 +512,57 @@ begin
                     data_in <= x"00";
                     cmd_in <= x"06";
                     reset_index <= '1';
-                    next_state <= EXTRACT;
+                    read_substate <= EXTRACT;
 --                    next_state <= DONE;
                     data_bytes_counter <= 0;
                     state <= RELEASE;
-                end case;
                 
-            when EXTRACT =>
---                cmd_in <= x"08";
-                cmd_in <= x"10";
-                next_state <= EXTRACT_READBYTE;
-                state <= RELEASE;
-                data_bytes_counter <= data_bytes_counter + 1;
-                if data_bytes_counter = PAGE_SIZE then
-                    state <= DONE;
---                    state <= WRITE_BLOCK;
---                    write_substate <= WRITE_START;
---                    led_light <= '1'; 
-                end if;             
-            
-            when EXTRACT_READBYTE =>
-                if data_out = x"AA" then
-                    state <= EXTRACT;
-                else
-                    state <= SEND_ERR; 
-                end if;
-            
-            when SEND_ERR =>
-                if o_TX_Active = '0' and i_TX_DV = '0' then
-                    i_TX_Byte <= data_out;
-                    i_TX_DV <= '1';
-    --                    state <= DELAY;
-                    state <= EXTRACT;
-                end if;
+                when EXTRACT =>
+    --                cmd_in <= x"08";
+                    cmd_in <= x"10";
+                    read_substate <= EXTRACT_READBYTE;
+                    state <= RELEASE;
+                    data_bytes_counter <= data_bytes_counter + 1;
+                    if data_bytes_counter = PAGE_SIZE then
+                        read_substate <= PAGE_READ_DONE;
+    --                    state <= WRITE_BLOCK;
+    --                    write_substate <= WRITE_START;
+    --                    led_light <= '1'; 
+                    end if;             
+                
+                when EXTRACT_READBYTE =>
+                    if data_out = x"AA" then
+                        read_substate <= EXTRACT;
+                    else
+                        read_substate <= SEND_ERR; 
+                    end if;
+                
+                when SEND_ERR =>
+                    if o_TX_Active = '0' and i_TX_DV = '0' then
+                        i_TX_Byte <= data_out;
+                        i_TX_DV <= '1';
+        --                    state <= DELAY;
+                        read_substate <= EXTRACT;
+                    end if;
+                
+                when PAGE_READ_DONE =>
+                    if pages_left > 1 then
+                        pages_left <= pages_left - 1;
+                        page_address <= page_address + 1;
+                        read_substate <= READ_LOAD_ADDR;
+                        address_bytes_counter <= 5;
+                        state <= INDEX_RESET;
+                    else
+                        state <= DONE;
+                    end if;
+                    
+            end case;
                 
             when DELAY =>
                 if delay_counter = DELAY_MAX_COUNT then
                     delay_counter <= 0;
 --                    cmd_in <= x"00";
-                    state <= EXTRACT;
+--                    state <= EXTRACT;
 --                    state <= RELEASE;
                 else 
                     delay_counter <= delay_counter + 1;
