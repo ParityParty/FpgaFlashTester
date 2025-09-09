@@ -154,7 +154,9 @@ use IEEE.NUMERIC_STD.ALL;
 entity flash_programmer is
     Generic (
         MAX_COUNT : integer := 25000000 / 1000;
-        DELAY_MAX_COUNT : integer := 25000000
+        DELAY_MAX_COUNT : integer := 25000000;
+        PAGE_SIZE : integer := 8640;
+        PAGES_TO_TEST : integer := 3
     );
     Port (
     led_light : out STD_LOGIC := '0';
@@ -223,10 +225,10 @@ architecture Behavioral of flash_programmer is
 	signal activate : std_logic;
 	signal cmd_in   : std_logic_vector(7 downto 0);
 	
-	type STATE_TYPE is (INIT, READ_PAGE, WRITE_PAGE, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, SEND_ERR, DELAY, DONE);
+	type STATE_TYPE is (INIT, READ_BLOCK, WRITE_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, EXTRACT, EXTRACT_READBYTE, SEND_ERR, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ);
-	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, ENABLE_WP);
+	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	
 --    type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV,  READ, EXTRACT, EXTRACT_READBYTE, DELAY);
 	signal state : STATE_TYPE := INIT;
@@ -242,7 +244,7 @@ architecture Behavioral of flash_programmer is
 	signal data_bytes_counter : integer := 0;
 	signal reset_index : std_logic := '0';
 	
-	signal cycles : integer := 3;
+	signal pages_left : integer := PAGES_TO_TEST;
 	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 begin
     uart_tx_inst : entity work.UART_TX
@@ -369,7 +371,7 @@ begin
                 when READ_ID =>
                     data_in <= x"00";
                     cmd_in <= x"03";
-                    next_state <= WRITE_PAGE;
+                    next_state <= WRITE_BLOCK;
                     write_substate <= WRITE_START;
                     state <= RELEASE;
                end case;
@@ -392,7 +394,7 @@ begin
                 reset_index <= '0';
                 state <= RELEASE;
                 
-            when WRITE_PAGE =>
+            when WRITE_BLOCK =>
                 case write_substate is
                 when WRITE_START =>
                     address_bytes_counter <= 5;
@@ -439,7 +441,7 @@ begin
                     state <= RELEASE;
                     if address_bytes_counter = 1 then
                       write_substate <= PROGRAM_WRITE_BYTE;
-                      data_bytes_counter <= 8640;
+                      data_bytes_counter <= PAGE_SIZE;
                       reset_index <= '1';
                     end if;
                 
@@ -454,18 +456,27 @@ begin
                     
                 when PROGRAM =>
                     cmd_in <= x"07";
-                    write_substate <= ENABLE_WP;
+                    write_substate <= PAGE_WRITE_DONE;
                     state <= RELEASE;
                     
-                when ENABLE_WP =>
-                    cmd_in <= x"0b";
-                    next_state <= READ_PAGE;
-                    read_substate <= READ_START;
-                    state <= RELEASE;
+                when PAGE_WRITE_DONE =>
+                    if pages_left > 1 then
+                        pages_left <= pages_left - 1;
+                        page_address <= page_address + 1;
+                        write_substate <= PROGRAM_LOAD_ADDR;
+                        address_bytes_counter <= 5;
+                        state <= INDEX_RESET;
+                    else
+                        -- enable WP
+                        cmd_in <= x"0b";
+                        next_state <= READ_BLOCK;
+                        read_substate <= READ_START;
+                        state <= RELEASE;
+                    end if;
                     
                 end case;
                 
-            when READ_PAGE =>
+            when READ_BLOCK =>
                 case read_substate is
                 
                 when READ_START =>
@@ -499,9 +510,9 @@ begin
                 next_state <= EXTRACT_READBYTE;
                 state <= RELEASE;
                 data_bytes_counter <= data_bytes_counter + 1;
-                if data_bytes_counter = 8640 then
+                if data_bytes_counter = PAGE_SIZE then
                     state <= DONE;
---                    state <= WRITE_PAGE;
+--                    state <= WRITE_BLOCK;
 --                    write_substate <= WRITE_START;
 --                    led_light <= '1'; 
                 end if;             
@@ -532,15 +543,15 @@ begin
                 end if;
             
             when DONE => --null;
-                if cycles > 1 then
-                    write_substate <= WRITE_START;
-                    state <= WRITE_PAGE;
-                    next_state <= WRITE_PAGE;
-                    cycles <= cycles - 1;
-                    page_address <= page_address + 1;
-                else
+--                if pages_to_test > 1 then
+--                    write_substate <= WRITE_START;
+--                    state <= WRITE_BLOCK;
+--                    next_state <= WRITE_BLOCK;
+--                    pages_to_test <= pages_to_test - 1;
+--                    page_address <= page_address + 1;
+--                else
                    led_light <= '1'; 
-                end if;
+--                end if;
                 
 --            when others => null;
             end case;
