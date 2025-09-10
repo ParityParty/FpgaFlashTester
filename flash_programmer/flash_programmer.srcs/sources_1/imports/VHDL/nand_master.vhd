@@ -44,7 +44,9 @@ entity nand_master is
 		data_in				: in	std_logic_vector(7 downto 0);
 		busy					: out	std_logic := '0';
 		activate				: in	std_logic;
-		cmd_in				: in	std_logic_vector(7 downto 0)
+		cmd_in				: in	std_logic_vector(7 downto 0);
+		
+		debug : out std_logic := '0'
 	);
 end nand_master;
 
@@ -872,6 +874,7 @@ begin
 				-- For just in case ("Shit happens..." (C) Forrest Gump)
 				when others =>
 					state 				<= M_RESET;
+					debug <= '1';
 			end case;
 		end if;
 	end process;

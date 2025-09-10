@@ -800,8 +800,8 @@ set_property IOSTANDARD LVCMOS18 [get_ports CLK25MHZ]
 set_property PACKAGE_PIN AB10 [get_ports uart_tx]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_tx]
 
-set_property PACKAGE_PIN AH14 [get_ports clk_monitor]
-set_property IOSTANDARD LVCMOS33 [get_ports clk_monitor]
+set_property PACKAGE_PIN AH14 [get_ports debug]
+set_property IOSTANDARD LVCMOS33 [get_ports debug]
 
 set_property IOSTANDARD LVCMOS33 [get_ports nand_ale]
 set_property IOSTANDARD LVCMOS33 [get_ports nand_cle]
