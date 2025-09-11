@@ -43,16 +43,14 @@
         "SELECTEDSIMMODEL": [ { "value": "" } ],
         "SHAREDDIR": [ { "value": "../../ipshared" } ],
         "SWVERSION": [ { "value": "2025.1" } ],
-        "SYNTHESISFLOW": [ { "value": "OOC_HIERARCHICAL" } ]
+        "SYNTHESISFLOW": [ { "value": "GLOBAL" } ]
       }
     },
     "boundary": {
       "ports": {
-        "led_light": [ { "direction": "out", "driver_value": "0x0" } ],
+        "led_light": [ { "direction": "out", "driver_value": "0x1" } ],
         "i_clock": [ { "direction": "in" } ],
-        "uart_tx": [ { "direction": "out" } ],
-        "debug": [ { "direction": "out" } ],
-        "i_reset": [ { "direction": "in" } ],
+        "debug": [ { "direction": "out", "driver_value": "0x1" } ],
         "nand_cle": [ { "direction": "out", "driver_value": "0x0" } ],
         "nand_ale": [ { "direction": "out", "driver_value": "0x0" } ],
         "nand_nwe": [ { "direction": "out", "driver_value": "0x1" } ],
@@ -63,30 +61,18 @@
         "nand_data": [ { "direction": "inout", "size_left": "15", "size_right": "0" } ]
       },
       "interfaces": {
-        "i_reset": {
-          "vlnv": "xilinx.com:signal:reset:1.0",
-          "abstraction_type": "xilinx.com:signal:reset_rtl:1.0",
-          "mode": "slave",
-          "parameters": {
-            "POLARITY": [ { "value": "ACTIVE_HIGH", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
-            "INSERT_VIP": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "simulation.rtl", "is_ips_inferred": true, "is_static_object": false } ]
-          },
-          "port_maps": {
-            "RST": [ { "physical_name": "i_reset" } ]
-          }
-        },
         "i_clock": {
           "vlnv": "xilinx.com:signal:clock:1.0",
           "abstraction_type": "xilinx.com:signal:clock_rtl:1.0",
           "mode": "slave",
           "parameters": {
-            "ASSOCIATED_RESET": [ { "value": "i_reset", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
-            "FREQ_HZ": [ { "value": "24999750", "value_src": "ip_propagated", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "FREQ_HZ": [ { "value": "25000000", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "FREQ_TOLERANCE_HZ": [ { "value": "0", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
-            "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_1_clk_out1", "value_src": "default_prop", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
+            "PHASE": [ { "value": "0.0", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
+            "CLK_DOMAIN": [ { "value": "design_1_CLK25MHZ", "value_src": "default_prop", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "ASSOCIATED_BUSIF": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "ASSOCIATED_PORT": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
+            "ASSOCIATED_RESET": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "INSERT_VIP": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "simulation.rtl", "is_ips_inferred": true, "is_static_object": false } ]
           },
           "port_maps": {

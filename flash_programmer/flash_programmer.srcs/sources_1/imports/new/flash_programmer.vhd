@@ -160,11 +160,11 @@ entity flash_programmer is
         BLOCKS_TO_TEST : integer := 64
     );
     Port (
-    led_light : out STD_LOGIC := '0';
+    led_light : out STD_LOGIC := '1';
     i_clock  : in  STD_LOGIC;
-    uart_tx : out STD_LOGIC;
-    debug : out std_logic;
-    i_reset : in std_logic;
+--    uart_tx : out STD_LOGIC;
+    debug : out std_logic := '1';
+--    i_reset : in std_logic;
     
     nand_cle				: out	std_logic := '0';
     nand_ale				: out	std_logic := '0';
@@ -185,7 +185,7 @@ end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
-     signal led_state : std_logic := '0';
+     signal led_state : std_logic := '1';
      
 -- signal i_TX_DV : std_logic := '0';         -- Data Valid for Transmission
 --    signal i_TX_Byte : std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
@@ -216,13 +216,11 @@ architecture Behavioral of flash_programmer is
 			data_in				: in	std_logic_vector(7 downto 0);
 			busy					: out	std_logic := '0';
 			activate				: in	std_logic := '0';
-			cmd_in				: in	std_logic_vector(7 downto 0);
-			
-			debug : out std_logic := '0'
+			cmd_in				: in	std_logic_vector(7 downto 0)
 		);
 	end component;
 	
-	signal nreset   : std_logic := '1';
+	signal nreset   : std_logic := '0';
 	signal data_out : std_logic_vector(7 downto 0);
 	signal data_in  : std_logic_vector(7 downto 0);
 	signal busy     : std_logic;
@@ -280,10 +278,10 @@ begin
 		data_in  => data_in,
 		busy     => busy,
 		activate => activate,
-		cmd_in   => cmd_in,
-		
-		debug => debug
+		cmd_in   => cmd_in
 	);
+	
+	debug <= i_clock;
 	
 --	process(data_out)
 --	begin

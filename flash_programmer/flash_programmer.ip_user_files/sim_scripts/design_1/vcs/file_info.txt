@@ -1,0 +1,3 @@
+design_1_flash_programmer_0_0.v,verilog,xil_defaultlib,../../../bd/design_1/ip/design_1_flash_programmer_0_0_2/sim/design_1_flash_programmer_0_0.v,incdir="../../../../../../../../opt/Xilinx/2025.1/data/rsb/busdef"
+design_1.v,verilog,xil_defaultlib,../../../bd/design_1/sim/design_1.v,incdir="../../../../../../../../opt/Xilinx/2025.1/data/rsb/busdef"
+glbl.v,Verilog,xil_defaultlib,glbl.v

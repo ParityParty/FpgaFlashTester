@@ -58,9 +58,7 @@
 module design_1_flash_programmer_0_0 (
   led_light,
   i_clock,
-  uart_tx,
   debug,
-  i_reset,
   nand_cle,
   nand_ale,
   nand_nwe,
@@ -74,14 +72,9 @@ module design_1_flash_programmer_0_0 (
 output wire led_light;
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clock CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, ASSOCIATED_RESET i_reset, FREQ_HZ 24999750, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_1_clk_out1, INSERT_VIP 0" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
 input wire i_clock;
-output wire uart_tx;
 output wire debug;
-(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_reset RST" *)
-(* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_reset, POLARITY ACTIVE_HIGH, INSERT_VIP 0" *)
-input wire i_reset;
 output wire nand_cle;
 output wire nand_ale;
 output wire nand_nwe;
@@ -100,9 +93,7 @@ inout wire [15 : 0] nand_data;
   ) inst (
     .led_light(led_light),
     .i_clock(i_clock),
-    .uart_tx(uart_tx),
     .debug(debug),
-    .i_reset(i_reset),
     .nand_cle(nand_cle),
     .nand_ale(nand_ale),
     .nand_nwe(nand_nwe),
