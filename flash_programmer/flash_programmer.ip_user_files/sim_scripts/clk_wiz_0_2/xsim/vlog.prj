@@ -1,0 +1,8 @@
+verilog xil_defaultlib -i "../../../../../../Xilinx/2025.1/data/rsb/busdef" --include "../../../../flash_programmer.gen/sources_1/ip/clk_wiz_0" \
+"../../../../flash_programmer.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v" \
+"../../../../flash_programmer.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

@@ -161,9 +161,10 @@ entity flash_programmer is
     );
     Port (
     led_light : out STD_LOGIC := '0';
-    CLK25MHZ  : in  STD_LOGIC;
+    i_clock  : in  STD_LOGIC;
     uart_tx : out STD_LOGIC;
     debug : out std_logic;
+    i_reset : in std_logic;
     
     nand_cle				: out	std_logic := '0';
     nand_ale				: out	std_logic := '0';
@@ -264,7 +265,7 @@ begin
     NM:nand_master
 	port map
 	(
-		clk => CLK25MHZ,
+		clk => i_clock,
 		enable => '0',
 		nand_cle => nand_cle,
 		nand_ale => nand_ale,
@@ -311,9 +312,10 @@ begin
 --        end case;
 --    end process;
         
-    process(CLK25MHZ)
+    process(i_clock)
     begin
-    if CLK25MHZ'event and CLK25MHZ = '1' then
+    debug <= i_clock;
+    if i_clock'event and i_clock = '1' then
     
 --        led_light <= '0';
     

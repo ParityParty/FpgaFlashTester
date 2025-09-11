@@ -1,0 +1,24 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-163,-78",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 TLS
+#  -string -flagsOSRD
+preplace port port-id_nand_rnb -pg 1 -lvl 0 -x 0 -y 320 -defaultsOSRD
+preplace inst flash_programmer_0 -pg 1 -lvl 3 -x 980 -y 180 -defaultsOSRD
+preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 330 -y 100 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 2 -x 740 -y 120 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 2 1 840 110n
+preplace netloc clk_wiz_0_locked 1 2 1 830 130n
+preplace netloc nand_rnb_1 1 0 3 NJ 320 640J 200 NJ
+preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 2 30 200 630
+preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 1 1 630 100n
+levelinfo -pg 1 0 330 740 980 1120
+pagesize -pg 1 -db -bbox -sgen -120 0 1120 340
+"
+}
+{
+   "da_board_cnt":"7",
+   "da_zynq_ultra_ps_e_cnt":"1"
+}
