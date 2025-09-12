@@ -47,62 +47,66 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:module_ref:flash_programmer:1.0
+// IP VLNV: xilinx.com:module_ref:nand_master:1.0
 // IP Revision: 1
 
-`timescale 1ns/1ps
-
+(* X_CORE_INFO = "nand_master,Vivado 2025.1" *)
+(* CHECK_LICENSE_TYPE = "design_1_nand_master_0_0,nand_master,{}" *)
+(* CORE_GENERATION_INFO = "design_1_nand_master_0_0,nand_master,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=nand_master,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED}" *)
 (* IP_DEFINITION_SOURCE = "module_ref" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
-module design_1_flash_programmer_0_0 (
-  led_light,
-  i_clock,
-  debug,
+module design_1_nand_master_0_0 (
+  clk,
+  enable,
+  nand_cle,
+  nand_ale,
+  nand_nwe,
+  nand_nwp,
+  nand_nre,
+  nand_rnb,
+  nand_data,
+  nreset,
   data_out,
   data_in,
   busy,
   activate,
-  cmd_in,
-  nand_reset,
-  nand_enable,
-  nand_nce
+  cmd_in
 );
 
-output wire led_light;
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clock CLK" *)
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 clk CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
-input wire i_clock;
-output wire debug;
-input wire [7 : 0] data_out;
-output wire [7 : 0] data_in;
-input wire busy;
-output wire activate;
-output wire [7 : 0] cmd_in;
-(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 nand_reset RST" *)
-(* X_INTERFACE_MODE = "master" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME nand_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
-output wire nand_reset;
-output wire nand_enable;
-output wire nand_nce;
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
+input wire clk;
+input wire enable;
+output wire nand_cle;
+output wire nand_ale;
+output wire nand_nwe;
+output wire nand_nwp;
+output wire nand_nre;
+input wire nand_rnb;
+inout wire [15 : 0] nand_data;
+input wire nreset;
+output wire [7 : 0] data_out;
+input wire [7 : 0] data_in;
+output wire busy;
+input wire activate;
+input wire [7 : 0] cmd_in;
 
-  flash_programmer #(
-    .MAX_COUNT(25000),
-    .DELAY_MAX_COUNT(25000000),
-    .PAGE_SIZE(8640),
-    .PAGES_IN_BLOCK(128),
-    .BLOCKS_TO_TEST(1024)
-  ) inst (
-    .led_light(led_light),
-    .i_clock(i_clock),
-    .debug(debug),
+  nand_master inst (
+    .clk(clk),
+    .enable(enable),
+    .nand_cle(nand_cle),
+    .nand_ale(nand_ale),
+    .nand_nwe(nand_nwe),
+    .nand_nwp(nand_nwp),
+    .nand_nre(nand_nre),
+    .nand_rnb(nand_rnb),
+    .nand_data(nand_data),
+    .nreset(nreset),
     .data_out(data_out),
     .data_in(data_in),
     .busy(busy),
     .activate(activate),
-    .cmd_in(cmd_in),
-    .nand_reset(nand_reset),
-    .nand_enable(nand_enable),
-    .nand_nce(nand_nce)
+    .cmd_in(cmd_in)
   );
 endmodule

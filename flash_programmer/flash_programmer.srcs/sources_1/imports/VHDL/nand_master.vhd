@@ -32,7 +32,7 @@ entity nand_master is
 		nand_ale				: out	std_logic := '0';
 		nand_nwe				: out	std_logic := '1';
 		nand_nwp				: out	std_logic := '0';
-		nand_nce				: out	std_logic := '1';
+--		nand_nce				: out	std_logic := '1';
 		nand_nre				: out std_logic := '1';
 		nand_rnb				: in	std_logic;
 		-- NAND chip data hardware interface. These signals should be boiund to physical pins.
@@ -307,7 +307,7 @@ begin
 					oob_bytes_per_page 	<= 0;
 					addr_cycles			<= 0;
 					status				<= x"08";		-- We start write protected!
-					nand_nce				<= '1';
+--					nand_nce				<= '1';
 					nand_nwp				<= '0';
 				
 				-- This is in fact a command interpreter
@@ -330,13 +330,13 @@ begin
 				
 				-- Set CE# to '0' (enable NAND chip)
 				when MI_CHIP_ENABLE =>
-					nand_nce				<= '0';
+--					nand_nce				<= '0';
 					state					<= M_IDLE;
 					status(2)			<= '1';
 					
 				-- Set CE# to '1' (disable NAND chip)
 				when MI_CHIP_DISABLE =>
-					nand_nce				<= '1';
+--					nand_nce				<= '1';
 					state					<= M_IDLE;
 					status(2)			<= '0';
 					

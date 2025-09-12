@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Thu Sep 11 17:31:14 2025
+//Date        : Fri Sep 12 15:21:16 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=1,numReposBlks=1,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=2,numReposBlks=2,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=2,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK25MHZ,
     debug,
@@ -37,10 +37,17 @@ module design_1
 
   wire CLK25MHZ;
   wire debug;
+  wire flash_programmer_0_activate;
+  wire [7:0]flash_programmer_0_cmd_in;
+  wire [7:0]flash_programmer_0_data_in;
+  wire flash_programmer_0_nand_enable;
+  wire flash_programmer_0_nand_reset;
   wire led_light;
   wire nand_ale;
   wire nand_cle;
   wire [15:0]nand_data;
+  wire nand_master_0_busy;
+  wire [7:0]nand_master_0_data_out;
   wire nand_nce;
   wire nand_nre;
   wire nand_nwe;
@@ -48,15 +55,31 @@ module design_1
   wire nand_rnb;
 
   design_1_flash_programmer_0_0 flash_programmer_0
-       (.debug(debug),
+       (.activate(flash_programmer_0_activate),
+        .busy(nand_master_0_busy),
+        .cmd_in(flash_programmer_0_cmd_in),
+        .data_in(flash_programmer_0_data_in),
+        .data_out(nand_master_0_data_out),
+        .debug(debug),
         .i_clock(CLK25MHZ),
         .led_light(led_light),
+        .nand_enable(flash_programmer_0_nand_enable),
+        .nand_nce(nand_nce),
+        .nand_reset(flash_programmer_0_nand_reset));
+  design_1_nand_master_0_0 nand_master_0
+       (.activate(flash_programmer_0_activate),
+        .busy(nand_master_0_busy),
+        .clk(CLK25MHZ),
+        .cmd_in(flash_programmer_0_cmd_in),
+        .data_in(flash_programmer_0_data_in),
+        .data_out(nand_master_0_data_out),
+        .enable(flash_programmer_0_nand_enable),
         .nand_ale(nand_ale),
         .nand_cle(nand_cle),
         .nand_data(nand_data),
-        .nand_nce(nand_nce),
         .nand_nre(nand_nre),
         .nand_nwe(nand_nwe),
         .nand_nwp(nand_nwp),
-        .nand_rnb(nand_rnb));
+        .nand_rnb(nand_rnb),
+        .nreset(flash_programmer_0_nand_reset));
 endmodule

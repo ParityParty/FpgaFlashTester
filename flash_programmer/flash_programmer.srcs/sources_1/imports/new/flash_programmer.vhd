@@ -165,74 +165,33 @@ entity flash_programmer is
 --    uart_tx : out STD_LOGIC;
     debug : out std_logic := '1';
 --    i_reset : in std_logic;
+
+    data_out				: in	std_logic_vector(7 downto 0);
+    data_in				: out	std_logic_vector(7 downto 0);
+    busy					: in	std_logic := '0';
+    activate				: out	std_logic := '0';
+    cmd_in				: out	std_logic_vector(7 downto 0);
+    nand_reset          : out std_logic := '0';
+    nand_enable         : out std_logic := '0';
     
-    nand_cle				: out	std_logic := '0';
-    nand_ale				: out	std_logic := '0';
-    nand_nwe				: out	std_logic := '1';
-    nand_nwp				: out	std_logic := '0';
-    nand_nce				: out	std_logic := '1';
-    nand_nre				: out std_logic := '1';
-    nand_rnb				: in	std_logic;
-    -- NAND chip data hardware interface. These signals should be boiund to physical pins.
-    nand_data			: inout	std_logic_vector(15 downto 0)
-    
-    -- Debug
---        dbg_state   : out std_logic_vector(3 downto 0);
---        dbg_data_out : out	std_logic_vector(7 downto 0);
---        dbg_activate : out std_logic
+    nand_nce : out std_logic := '1'
     );
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
-     signal led_state : std_logic := '0';
      
 -- signal i_TX_DV : std_logic := '0';         -- Data Valid for Transmission
 --    signal i_TX_Byte : std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
 --    signal o_TX_Active : std_logic := '0';
 --    signal o_TX_Serial : std_logic := '1';
 --    signal o_TX_Done : std_logic := '0';
-    
-    component nand_master
-		port
-		(
-			-- System clock
-			clk					: in	std_logic;
-			enable : in std_logic;
-			-- NAND chip control hardware interface. These signals should be bound to physical pins.
-			nand_cle				: out	std_logic := '0';
-			nand_ale				: out	std_logic := '0';
-			nand_nwe				: out	std_logic := '1';
-			nand_nwp				: out	std_logic := '0';
-			nand_nce				: out	std_logic := '1';
-			nand_nre				: out std_logic := '1';
-			nand_rnb				: in	std_logic;
-			-- NAND chip data hardware interface. These signals should be boiund to physical pins.
-			nand_data			: inout	std_logic_vector(15 downto 0);
-			
-			-- Component interface
-			nreset				: in	std_logic := '0';
-			data_out				: out	std_logic_vector(7 downto 0);
-			data_in				: in	std_logic_vector(7 downto 0);
-			busy					: out	std_logic := '0';
-			activate				: in	std_logic := '0';
-			cmd_in				: in	std_logic_vector(7 downto 0)
-		);
-	end component;
-	
-	signal nreset   : std_logic := '0';
-	signal data_out : std_logic_vector(7 downto 0);
-	signal data_in  : std_logic_vector(7 downto 0);
-	signal busy     : std_logic;
-	signal activate : std_logic;
-	signal cmd_in   : std_logic_vector(7 downto 0);
-	
-	type STATE_TYPE is (INIT, READ_BLOCK, WRITE_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, DELAY, DONE);
+
+	type STATE_TYPE is (INIT, WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	
---    type STATE_TYPE is (INIT, RELEASE, CTRL_BUSY, RESET_DEV, ENABLE_DEV,  READ, EXTRACT, EXTRACT_READBYTE, DELAY);
 	signal state : STATE_TYPE := INIT;
 	signal init_substate :INIT_SUBSTATE_TYPE := INIT_START;
 	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
@@ -249,6 +208,8 @@ architecture Behavioral of flash_programmer is
 	signal pages_left : integer := PAGES_IN_BLOCK;
 	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 	signal blocks_tested : integer := 0;
+	
+	signal int_activate : std_logic := '0';
 begin
 --    uart_tx_inst : entity work.UART_TX
 --        port map (
@@ -259,64 +220,14 @@ begin
 --            o_TX_Serial => uart_tx,  -- Connect the transmit line
 --            o_TX_Done   => o_TX_Done
 --        );
-        
-    NM:nand_master
-	port map
-	(
-		clk => i_clock,
-		enable => '0',
-		nand_cle => nand_cle,
-		nand_ale => nand_ale,
-		nand_nwe => nand_nwe,
-		nand_nwp => nand_nwp,
-		nand_nce => nand_nce,
-		nand_nre => nand_nre,
-		nand_rnb => nand_rnb,
-		nand_data=> nand_data,
-		nreset   => nreset,
-		data_out => data_out,
-		data_in  => data_in,
-		busy     => busy,
-		activate => activate,
-		cmd_in   => cmd_in
-	);
 	
 	debug <= i_clock;
-	
---	process(data_out)
---	begin
---	   dbg_data_out <= data_out;
---	end process;
-	
---    process(activate)
---	begin
---	   dbg_activate <= activate;
---	end process;
-	
---	process(state)
---    begin
---        case state is
---            when INIT             => dbg_state <= "0000";
---            when RELEASE          => dbg_state <= "0001";
---            when CTRL_BUSY        => dbg_state <= "0010";
---            when RESET_DEV        => dbg_state <= "0011";
---            when ENABLE_DEV           => dbg_state <= "0100";
---            when RESET_CTRL => dbg_state <= "1001";
---            when READ             => dbg_state <= "0101";
---            when EXTRACT          => dbg_state <= "0110";
---            when EXTRACT_READBYTE => dbg_state <= "0111";
---            when DELAY            => dbg_state <= "1000";
---            when others           => dbg_state <= "1111";
---        end case;
---    end process;
+	activate <= int_activate;
         
     process(i_clock)
     begin
-    debug <= i_clock;
     led_light <= '0';
-    if i_clock'event and i_clock = '1' then
-    
---        led_light <= '0';
+    if rising_edge(i_clock) then
     
 --        if i_TX_DV = '1' then
 --            i_TX_DV <= '0';
@@ -324,28 +235,23 @@ begin
         
         if counter = MAX_COUNT then
             counter <= 1;
---            led_light <= led_state;
---            led_state <= not led_state;
-            
 --            if o_TX_Active = '0' and i_TX_DV = '0' then
 --                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
 --                i_TX_DV <= '1';
 --            end if;
             startup_done <= '1';
-            nreset <= '1';
+            nand_reset <= '1';
         else 
             counter <= counter + 1;
         end if;
         
-        if activate = '1' then
-            activate <= '0';
+        if int_activate = '1' then
+            int_activate <= '0';
         else
             case state is
             when INIT =>
-            
                 case init_substate is
                 when INIT_START =>
-                    nand_data <= "ZZZZZZZZZZZZZZZZ";
                     next_state <= INIT;
                     
                     if startup_done = '1' then
@@ -356,9 +262,10 @@ begin
                    
                -- Enable device
                 when ENABLE_DEV =>
-                    cmd_in <= x"09";
+                    nand_nce <= '0';
+--                    cmd_in <= x"09";
                     init_substate <= RESET_DEV;
-                    state <= RELEASE;
+--                    state <= RELEASE;
                 
                 -- Reset device
                 when RESET_DEV =>
@@ -385,7 +292,7 @@ begin
             -- These two states are responsible for releasing the command in cmd_in
             -- and waitng until done
             when RELEASE =>
-                activate <= '1';
+                int_activate <= '1';
                 state <= CTRL_BUSY;
             when CTRL_BUSY =>
                 if busy = '0' then

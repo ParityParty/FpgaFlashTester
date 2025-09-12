@@ -1,35 +1,43 @@
 {
    "ActiveEmotionalView":"Default View",
    "Default View_ScaleFactor":"1.0",
-   "Default View_TopLeft":"-699,-294",
+   "Default View_TopLeft":"-509,-248",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 TLS
 #  -string -flagsOSRD
-preplace port port-id_nand_rnb -pg 1 -lvl 0 -x 0 -y 160 -defaultsOSRD
-preplace port port-id_nand_nre -pg 1 -lvl 2 -x 320 -y 200 -defaultsOSRD
-preplace port port-id_nand_ale -pg 1 -lvl 2 -x 320 -y 120 -defaultsOSRD
-preplace port port-id_nand_nwp -pg 1 -lvl 2 -x 320 -y 160 -defaultsOSRD
-preplace port port-id_nand_nwe -pg 1 -lvl 2 -x 320 -y 140 -defaultsOSRD
-preplace port port-id_nand_nce -pg 1 -lvl 2 -x 320 -y 180 -defaultsOSRD
-preplace port port-id_nand_cle -pg 1 -lvl 2 -x 320 -y 100 -defaultsOSRD
-preplace port port-id_debug -pg 1 -lvl 2 -x 320 -y 80 -defaultsOSRD
-preplace port port-id_led_light -pg 1 -lvl 2 -x 320 -y 60 -defaultsOSRD
-preplace port port-id_CLK25MHZ -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
-preplace portBus nand_data -pg 1 -lvl 2 -x 320 -y 220 -defaultsOSRD
-preplace inst flash_programmer_0 -pg 1 -lvl 1 -x 160 -y 140 -defaultsOSRD
-preplace netloc CLK25MHZ_1 1 0 1 20 100n
-preplace netloc Net 1 1 1 NJ 220
-preplace netloc flash_programmer_0_debug 1 1 1 NJ 80
-preplace netloc flash_programmer_0_led_light 1 1 1 NJ 60
-preplace netloc flash_programmer_0_nand_ale 1 1 1 NJ 120
-preplace netloc flash_programmer_0_nand_cle 1 1 1 NJ 100
-preplace netloc flash_programmer_0_nand_nce 1 1 1 NJ 180
-preplace netloc flash_programmer_0_nand_nre 1 1 1 NJ 200
-preplace netloc flash_programmer_0_nand_nwe 1 1 1 NJ 140
-preplace netloc flash_programmer_0_nand_nwp 1 1 1 NJ 160
-preplace netloc nand_rnb_1 1 0 1 20J 150n
-levelinfo -pg 1 0 160 320
-pagesize -pg 1 -db -bbox -sgen -130 -30 490 280
+preplace port port-id_nand_rnb -pg 1 -lvl 0 -x 0 -y 90 -defaultsOSRD
+preplace port port-id_nand_nre -pg 1 -lvl 3 -x 700 -y 180 -defaultsOSRD
+preplace port port-id_nand_ale -pg 1 -lvl 3 -x 700 -y 120 -defaultsOSRD
+preplace port port-id_nand_nwp -pg 1 -lvl 3 -x 700 -y 160 -defaultsOSRD
+preplace port port-id_nand_nwe -pg 1 -lvl 3 -x 700 -y 140 -defaultsOSRD
+preplace port port-id_nand_nce -pg 1 -lvl 3 -x 700 -y 300 -defaultsOSRD
+preplace port port-id_nand_cle -pg 1 -lvl 3 -x 700 -y 100 -defaultsOSRD
+preplace port port-id_debug -pg 1 -lvl 3 -x 700 -y 40 -defaultsOSRD
+preplace port port-id_led_light -pg 1 -lvl 3 -x 700 -y 20 -defaultsOSRD
+preplace port port-id_CLK25MHZ -pg 1 -lvl 0 -x 0 -y 110 -defaultsOSRD
+preplace portBus nand_data -pg 1 -lvl 3 -x 700 -y 200 -defaultsOSRD
+preplace inst flash_programmer_0 -pg 1 -lvl 1 -x 180 -y 220 -defaultsOSRD
+preplace inst nand_master_0 -pg 1 -lvl 2 -x 520 -y 170 -defaultsOSRD
+preplace netloc CLK25MHZ_1 1 0 2 20 80 360J
+preplace netloc flash_programmer_0_debug 1 1 2 340J 40 NJ
+preplace netloc flash_programmer_0_led_light 1 1 2 330J 20 NJ
+preplace netloc nand_rnb_1 1 0 2 NJ 90 350J
+preplace netloc nand_master_0_busy 1 0 3 30 350 NJ 350 670
+preplace netloc flash_programmer_0_nand_reset 1 1 1 370 170n
+preplace netloc flash_programmer_0_data_in 1 1 1 N 190
+preplace netloc flash_programmer_0_cmd_in 1 1 1 N 230
+preplace netloc nand_master_0_data_out 1 0 3 20 360 NJ 360 680
+preplace netloc flash_programmer_0_activate 1 1 1 N 210
+preplace netloc Net1 1 2 1 NJ 200
+preplace netloc nand_master_0_nand_nre 1 2 1 NJ 180
+preplace netloc nand_master_0_nand_nwp 1 2 1 NJ 160
+preplace netloc nand_master_0_nand_nwe 1 2 1 NJ 140
+preplace netloc nand_master_0_nand_ale 1 2 1 NJ 120
+preplace netloc nand_master_0_nand_cle 1 2 1 NJ 100
+preplace netloc flash_programmer_0_nand_enable 1 1 1 360 130n
+preplace netloc flash_programmer_0_nand_nce1 1 1 2 330J 300 NJ
+levelinfo -pg 1 0 180 520 700
+pagesize -pg 1 -db -bbox -sgen -130 0 870 370
 "
 }
 {

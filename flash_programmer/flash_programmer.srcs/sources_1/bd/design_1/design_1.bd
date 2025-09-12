@@ -11,7 +11,8 @@
       "validated": "true"
     },
     "design_tree": {
-      "flash_programmer_0": ""
+      "flash_programmer_0": "",
+      "nand_master_0": ""
     },
     "ports": {
       "nand_rnb": {
@@ -105,6 +106,69 @@
           "debug": {
             "direction": "O"
           },
+          "data_out": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "data_in": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "busy": {
+            "direction": "I"
+          },
+          "activate": {
+            "direction": "O"
+          },
+          "cmd_in": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "nand_reset": {
+            "type": "rst",
+            "direction": "O"
+          },
+          "nand_enable": {
+            "direction": "O"
+          },
+          "nand_nce": {
+            "direction": "O"
+          }
+        }
+      },
+      "nand_master_0": {
+        "vlnv": "xilinx.com:module_ref:nand_master:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_1_nand_master_0_0",
+        "xci_path": "ip/design_1_nand_master_0_0/design_1_nand_master_0_0.xci",
+        "inst_hier_path": "nand_master_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "nand_master",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "25000000",
+                "value_src": "user_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_CLK25MHZ",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "enable": {
+            "direction": "I"
+          },
           "nand_cle": {
             "direction": "O"
           },
@@ -117,9 +181,6 @@
           "nand_nwp": {
             "direction": "O"
           },
-          "nand_nce": {
-            "direction": "O"
-          },
           "nand_nre": {
             "direction": "O"
           },
@@ -130,6 +191,36 @@
             "direction": "IO",
             "left": "15",
             "right": "0"
+          },
+          "nreset": {
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "data_out": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "data_in": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "busy": {
+            "direction": "O"
+          },
+          "activate": {
+            "direction": "I"
+          },
+          "cmd_in": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
           }
         }
       }
@@ -138,13 +229,32 @@
       "CLK25MHZ_1": {
         "ports": [
           "CLK25MHZ",
+          "nand_master_0/clk",
           "flash_programmer_0/i_clock"
         ]
       },
-      "Net": {
+      "Net1": {
         "ports": [
           "nand_data",
-          "flash_programmer_0/nand_data"
+          "nand_master_0/nand_data"
+        ]
+      },
+      "flash_programmer_0_activate": {
+        "ports": [
+          "flash_programmer_0/activate",
+          "nand_master_0/activate"
+        ]
+      },
+      "flash_programmer_0_cmd_in": {
+        "ports": [
+          "flash_programmer_0/cmd_in",
+          "nand_master_0/cmd_in"
+        ]
+      },
+      "flash_programmer_0_data_in": {
+        "ports": [
+          "flash_programmer_0/data_in",
+          "nand_master_0/data_in"
         ]
       },
       "flash_programmer_0_debug": {
@@ -159,46 +269,70 @@
           "led_light"
         ]
       },
-      "flash_programmer_0_nand_ale": {
+      "flash_programmer_0_nand_enable": {
         "ports": [
-          "flash_programmer_0/nand_ale",
-          "nand_ale"
+          "flash_programmer_0/nand_enable",
+          "nand_master_0/enable"
         ]
       },
-      "flash_programmer_0_nand_cle": {
-        "ports": [
-          "flash_programmer_0/nand_cle",
-          "nand_cle"
-        ]
-      },
-      "flash_programmer_0_nand_nce": {
+      "flash_programmer_0_nand_nce1": {
         "ports": [
           "flash_programmer_0/nand_nce",
           "nand_nce"
         ]
       },
-      "flash_programmer_0_nand_nre": {
+      "flash_programmer_0_nand_reset": {
         "ports": [
-          "flash_programmer_0/nand_nre",
+          "flash_programmer_0/nand_reset",
+          "nand_master_0/nreset"
+        ]
+      },
+      "nand_master_0_busy": {
+        "ports": [
+          "nand_master_0/busy",
+          "flash_programmer_0/busy"
+        ]
+      },
+      "nand_master_0_data_out": {
+        "ports": [
+          "nand_master_0/data_out",
+          "flash_programmer_0/data_out"
+        ]
+      },
+      "nand_master_0_nand_ale": {
+        "ports": [
+          "nand_master_0/nand_ale",
+          "nand_ale"
+        ]
+      },
+      "nand_master_0_nand_cle": {
+        "ports": [
+          "nand_master_0/nand_cle",
+          "nand_cle"
+        ]
+      },
+      "nand_master_0_nand_nre": {
+        "ports": [
+          "nand_master_0/nand_nre",
           "nand_nre"
         ]
       },
-      "flash_programmer_0_nand_nwe": {
+      "nand_master_0_nand_nwe": {
         "ports": [
-          "flash_programmer_0/nand_nwe",
+          "nand_master_0/nand_nwe",
           "nand_nwe"
         ]
       },
-      "flash_programmer_0_nand_nwp": {
+      "nand_master_0_nand_nwp": {
         "ports": [
-          "flash_programmer_0/nand_nwp",
+          "nand_master_0/nand_nwp",
           "nand_nwp"
         ]
       },
       "nand_rnb_1": {
         "ports": [
           "nand_rnb",
-          "flash_programmer_0/nand_rnb"
+          "nand_master_0/nand_rnb"
         ]
       }
     }
