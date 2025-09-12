@@ -157,7 +157,7 @@ entity flash_programmer is
         DELAY_MAX_COUNT : integer := 25000000;
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
-        BLOCKS_TO_TEST : integer := 64
+        BLOCKS_TO_TEST : integer := 1024
     );
     Port (
     led_light : out STD_LOGIC := '1';
@@ -185,7 +185,7 @@ end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
-     signal led_state : std_logic := '1';
+     signal led_state : std_logic := '0';
      
 -- signal i_TX_DV : std_logic := '0';         -- Data Valid for Transmission
 --    signal i_TX_Byte : std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
@@ -313,6 +313,7 @@ begin
     process(i_clock)
     begin
     debug <= i_clock;
+    led_light <= '0';
     if i_clock'event and i_clock = '1' then
     
 --        led_light <= '0';

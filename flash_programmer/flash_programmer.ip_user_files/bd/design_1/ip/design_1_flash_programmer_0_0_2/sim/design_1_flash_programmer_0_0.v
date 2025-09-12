@@ -88,7 +88,7 @@ inout wire [15 : 0] nand_data;
     .DELAY_MAX_COUNT(25000000),
     .PAGE_SIZE(8640),
     .PAGES_IN_BLOCK(128),
-    .BLOCKS_TO_TEST(64)
+    .BLOCKS_TO_TEST(1024)
   ) inst (
     .led_light(led_light),
     .i_clock(i_clock),

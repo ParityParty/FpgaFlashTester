@@ -12,7 +12,7 @@
         "DELAY_MAX_COUNT": [ { "value": "25000000", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "BLOCKS_TO_TEST": [ { "value": "64", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_flash_programmer_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
@@ -20,7 +20,7 @@
         "DELAY_MAX_COUNT": [ { "value": "25000000", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "BLOCKS_TO_TEST": [ { "value": "64", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynquplus" } ],

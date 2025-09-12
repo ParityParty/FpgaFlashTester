@@ -17,6 +17,7 @@ preplace port port-id_led_light -pg 1 -lvl 2 -x 320 -y 60 -defaultsOSRD
 preplace port port-id_CLK25MHZ -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
 preplace portBus nand_data -pg 1 -lvl 2 -x 320 -y 220 -defaultsOSRD
 preplace inst flash_programmer_0 -pg 1 -lvl 1 -x 160 -y 140 -defaultsOSRD
+preplace netloc CLK25MHZ_1 1 0 1 20 100n
 preplace netloc Net 1 1 1 NJ 220
 preplace netloc flash_programmer_0_debug 1 1 1 NJ 80
 preplace netloc flash_programmer_0_led_light 1 1 1 NJ 60
@@ -27,7 +28,6 @@ preplace netloc flash_programmer_0_nand_nre 1 1 1 NJ 200
 preplace netloc flash_programmer_0_nand_nwe 1 1 1 NJ 140
 preplace netloc flash_programmer_0_nand_nwp 1 1 1 NJ 160
 preplace netloc nand_rnb_1 1 0 1 20J 150n
-preplace netloc CLK25MHZ_1 1 0 1 20 100n
 levelinfo -pg 1 0 160 320
 pagesize -pg 1 -db -bbox -sgen -130 -30 490 280
 "
