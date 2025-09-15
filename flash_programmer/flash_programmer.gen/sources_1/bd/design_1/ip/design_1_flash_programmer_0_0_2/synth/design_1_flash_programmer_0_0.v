@@ -66,6 +66,10 @@ module design_1_flash_programmer_0_0 (
   cmd_in,
   nand_reset,
   nand_enable,
+  i_TX_DV,
+  i_TX_Byte,
+  o_TX_Active,
+  o_TX_Done,
   nand_nce
 );
 
@@ -85,6 +89,10 @@ output wire [7 : 0] cmd_in;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME nand_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
 output wire nand_reset;
 output wire nand_enable;
+output wire i_TX_DV;
+output wire [7 : 0] i_TX_Byte;
+input wire o_TX_Active;
+input wire o_TX_Done;
 output wire nand_nce;
 
   flash_programmer #(
@@ -104,6 +112,10 @@ output wire nand_nce;
     .cmd_in(cmd_in),
     .nand_reset(nand_reset),
     .nand_enable(nand_enable),
+    .i_TX_DV(i_TX_DV),
+    .i_TX_Byte(i_TX_Byte),
+    .o_TX_Active(o_TX_Active),
+    .o_TX_Done(o_TX_Done),
     .nand_nce(nand_nce)
   );
 endmodule

@@ -19,134 +19,6 @@
 ----------------------------------------------------------------------------------
 
 
---library IEEE;
---use IEEE.STD_LOGIC_1164.ALL;
-
----- Uncomment the following library declaration if using
----- arithmetic functions with Signed or Unsigned values
-----use IEEE.NUMERIC_STD.ALL;
-
----- Uncomment the following library declaration if instantiating
----- any Xilinx leaf cells in this code.
-----library UNISIM;
-----use UNISIM.VComponents.all;
-
---entity UART_TX is
---  generic (
---    g_CLKS_PER_BIT : integer := 2604     -- Needs to be set correctly
---    );
---  port (
---    i_Clk       : in  std_logic;
---    i_TX_DV     : in  std_logic;
---    i_TX_Byte   : in  std_logic_vector(7 downto 0);
---    o_TX_Active : out std_logic;
---    o_TX_Serial : out std_logic;
---    o_TX_Done   : out std_logic
---    );
---end UART_TX;
- 
- 
---architecture rtl_tx of UART_TX is
- 
---  type t_SM_Main is (s_Idle, s_TX_Start_Bit, s_TX_Data_Bits,
---                     s_TX_Stop_Bit, s_Cleanup);
---  signal r_SM_Main : t_SM_Main := s_Idle;
- 
---  signal r_Clk_Count : integer range 0 to g_CLKS_PER_BIT-1 := 0;
---  signal r_Bit_Index : integer range 0 to 7 := 0;  -- 8 Bits Total
---  signal r_TX_Data   : std_logic_vector(7 downto 0) := (others => '0');
---  signal r_TX_Done   : std_logic := '0';
-   
---begin
- 
-   
---  p_UART_TX : process (i_Clk)
---  begin
---    if rising_edge(i_Clk) then
-         
---      case r_SM_Main is
- 
---        when s_Idle =>
---          o_TX_Active <= '0';
---          o_TX_Serial <= '1';         -- Drive Line High for Idle
---          r_TX_Done   <= '0';
---          r_Clk_Count <= 0;
---          r_Bit_Index <= 0;
- 
---          if i_TX_DV = '1' then
---            r_TX_Data <= i_TX_Byte;
---            r_SM_Main <= s_TX_Start_Bit;
---            o_TX_Active <= '1';
---          else
---            r_SM_Main <= s_Idle;
---          end if;
- 
---        -- Send out Start Bit. Start bit = 0
---        when s_TX_Start_Bit =>
---          o_TX_Active <= '1';
---          o_TX_Serial <= '0';
- 
---          -- Wait g_CLKS_PER_BIT-1 clock cycles for start bit to finish
---          if r_Clk_Count < g_CLKS_PER_BIT-1 then
---            r_Clk_Count <= r_Clk_Count + 1;
---            r_SM_Main   <= s_TX_Start_Bit;
---          else
---            r_Clk_Count <= 0;
---            r_SM_Main   <= s_TX_Data_Bits;
---          end if;
- 
---        -- Wait g_CLKS_PER_BIT-1 clock cycles for data bits to finish
---        when s_TX_Data_Bits =>
---          o_TX_Serial <= r_TX_Data(r_Bit_Index);
-           
---          if r_Clk_Count < g_CLKS_PER_BIT-1 then
---            r_Clk_Count <= r_Clk_Count + 1;
---            r_SM_Main   <= s_TX_Data_Bits;
---          else
---            r_Clk_Count <= 0;
-             
---            -- Check if we have sent out all bits
---            if r_Bit_Index < 7 then
---              r_Bit_Index <= r_Bit_Index + 1;
---              r_SM_Main   <= s_TX_Data_Bits;
---            else
---              r_Bit_Index <= 0;
---              r_SM_Main   <= s_TX_Stop_Bit;
---            end if;
---          end if;
- 
---        -- Send out Stop bit. Stop bit = 1 
---        when s_TX_Stop_Bit =>
---          o_TX_Serial <= '1';
- 
---          -- Wait g_CLKS_PER_BIT-1 clock cycles for Stop bit to finish
---          if r_Clk_Count < g_CLKS_PER_BIT-1 then
---            r_Clk_Count <= r_Clk_Count + 1;
---            r_SM_Main   <= s_TX_Stop_Bit;
---          else
---            r_TX_Done   <= '1';
---            r_Clk_Count <= 0;
---            r_SM_Main   <= s_Cleanup;
---          end if;
-         
---        -- Stay here 1 clock 
---        when s_Cleanup =>
---          o_TX_Active <= '0';
---          r_TX_Done   <= '1';
---          r_SM_Main   <= s_Idle;
- 
---        when others =>
---          r_SM_Main <= s_Idle;
- 
---      end case;
---    end if;
---  end process p_UART_TX;
- 
---  o_TX_Done <= r_TX_Done;
-   
---end rtl_tx;
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -160,7 +32,7 @@ entity flash_programmer is
         BLOCKS_TO_TEST : integer := 1024
     );
     Port (
-    led_light : out STD_LOGIC := '1';
+    led_light : out STD_LOGIC := '0';
     i_clock  : in  STD_LOGIC;
 --    uart_tx : out STD_LOGIC;
     debug : out std_logic := '1';
@@ -174,6 +46,11 @@ entity flash_programmer is
     nand_reset          : out std_logic := '0';
     nand_enable         : out std_logic := '0';
     
+    i_TX_DV : out std_logic := '0';         -- Data Valid for Transmission
+    i_TX_Byte : out std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
+    o_TX_Active : in std_logic;
+    o_TX_Done : in std_logic := '0';
+    
     nand_nce : out std_logic := '1'
     );
 end flash_programmer;
@@ -181,21 +58,17 @@ end flash_programmer;
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
      
--- signal i_TX_DV : std_logic := '0';         -- Data Valid for Transmission
---    signal i_TX_Byte : std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
---    signal o_TX_Active : std_logic := '0';
---    signal o_TX_Serial : std_logic := '1';
---    signal o_TX_Done : std_logic := '0';
 
-	type STATE_TYPE is (INIT, WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, DELAY, DONE);
+
+	type STATE_TYPE is (INIT,  WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, GET_STATUS, DELAY, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
+	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, ERASE_CHECK, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
-	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	
 	signal state : STATE_TYPE := INIT;
 	signal init_substate :INIT_SUBSTATE_TYPE := INIT_START;
-	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
 	signal write_substate : WRITE_SUBSTATE_TYPE := WRITE_START;
+	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
 	
 	signal next_state : STATE_TYPE;
 	signal delay_counter : integer := 0;
@@ -203,13 +76,16 @@ architecture Behavioral of flash_programmer is
 	signal startup_done : std_logic := '0';
 	signal address_bytes_counter : integer := 0;
 	signal data_bytes_counter : integer := 0;
-	signal reset_index : std_logic := '0';
+	
+	signal reset_index_after_release : std_logic := '0';
+	signal get_status_after_release : std_logic := '0';
 	
 	signal pages_left : integer := PAGES_IN_BLOCK;
 	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 	signal blocks_tested : integer := 0;
 	
 	signal int_activate : std_logic := '0';
+	signal int_uart_dv : std_logic := '0';
 begin
 --    uart_tx_inst : entity work.UART_TX
 --        port map (
@@ -223,21 +99,21 @@ begin
 	
 	debug <= i_clock;
 	activate <= int_activate;
+	i_TX_DV <= int_uart_dv;
         
     process(i_clock)
     begin
-    led_light <= '0';
     if rising_edge(i_clock) then
     
---        if i_TX_DV = '1' then
---            i_TX_DV <= '0';
+--        if int_uart_dv = '1' then
+--            int_uart_dv <= '0';
 --        end if;
         
         if counter = MAX_COUNT then
             counter <= 1;
---            if o_TX_Active = '0' and i_TX_DV = '0' then
+--            if o_TX_Active = '0' and int_uart_dv = '0' then
 --                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
---                i_TX_DV <= '1';
+--                int_uart_dv <= '1';
 --            end if;
             startup_done <= '1';
             nand_reset <= '1';
@@ -249,6 +125,31 @@ begin
             int_activate <= '0';
         else
             case state is
+            -- These two states are responsible for releasing the command in cmd_in
+            -- and waitng until done
+            when RELEASE =>
+                int_activate <= '1';
+                state <= CTRL_BUSY;
+            when CTRL_BUSY =>
+                if busy = '0' then
+                    if reset_index_after_release = '1' then
+                        state <= INDEX_RESET;
+                    elsif get_status_after_release = '1' then
+                        state <= GET_STATUS;
+                    else 
+                        state <= next_state;
+                    end if;
+                end if;
+                
+            when INDEX_RESET =>
+                cmd_in <= x"0d";
+                reset_index_after_release <= '0';
+                state <= RELEASE;
+            when GET_STATUS =>
+                cmd_in <= x"05";
+                get_status_after_release <= '0';
+                state <= RELEASE;
+                
             when INIT =>
                 case init_substate is
                 when INIT_START =>
@@ -288,24 +189,6 @@ begin
                     write_substate <= WRITE_START;
                     state <= RELEASE;
                end case;
-            
-            -- These two states are responsible for releasing the command in cmd_in
-            -- and waitng until done
-            when RELEASE =>
-                int_activate <= '1';
-                state <= CTRL_BUSY;
-            when CTRL_BUSY =>
-                if busy = '0' then
-                    if reset_index = '1' then
-                        state <= INDEX_RESET;
-                    else
-                        state <= next_state;
-                    end if;
-                end if;
-            when INDEX_RESET =>
-                cmd_in <= x"0d";
-                reset_index <= '0';
-                state <= RELEASE;
                 
             when WRITE_BLOCK =>
                 case write_substate is
@@ -344,10 +227,24 @@ begin
                     
                 when ERASE =>
                     cmd_in <= x"04";
-                    write_substate <= PROGRAM_LOAD_ADDR;
-                    reset_index <= '1';
+                    write_substate <= ERASE_CHECK;
+                    reset_index_after_release <= '1';
+                    get_status_after_release <= '1';
                     address_bytes_counter <= 5;
                     state <= RELEASE;
+                
+                when ERASE_CHECK =>
+                    if data_out(5) = '1' then 
+                        if data_out(0) = '1' then
+                            led_light <= '1';
+                            state <= DONE;
+                        else
+                            write_substate <= PROGRAM_LOAD_ADDR;
+                        end if;
+                    else
+                        state <= GET_STATUS;
+                    end if;
+                    
                     
                 when PROGRAM_LOAD_ADDR =>
                     case address_bytes_counter is
@@ -369,7 +266,7 @@ begin
                     if address_bytes_counter = 1 then
                       write_substate <= PROGRAM_WRITE_BYTE;
                       data_bytes_counter <= PAGE_SIZE;
-                      reset_index <= '1';
+                      reset_index_after_release <= '1';
                     end if;
                 
                 when PROGRAM_WRITE_BYTE =>
@@ -438,15 +335,15 @@ begin
                 when READ =>
                     data_in <= x"00";
                     cmd_in <= x"06";
-                    reset_index <= '1';
+                    reset_index_after_release <= '1';
                     read_substate <= EXTRACT;
 --                    next_state <= DONE;
                     data_bytes_counter <= 0;
                     state <= RELEASE;
                 
                 when EXTRACT =>
-                    cmd_in <= x"08";
---                    cmd_in <= x"10";
+--                    cmd_in <= x"08";
+                    cmd_in <= x"10";
                     read_substate <= EXTRACT_READBYTE;
                     state <= RELEASE;
                     data_bytes_counter <= data_bytes_counter + 1;
@@ -458,19 +355,19 @@ begin
                     end if;             
                 
                 when EXTRACT_READBYTE =>
---                    if data_out = x"AA" then
+                    if data_out = x"AA" then
                         read_substate <= EXTRACT;
---                    else
---                        read_substate <= SEND_ERR; 
---                    end if;
+                    else
+                        read_substate <= SEND_ERR; 
+                    end if;
                 
-                when SEND_ERR =>
---                    if o_TX_Active = '0' and i_TX_DV = '0' then
---                        i_TX_Byte <= data_out;
---                        i_TX_DV <= '1';
-        --                    state <= DELAY;
---                        read_substate <= EXTRACT;
---                    end if;
+                when SEND_ERR => 
+                    if o_TX_Active = '0' and int_uart_dv = '0' then
+                        i_TX_Byte <= data_out;
+                        int_uart_dv <= '1';
+                            state <= DELAY;
+                        read_substate <= EXTRACT;
+                    end if;
                 
                 when PAGE_READ_DONE =>
                     if pages_left > 1 then

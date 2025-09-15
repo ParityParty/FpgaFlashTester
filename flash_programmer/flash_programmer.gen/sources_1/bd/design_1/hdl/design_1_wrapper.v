@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Fri Sep 12 15:21:16 2025
+//Date        : Mon Sep 15 11:56:06 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1_wrapper.bd
 //Design      : design_1_wrapper
@@ -21,7 +21,8 @@ module design_1_wrapper
     nand_nre,
     nand_nwe,
     nand_nwp,
-    nand_rnb);
+    nand_rnb,
+    uart_tx);
   input CLK25MHZ;
   output debug;
   output led_light;
@@ -33,6 +34,7 @@ module design_1_wrapper
   output nand_nwe;
   output nand_nwp;
   input nand_rnb;
+  output uart_tx;
 
   wire CLK25MHZ;
   wire debug;
@@ -45,6 +47,7 @@ module design_1_wrapper
   wire nand_nwe;
   wire nand_nwp;
   wire nand_rnb;
+  wire uart_tx;
 
   design_1 design_1_i
        (.CLK25MHZ(CLK25MHZ),
@@ -57,5 +60,6 @@ module design_1_wrapper
         .nand_nre(nand_nre),
         .nand_nwe(nand_nwe),
         .nand_nwp(nand_nwp),
-        .nand_rnb(nand_rnb));
+        .nand_rnb(nand_rnb),
+        .uart_tx(uart_tx));
 endmodule

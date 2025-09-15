@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x7E161128F43CF1ED",
+      "boundary_crc": "0xCA90E5036FF6D709",
       "device": "xck26-sfvc784-2LV-c",
       "gen_directory": "../../../../flash_programmer.gen/sources_1/bd/design_1",
       "name": "design_1",
@@ -12,7 +12,8 @@
     },
     "design_tree": {
       "flash_programmer_0": "",
-      "nand_master_0": ""
+      "nand_master_0": "",
+      "UART_TX_0": ""
     },
     "ports": {
       "nand_rnb": {
@@ -71,6 +72,9 @@
             "value_src": "default"
           }
         }
+      },
+      "uart_tx": {
+        "direction": "O"
       }
     },
     "components": {
@@ -133,6 +137,20 @@
           },
           "nand_enable": {
             "direction": "O"
+          },
+          "i_TX_DV": {
+            "direction": "O"
+          },
+          "i_TX_Byte": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "o_TX_Active": {
+            "direction": "I"
+          },
+          "o_TX_Done": {
+            "direction": "I"
           },
           "nand_nce": {
             "direction": "O"
@@ -223,6 +241,52 @@
             "right": "0"
           }
         }
+      },
+      "UART_TX_0": {
+        "vlnv": "xilinx.com:module_ref:UART_TX:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_1_UART_TX_0_0",
+        "xci_path": "ip/design_1_UART_TX_0_0/design_1_UART_TX_0_0.xci",
+        "inst_hier_path": "UART_TX_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "UART_TX",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "i_Clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "25000000",
+                "value_src": "user_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_CLK25MHZ",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "i_TX_DV": {
+            "direction": "I"
+          },
+          "i_TX_Byte": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "o_TX_Active": {
+            "direction": "O"
+          },
+          "o_TX_Serial": {
+            "direction": "O"
+          },
+          "o_TX_Done": {
+            "direction": "O"
+          }
+        }
       }
     },
     "nets": {
@@ -230,6 +294,7 @@
         "ports": [
           "CLK25MHZ",
           "nand_master_0/clk",
+          "UART_TX_0/i_Clk",
           "flash_programmer_0/i_clock"
         ]
       },
@@ -237,6 +302,24 @@
         "ports": [
           "nand_data",
           "nand_master_0/nand_data"
+        ]
+      },
+      "UART_TX_0_o_TX_Active": {
+        "ports": [
+          "UART_TX_0/o_TX_Active",
+          "flash_programmer_0/o_TX_Active"
+        ]
+      },
+      "UART_TX_0_o_TX_Done": {
+        "ports": [
+          "UART_TX_0/o_TX_Done",
+          "flash_programmer_0/o_TX_Done"
+        ]
+      },
+      "UART_TX_0_o_TX_Serial": {
+        "ports": [
+          "UART_TX_0/o_TX_Serial",
+          "uart_tx"
         ]
       },
       "flash_programmer_0_activate": {
@@ -261,6 +344,18 @@
         "ports": [
           "flash_programmer_0/debug",
           "debug"
+        ]
+      },
+      "flash_programmer_0_i_TX_Byte": {
+        "ports": [
+          "flash_programmer_0/i_TX_Byte",
+          "UART_TX_0/i_TX_Byte"
+        ]
+      },
+      "flash_programmer_0_i_TX_DV": {
+        "ports": [
+          "flash_programmer_0/i_TX_DV",
+          "UART_TX_0/i_TX_DV"
         ]
       },
       "flash_programmer_0_led_light": {

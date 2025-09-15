@@ -47,74 +47,41 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:module_ref:flash_programmer:1.0
+// IP VLNV: xilinx.com:module_ref:UART_TX:1.0
 // IP Revision: 1
 
-`timescale 1ns/1ps
-
+(* X_CORE_INFO = "UART_TX,Vivado 2025.1" *)
+(* CHECK_LICENSE_TYPE = "design_1_UART_TX_0_0,UART_TX,{}" *)
+(* CORE_GENERATION_INFO = "design_1_UART_TX_0_0,UART_TX,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=UART_TX,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,g_CLKS_PER_BIT=2604}" *)
 (* IP_DEFINITION_SOURCE = "module_ref" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
-module design_1_flash_programmer_0_0 (
-  led_light,
-  i_clock,
-  debug,
-  data_out,
-  data_in,
-  busy,
-  activate,
-  cmd_in,
-  nand_reset,
-  nand_enable,
+module design_1_UART_TX_0_0 (
+  i_Clk,
   i_TX_DV,
   i_TX_Byte,
   o_TX_Active,
-  o_TX_Done,
-  nand_nce
+  o_TX_Serial,
+  o_TX_Done
 );
 
-output wire led_light;
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clock CLK" *)
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_Clk CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
-input wire i_clock;
-output wire debug;
-input wire [7 : 0] data_out;
-output wire [7 : 0] data_in;
-input wire busy;
-output wire activate;
-output wire [7 : 0] cmd_in;
-(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 nand_reset RST" *)
-(* X_INTERFACE_MODE = "master" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME nand_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
-output wire nand_reset;
-output wire nand_enable;
-output wire i_TX_DV;
-output wire [7 : 0] i_TX_Byte;
-input wire o_TX_Active;
-input wire o_TX_Done;
-output wire nand_nce;
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_Clk, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
+input wire i_Clk;
+input wire i_TX_DV;
+input wire [7 : 0] i_TX_Byte;
+output wire o_TX_Active;
+output wire o_TX_Serial;
+output wire o_TX_Done;
 
-  flash_programmer #(
-    .MAX_COUNT(25000),
-    .DELAY_MAX_COUNT(25000000),
-    .PAGE_SIZE(8640),
-    .PAGES_IN_BLOCK(128),
-    .BLOCKS_TO_TEST(1024)
+  UART_TX #(
+    .g_CLKS_PER_BIT(2604)
   ) inst (
-    .led_light(led_light),
-    .i_clock(i_clock),
-    .debug(debug),
-    .data_out(data_out),
-    .data_in(data_in),
-    .busy(busy),
-    .activate(activate),
-    .cmd_in(cmd_in),
-    .nand_reset(nand_reset),
-    .nand_enable(nand_enable),
+    .i_Clk(i_Clk),
     .i_TX_DV(i_TX_DV),
     .i_TX_Byte(i_TX_Byte),
     .o_TX_Active(o_TX_Active),
-    .o_TX_Done(o_TX_Done),
-    .nand_nce(nand_nce)
+    .o_TX_Serial(o_TX_Serial),
+    .o_TX_Done(o_TX_Done)
   );
 endmodule

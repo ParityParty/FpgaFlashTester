@@ -1,6 +1,7 @@
 verilog xil_defaultlib -i "../../../../../../../../opt/Xilinx/2025.1/data/rsb/busdef" \
 "../../../bd/design_1/ip/design_1_flash_programmer_0_0_2/sim/design_1_flash_programmer_0_0.v" \
 "../../../bd/design_1/ip/design_1_nand_master_0_0/sim/design_1_nand_master_0_0.v" \
+"../../../bd/design_1/ip/design_1_UART_TX_0_0/sim/design_1_UART_TX_0_0.v" \
 "../../../bd/design_1/sim/design_1.v" \
 
 verilog xil_defaultlib "glbl.v"

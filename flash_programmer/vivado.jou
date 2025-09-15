@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Wed May 21 22:58:25 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Mon Sep 15 11:54:35 2025
+# Process ID         : 3240861
+# Current directory  : /home/michal/FpgaFlashTester/flash_programmer
+# Command line       : vivado -mode batch -source synth_and_program.tcl
+# Log file           : /home/michal/FpgaFlashTester/flash_programmer/vivado.log
+# Journal file       : /home/michal/FpgaFlashTester/flash_programmer/vivado.jou
+# Running On         : volzotan
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 20.04.6 LTS
+# Processor Detail   : Intel(R) Xeon(R) W-2155 CPU @ 3.30GHz
+# CPU Frequency      : 3300.000 MHz
+# CPU Physical cores : 10
+# CPU Logical cores  : 20
+# Host memory        : 67086 MB
+# Swap memory        : 1023 MB
+# Total Virtual      : 68109 MB
+# Available Virtual  : 55818 MB
+#-----------------------------------------------------------
+source synth_and_program.tcl
