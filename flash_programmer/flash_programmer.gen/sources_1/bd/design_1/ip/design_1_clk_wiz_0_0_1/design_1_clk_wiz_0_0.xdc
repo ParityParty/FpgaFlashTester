@@ -54,3 +54,4 @@ create_clock -period 40.000 [get_ports clk_in1]
 set_input_jitter [get_clocks -of_objects [get_ports clk_in1]] 0.400
 
 
+set_property PHASESHIFT_MODE LATENCY [get_cells -hierarchical *adv*]

@@ -55,6 +55,7 @@
 (* IP_DEFINITION_SOURCE = "module_ref" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module design_1_UART_TX_0_0 (
+  i_reset,
   i_Clk,
   i_TX_DV,
   i_TX_Byte,
@@ -63,9 +64,13 @@ module design_1_UART_TX_0_0 (
   o_TX_Done
 );
 
+(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_reset RST" *)
+(* X_INTERFACE_MODE = "slave" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
+input wire i_reset;
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_Clk CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_Clk, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_Clk, ASSOCIATED_RESET i_reset, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0" *)
 input wire i_Clk;
 input wire i_TX_DV;
 input wire [7 : 0] i_TX_Byte;
@@ -76,6 +81,7 @@ output wire o_TX_Done;
   UART_TX #(
     .g_CLKS_PER_BIT(2604)
   ) inst (
+    .i_reset(i_reset),
     .i_Clk(i_Clk),
     .i_TX_DV(i_TX_DV),
     .i_TX_Byte(i_TX_Byte),

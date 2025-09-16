@@ -67,6 +67,8 @@ module design_1_clk_wiz_0_0_clk_wiz
  (// Clock in ports
   // Clock out ports
   output        clk_out1,
+  // Status and control signals
+  output        locked,
   input         clk_in1
  );
   // Input buffering
@@ -119,24 +121,70 @@ wire clk_in2_design_1_clk_wiz_0_0;
 // Auto Instantiation//
 
 
-BUFGCE_DIV #(
-      .BUFGCE_DIVIDE(1.0),      // 1-8
-      // Programmable Inversion Attributes: Specifies built-in programmable inversion on specific pins
-      .IS_CE_INVERTED(1'b0),  // Optional inversion for CE
-      .IS_CLR_INVERTED(1'b0), // Optional inversion for CLR
-      .IS_I_INVERTED(1'b0)    // Optional inversion for I
-   )
-   BUFGCE_DIV_CLK1_inst (
-      .O(clk_out1_design_1_clk_wiz_0_0),     // 1-bit output: Buffer
-      .CE(1'b1),   // 1-bit input: Buffer enable
-      .CLR(1'b0), // 1-bit input: Asynchronous clear
-      .I(clk_in1_design_1_clk_wiz_0_0)      // 1-bit input: Buffer
-   );
-   
-   
+  
+    MMCME4_ADV
+
+  #(.BANDWIDTH            ("OPTIMIZED"),
+    .CLKOUT4_CASCADE      ("FALSE"),
+    .COMPENSATION         ("AUTO"),
+    .STARTUP_WAIT         ("FALSE"),
+    .DIVCLK_DIVIDE        (1),
+    .CLKFBOUT_MULT_F      (44.375),
+    .CLKFBOUT_PHASE       (0.000),
+    .CLKFBOUT_USE_FINE_PS ("FALSE"),
+    .CLKOUT0_DIVIDE_F     (44.375),
+    .CLKOUT0_PHASE        (0.000),
+    .CLKOUT0_DUTY_CYCLE   (0.500),
+    .CLKOUT0_USE_FINE_PS  ("FALSE"),
+    .CLKIN1_PERIOD        (40.000))
+  
+     mmcme4_adv_inst
+    // Output clocks
+   (
+    .CLKFBOUT            (clkfbout_design_1_clk_wiz_0_0),
+    .CLKFBOUTB           (clkfboutb_unused),
+    .CLKOUT0             (clk_out1_design_1_clk_wiz_0_0),
+    .CLKOUT0B            (clkout0b_unused),
+    .CLKOUT1             (clkout1_unused),
+    .CLKOUT1B            (clkout1b_unused),
+    .CLKOUT2             (clkout2_unused),
+    .CLKOUT2B            (clkout2b_unused),
+    .CLKOUT3             (clkout3_unused),
+    .CLKOUT3B            (clkout3b_unused),
+    .CLKOUT4             (clkout4_unused),
+    .CLKOUT5             (clkout5_unused),
+    .CLKOUT6             (clkout6_unused),
+     // Input clock control
+    .CLKFBIN             (clkfbout_design_1_clk_wiz_0_0),
+    .CLKIN1              (clk_in1_design_1_clk_wiz_0_0),
+    .CLKIN2              (1'b0),
+     // Tied to always select the primary input clock
+    .CLKINSEL            (1'b1),
+    // Ports for dynamic reconfiguration
+    .DADDR               (7'h0),
+    .DCLK                (1'b0),
+    .DEN                 (1'b0),
+    .DI                  (16'h0),
+    .DO                  (do_unused),
+    .DRDY                (drdy_unused),
+    .DWE                 (1'b0),
+    .CDDCDONE            (),
+    .CDDCREQ             (1'b0),
+    // Ports for dynamic phase shift
+    .PSCLK               (1'b0),
+    .PSEN                (1'b0),
+    .PSINCDEC            (1'b0),
+    .PSDONE              (psdone_unused),
+    // Other control and status signals
+    .LOCKED              (locked_int),
+    .CLKINSTOPPED        (clkinstopped_unused),
+    .CLKFBSTOPPED        (clkfbstopped_unused),
+    .PWRDWN              (1'b0),
+    .RST                 (1'b0));
 
 
 
+  assign locked = locked_int;
 // Clock Monitor clock assigning
 //--------------------------------------
  // Output buffering
@@ -147,7 +195,9 @@ BUFGCE_DIV #(
 
 
 
-  assign clk_out1 = clk_out1_design_1_clk_wiz_0_0;
+  BUFG clkout1_buf
+   (.O   (clk_out1),
+    .I   (clk_out1_design_1_clk_wiz_0_0));
 
 
 
