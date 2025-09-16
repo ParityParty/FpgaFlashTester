@@ -13,7 +13,8 @@
     "design_tree": {
       "flash_programmer_0": "",
       "nand_master_0": "",
-      "UART_TX_0": ""
+      "UART_TX_0": "",
+      "clk_wiz_0": ""
     },
     "ports": {
       "nand_rnb": {
@@ -101,8 +102,12 @@
               "FREQ_HZ": {
                 "value": "25000000"
               },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
               "CLK_DOMAIN": {
-                "value": "design_1_CLK25MHZ",
+                "value": "design_1_clk_wiz_0_0_clk_out1",
                 "value_src": "default_prop"
               }
             }
@@ -176,10 +181,14 @@
             "parameters": {
               "FREQ_HZ": {
                 "value": "25000000",
-                "value_src": "user_prop"
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
               },
               "CLK_DOMAIN": {
-                "value": "design_1_CLK25MHZ",
+                "value": "design_1_clk_wiz_0_0_clk_out1",
                 "value_src": "default_prop"
               }
             }
@@ -261,10 +270,14 @@
             "parameters": {
               "FREQ_HZ": {
                 "value": "25000000",
-                "value_src": "user_prop"
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
               },
               "CLK_DOMAIN": {
-                "value": "design_1_CLK25MHZ",
+                "value": "design_1_clk_wiz_0_0_clk_out1",
                 "value_src": "default_prop"
               }
             }
@@ -287,15 +300,95 @@
             "direction": "O"
           }
         }
+      },
+      "clk_wiz_0": {
+        "vlnv": "xilinx.com:ip:clk_wiz:6.0",
+        "ip_revision": "16",
+        "xci_name": "design_1_clk_wiz_0_0",
+        "xci_path": "ip/design_1_clk_wiz_0_0_1/design_1_clk_wiz_0_0.xci",
+        "inst_hier_path": "clk_wiz_0",
+        "has_run_ip_tcl": "true",
+        "parameters": {
+          "AUTO_PRIMITIVE": {
+            "value": "BUFGCE_DIV"
+          },
+          "CLKIN1_JITTER_PS": {
+            "value": "400.0"
+          },
+          "CLKOUT1_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT1_JITTER": {
+            "value": "301.662"
+          },
+          "CLKOUT1_PHASE_ERROR": {
+            "value": "226.541"
+          },
+          "CLKOUT1_REQUESTED_OUT_FREQ": {
+            "value": "25.000"
+          },
+          "CLKOUT2_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT3_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT4_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT5_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT6_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT7_DRIVES": {
+            "value": "Buffer"
+          },
+          "FEEDBACK_SOURCE": {
+            "value": "FDBK_AUTO"
+          },
+          "MMCM_BANDWIDTH": {
+            "value": "OPTIMIZED"
+          },
+          "MMCM_CLKFBOUT_MULT_F": {
+            "value": "44.375"
+          },
+          "MMCM_CLKIN1_PERIOD": {
+            "value": "40.000"
+          },
+          "MMCM_CLKIN2_PERIOD": {
+            "value": "10.0"
+          },
+          "MMCM_CLKOUT0_DIVIDE_F": {
+            "value": "44.375"
+          },
+          "MMCM_COMPENSATION": {
+            "value": "AUTO"
+          },
+          "OPTIMIZE_CLOCKING_STRUCTURE_EN": {
+            "value": "true"
+          },
+          "PRIMITIVE": {
+            "value": "Auto"
+          },
+          "PRIM_IN_FREQ": {
+            "value": "25.000"
+          },
+          "USE_LOCKED": {
+            "value": "false"
+          },
+          "USE_RESET": {
+            "value": "false"
+          }
+        }
       }
     },
     "nets": {
       "CLK25MHZ_1": {
         "ports": [
           "CLK25MHZ",
-          "nand_master_0/clk",
-          "UART_TX_0/i_Clk",
-          "flash_programmer_0/i_clock"
+          "clk_wiz_0/clk_in1"
         ]
       },
       "Net1": {
@@ -320,6 +413,14 @@
         "ports": [
           "UART_TX_0/o_TX_Serial",
           "uart_tx"
+        ]
+      },
+      "clk_wiz_0_clk_out1": {
+        "ports": [
+          "clk_wiz_0/clk_out1",
+          "UART_TX_0/i_Clk",
+          "flash_programmer_0/i_clock",
+          "nand_master_0/clk"
         ]
       },
       "flash_programmer_0_activate": {
