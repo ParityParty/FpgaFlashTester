@@ -44,7 +44,9 @@ entity nand_master is
 		data_in				: in	std_logic_vector(7 downto 0);
 		busy					: out	std_logic := '0';
 		activate				: in	std_logic;
-		cmd_in				: in	std_logic_vector(7 downto 0)
+		cmd_in				: in	std_logic_vector(7 downto 0);
+		
+		debug : out std_logic
 	);
 end nand_master;
 
@@ -273,6 +275,7 @@ begin
 											(state = M_NAND_READ_ID and substate = MS_READ_DATA0) or								-- initiate byte read for READ ID command
 											(state = MI_BYPASS_DATA_RD and substate = MS_BEGIN) else 							-- reading byte directly from the chip
 							'0';
+--    debug <= io_wr_activate;
 							
 	-- Activation of write byte mechanism
 	io_wr_activate	<=	'1'	when 	(state = M_NAND_PAGE_PROGRAM and substate = MS_WRITE_DATA3)	or						-- initiate byte write for PAGE_PROGRAM command
@@ -290,6 +293,65 @@ begin
 --			state							<= state_switch(to_integer(unsigned(cmd_in)));
 			
 		elsif(rising_edge(clk) and enable = '0')then
+               debug <= '0';
+--		      io_wr_activate <= '0';
+		          
+--            if state = M_IDLE then
+--                busy <= '0';
+--            else
+--                busy <= '1';
+--            end if;
+            
+--            -- Activation of command latch unit (cle_activate)
+--            if (state = M_NAND_RESET) or
+--               (state = M_NAND_READ_PARAM_PAGE and substate = MS_BEGIN) or
+--               (state = M_NAND_BLOCK_ERASE and substate = MS_BEGIN) or
+--               (state = M_NAND_BLOCK_ERASE and substate = MS_SUBMIT_COMMAND1) or
+--               (state = M_NAND_READ_STATUS and substate = MS_BEGIN) or
+--               (state = M_NAND_READ and substate = MS_BEGIN) or
+--               (state = M_NAND_READ and substate = MS_SUBMIT_COMMAND1) or
+--               (state = M_NAND_PAGE_PROGRAM and substate = MS_BEGIN) or
+--               (state = M_NAND_PAGE_PROGRAM and substate = MS_SUBMIT_COMMAND1) or
+--               (state = M_NAND_READ_ID and substate = MS_BEGIN) or
+--               (state = MI_BYPASS_COMMAND and substate = MS_SUBMIT_COMMAND) then
+--                cle_activate <= '1';
+--            else
+--                cle_activate <= '0';
+--            end if;
+        
+--            -- Activation of address latch unit (ale_activate)
+--            if (state = M_NAND_READ_PARAM_PAGE and substate = MS_SUBMIT_COMMAND) or
+--               (state = M_NAND_BLOCK_ERASE and substate = MS_SUBMIT_COMMAND) or
+--               (state = M_NAND_READ and substate = MS_SUBMIT_COMMAND) or
+--               (state = M_NAND_PAGE_PROGRAM and substate = MS_SUBMIT_ADDRESS) or
+--               (state = M_NAND_READ_ID and substate = MS_SUBMIT_COMMAND) or
+--               (state = MI_BYPASS_ADDRESS and substate = MS_SUBMIT_ADDRESS) then
+--                ale_activate <= '1';
+--            else
+--                ale_activate <= '0';
+--            end if;
+		
+--            -- Activation of read byte mechanism
+--            if (state = M_NAND_READ_PARAM_PAGE and substate = MS_READ_DATA0) or
+--               (state = M_NAND_READ_STATUS and substate = MS_READ_DATA0) or
+--               (state = M_NAND_READ and substate = MS_READ_DATA0) or
+--               (state = M_NAND_READ_ID and substate = MS_READ_DATA0) or
+--               (state = MI_BYPASS_DATA_RD and substate = MS_BEGIN) then
+--                io_rd_activate <= '1';
+--            else
+--                io_rd_activate <= '0';
+--            end if;
+        
+--            debug <= io_rd_activate;
+        
+--            -- Activation of write byte mechanism
+--            if (state = M_NAND_PAGE_PROGRAM and substate = MS_WRITE_DATA3) or
+--               (state = MI_BYPASS_DATA_WR and substate = MS_WRITE_DATA0) then
+--                io_wr_activate <= '1';
+--            else
+--                io_wr_activate <= '0';
+--            end if;
+		
 			case state is
 				-- RESET state. Speaks for itself
 				when M_RESET =>
@@ -455,6 +517,7 @@ begin
 				
 				-- Program one page.
 				when M_NAND_PAGE_PROGRAM =>
+                    debug <= '1';
 					if(substate = MS_BEGIN)then
 						cle_data_in		<= x"0080";
 						substate			<= MS_SUBMIT_COMMAND;
@@ -490,6 +553,7 @@ begin
 						io_wr_data_in	<= x"00"&page_data(page_idx);
 						if(status(1) = '0')then
 							substate		<= MS_WRITE_DATA3;
+--							io_wr_activate <= '1';
 						else
 							substate		<= MS_WRITE_DATA2;
 						end if;
@@ -498,6 +562,7 @@ begin
 						page_idx			<= page_idx + 1;
 						io_wr_data_in(15 downto 8) <= page_data(page_idx);
 						substate			<= MS_WRITE_DATA3;
+--						io_wr_activate <= '1';
 						
 					elsif(substate = MS_WRITE_DATA3)then
 						if(byte_count < data_bytes_per_page + oob_bytes_per_page)then
@@ -511,7 +576,7 @@ begin
 					elsif(substate = MS_SUBMIT_COMMAND1)then
 						cle_data_in		<= x"0010";
 						n_state			<= M_NAND_PAGE_PROGRAM;
-						state				<= M_WAIT;
+--						state				<= M_WAIT;
 						substate			<= MS_WAIT;
 						
 					elsif(substate = MS_WAIT)then
@@ -567,6 +632,7 @@ begin
 						byte_count		<= 0;
 						page_idx			<= 0;
 						
+						
 					elsif(substate = MS_READ_DATA0)then
 						byte_count		<= byte_count + 1;
 						n_state			<= M_NAND_READ;
@@ -582,6 +648,7 @@ begin
 						else
 							if(status(1) = '0')then
 								substate		<= MS_READ_DATA0;
+--								debug <= '1';
 							else
 								substate		<= MS_READ_DATA2;
 							end if;
@@ -594,6 +661,7 @@ begin
 							substate		<= MS_END;
 						else
 							substate		<= MS_READ_DATA0;
+--							debug <= '1';
 						end if;
 						
 					elsif(substate = MS_END)then
@@ -795,6 +863,7 @@ begin
 				
 				-- Wait for latch and IO modules to become ready as well as for NAND's R/B# to be '1'
 				when M_WAIT =>
+--				    debug <= '1';
 					if(delay > 1)then
 						delay				<= delay - 1;
 					elsif('0' = (cle_busy or ale_busy or io_rd_busy or io_wr_busy or (not nand_rnb)))then
@@ -849,6 +918,7 @@ begin
 					if(substate = MS_BEGIN)then
 						io_wr_data_in(15 downto 0) <= x"00"&data_in(7 downto 0); --page_data(page_idx);
 						substate 		<= MS_WRITE_DATA0;
+--						io_wr_activate <= '1';
 						state 			<= M_WAIT;
 						n_state			<= MI_BYPASS_DATA_WR;
 						

@@ -26,7 +26,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity flash_programmer is
     Generic (
         MAX_COUNT : integer := 25000000 / 1000;
-        DELAY_MAX_COUNT : integer := 25000000;
+        DELAY_MAX_COUNT : integer := 3;
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
         BLOCKS_TO_TEST : integer := 1024
@@ -35,7 +35,7 @@ entity flash_programmer is
     led_light : out STD_LOGIC := '0';
     i_clock  : in  STD_LOGIC;
 --    uart_tx : out STD_LOGIC;
-    debug : out std_logic := '1';
+--    debug : out std_logic := '1';
     i_reset : in std_logic := '0';
 
     data_out				: in	std_logic_vector(7 downto 0);
@@ -56,8 +56,8 @@ end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
-     
-
+    signal delay_counter : integer := 0;
+    
 
 	type STATE_TYPE is (IDLE, INIT,  WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, GET_STATUS, DONE);
 	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
@@ -70,9 +70,7 @@ architecture Behavioral of flash_programmer is
 	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
 	
 	signal next_state : STATE_TYPE;
-	signal delay_counter : integer := 0;
 	
-	signal startup_done : std_logic := '0';
 	signal address_bytes_counter : integer := 0;
 	signal data_bytes_counter : integer := 0;
 	
@@ -96,7 +94,7 @@ begin
 --            o_TX_Done   => o_TX_Done
 --        );
 	
-	debug <= i_clock;
+--	debug <= busy;
 	activate <= int_activate;
 	i_TX_DV <= int_uart_dv;
         
@@ -120,7 +118,6 @@ begin
             read_substate             <= READ_START;
             next_state                <= INIT;
             delay_counter             <= 0;
-            startup_done              <= '0';
             address_bytes_counter     <= 0;
             data_bytes_counter        <= 0;
             reset_index_after_release <= '0';
@@ -149,7 +146,7 @@ begin
             end if;
             
         when CTRL_BUSY =>
-            if busy = '0' then
+            if busy = '0' and delay_counter > DELAY_MAX_COUNT then
                 if reset_index_after_release = '1' then
                     state <= INDEX_RESET;
                 elsif get_status_after_release = '1' then
@@ -157,6 +154,9 @@ begin
                 else 
                     state <= next_state;
                 end if;
+                delay_counter <= 0;
+            else
+                delay_counter <= delay_counter + 1;
             end if;
             
         when INDEX_RESET =>

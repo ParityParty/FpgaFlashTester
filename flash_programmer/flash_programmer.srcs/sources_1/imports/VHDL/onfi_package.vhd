@@ -21,25 +21,45 @@ package onfi is
 
 	-- NAND interface delays.
 	-- Delays of 7.5ns may need to be fixed to 7.0.
-	constant	t_cls		:	integer	:= integer(10.0	/ clock_cycle);
-	constant	t_clh		:	integer	:= integer(5.0 	/ clock_cycle);
-	constant	t_wp		:	integer	:= integer(10.0 	/ clock_cycle);
-	constant	t_wh		:	integer	:= integer(7.5		/ clock_cycle);
-	constant	t_wc		:	integer	:= integer(20.0	/ clock_cycle);
-	constant	t_ds		:	integer	:= integer(7.5		/ clock_cycle);
-	constant	t_dh		:	integer	:= integer(5.0		/ clock_cycle);
-	constant	t_als		:	integer	:= integer(10.0	/ clock_cycle);
-	constant	t_alh		:	integer	:= integer(5.0		/ clock_cycle);
-	constant	t_rr		:	integer	:= integer(20.0	/ clock_cycle);
-	constant	t_rea		:	integer	:= integer(16.0	/ clock_cycle);
-	constant	t_rp		:	integer	:= integer(10.0	/ clock_cycle);
-	constant	t_reh		:	integer	:= integer(7.5		/ clock_cycle);
-	constant	t_wb		:	integer	:= integer(100.0	/ clock_cycle);
+--	constant	t_cls		:	integer	:= integer(10.0	/ clock_cycle);
+--	constant	t_clh		:	integer	:= integer(5.0 	/ clock_cycle);
+--	constant	t_wp		:	integer	:= integer(10.0 	/ clock_cycle);
+--	constant	t_wh		:	integer	:= integer(7.5		/ clock_cycle);
+--	constant	t_wc		:	integer	:= integer(20.0	/ clock_cycle);
+--	constant	t_ds		:	integer	:= integer(7.5		/ clock_cycle);
+--	constant	t_dh		:	integer	:= integer(5.0		/ clock_cycle);
+--	constant	t_als		:	integer	:= integer(10.0	/ clock_cycle);
+--	constant	t_alh		:	integer	:= integer(5.0		/ clock_cycle);
+--	constant	t_rr		:	integer	:= integer(20.0	/ clock_cycle);
+--	constant	t_rea		:	integer	:= integer(16.0	/ clock_cycle);
+--	constant	t_rp		:	integer	:= integer(10.0	/ clock_cycle);
+--	constant	t_reh		:	integer	:= integer(7.5		/ clock_cycle);
+--	constant	t_wb		:	integer	:= integer(100.0	/ clock_cycle);
+--	constant	t_rst		:	integer	:= integer(5000.0	/ clock_cycle);
+--	constant	t_bers	:	integer	:=	integer(700000.0 / clock_cycle);
+--	constant	t_whr		:	integer	:=	integer(80.0	/ clock_cycle);
+--	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
+--	constant	t_adl		:	integer	:=	integer(70.0	/ clock_cycle);
+	
+    constant	t_cls		:	integer	:= integer(40.0	/ clock_cycle);
+	constant	t_clh		:	integer	:= integer(40.0 	/ clock_cycle);
+	constant	t_wp		:	integer	:= integer(40.0 	/ clock_cycle);
+	constant	t_wh		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_wc		:	integer	:= integer(40.0	/ clock_cycle);
+	constant	t_ds		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_dh		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_als		:	integer	:= integer(40.0	/ clock_cycle);
+	constant	t_alh		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_rr		:	integer	:= integer(40.0	/ clock_cycle);
+	constant	t_rea		:	integer	:= integer(40.0	/ clock_cycle);
+	constant	t_rp		:	integer	:= integer(80.0	/ clock_cycle);
+	constant	t_reh		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_wb		:	integer	:= integer(120.0	/ clock_cycle);
 	constant	t_rst		:	integer	:= integer(5000.0	/ clock_cycle);
 	constant	t_bers	:	integer	:=	integer(700000.0 / clock_cycle);
 	constant	t_whr		:	integer	:=	integer(80.0	/ clock_cycle);
 	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
-	constant	t_adl		:	integer	:=	integer(70.0	/ clock_cycle);
+	constant	t_adl		:	integer	:=	integer(80.0	/ clock_cycle);
 	
 	type latch_t is (LATCH_CMD, LATCH_ADDR);
 	type io_t is (IO_READ, IO_WRITE);
@@ -49,6 +69,7 @@ package onfi is
 		M_IDLE,								-- NAND Master is in idle state - awaits commands.
 		M_RESET,								-- NAND Master is being reset.
 		M_WAIT,								-- NAND Master waits for current operation to complete.
+--        M_WAIT_IGNORE_RB,       -- (ADDED BY MK)  NAND Master waits for current operation to complete while ignoring the R/B signal
 		M_DELAY,								-- Execute timed delay.
 		M_NAND_RESET,						-- NAND Master executes NAND 'reset' command.
 		M_NAND_READ_PARAM_PAGE,			-- Read ONFI parameter page.

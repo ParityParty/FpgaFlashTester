@@ -9,7 +9,7 @@
     "parameters": {
       "component_parameters": {
         "MAX_COUNT": [ { "value": "25000", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "DELAY_MAX_COUNT": [ { "value": "25000000", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "DELAY_MAX_COUNT": [ { "value": "3", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -17,7 +17,7 @@
       },
       "model_parameters": {
         "MAX_COUNT": [ { "value": "25000", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "DELAY_MAX_COUNT": [ { "value": "25000000", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "DELAY_MAX_COUNT": [ { "value": "3", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "generated", "format": "long", "usage": "all" } ]
@@ -50,7 +50,6 @@
       "ports": {
         "led_light": [ { "direction": "out", "driver_value": "0x0" } ],
         "i_clock": [ { "direction": "in" } ],
-        "debug": [ { "direction": "out", "driver_value": "0x1" } ],
         "i_reset": [ { "direction": "in", "driver_value": "0x0" } ],
         "data_out": [ { "direction": "in", "size_left": "7", "size_right": "0" } ],
         "data_in": [ { "direction": "out", "size_left": "7", "size_right": "0" } ],

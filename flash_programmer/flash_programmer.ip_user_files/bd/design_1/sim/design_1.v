@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Tue Sep 16 14:32:35 2025
+//Date        : Wed Sep 17 12:53:17 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -80,7 +80,6 @@ module design_1
         .cmd_in(flash_programmer_0_cmd_in),
         .data_in(flash_programmer_0_data_in),
         .data_out(nand_master_0_data_out),
-        .debug(debug),
         .i_TX_Byte(flash_programmer_0_i_TX_Byte),
         .i_TX_DV(flash_programmer_0_i_TX_DV),
         .i_clock(clk_wiz_0_clk_out1),
@@ -97,6 +96,7 @@ module design_1
         .cmd_in(flash_programmer_0_cmd_in),
         .data_in(flash_programmer_0_data_in),
         .data_out(nand_master_0_data_out),
+        .debug(debug),
         .enable(flash_programmer_0_nand_enable),
         .nand_ale(nand_ale),
         .nand_cle(nand_cle),
