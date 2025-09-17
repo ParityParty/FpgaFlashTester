@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Mon Sep 15 11:56:05 2025
+//Date        : Wed Sep 17 17:58:05 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=3,numReposBlks=3,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (CLK25MHZ,
     debug,
@@ -40,6 +40,8 @@ module design_1
   wire CLK25MHZ;
   wire UART_TX_0_o_TX_Active;
   wire UART_TX_0_o_TX_Done;
+  wire clk_wiz_0_clk_out1;
+  wire clk_wiz_0_locked;
   wire debug;
   wire flash_programmer_0_activate;
   wire [7:0]flash_programmer_0_cmd_in;
@@ -47,7 +49,6 @@ module design_1
   wire [7:0]flash_programmer_0_i_TX_Byte;
   wire flash_programmer_0_i_TX_DV;
   wire flash_programmer_0_nand_enable;
-  wire flash_programmer_0_nand_reset;
   wire led_light;
   wire nand_ale;
   wire nand_cle;
@@ -62,35 +63,40 @@ module design_1
   wire uart_tx;
 
   design_1_UART_TX_0_0 UART_TX_0
-       (.i_Clk(CLK25MHZ),
+       (.i_Clk(clk_wiz_0_clk_out1),
         .i_TX_Byte(flash_programmer_0_i_TX_Byte),
         .i_TX_DV(flash_programmer_0_i_TX_DV),
+        .i_reset(clk_wiz_0_locked),
         .o_TX_Active(UART_TX_0_o_TX_Active),
         .o_TX_Done(UART_TX_0_o_TX_Done),
         .o_TX_Serial(uart_tx));
+  design_1_clk_wiz_0_0 clk_wiz_0
+       (.clk_in1(CLK25MHZ),
+        .clk_out1(clk_wiz_0_clk_out1),
+        .locked(clk_wiz_0_locked));
   design_1_flash_programmer_0_0 flash_programmer_0
        (.activate(flash_programmer_0_activate),
         .busy(nand_master_0_busy),
         .cmd_in(flash_programmer_0_cmd_in),
         .data_in(flash_programmer_0_data_in),
         .data_out(nand_master_0_data_out),
-        .debug(debug),
         .i_TX_Byte(flash_programmer_0_i_TX_Byte),
         .i_TX_DV(flash_programmer_0_i_TX_DV),
-        .i_clock(CLK25MHZ),
+        .i_clock(clk_wiz_0_clk_out1),
+        .i_reset(clk_wiz_0_locked),
         .led_light(led_light),
         .nand_enable(flash_programmer_0_nand_enable),
         .nand_nce(nand_nce),
-        .nand_reset(flash_programmer_0_nand_reset),
         .o_TX_Active(UART_TX_0_o_TX_Active),
         .o_TX_Done(UART_TX_0_o_TX_Done));
   design_1_nand_master_0_0 nand_master_0
        (.activate(flash_programmer_0_activate),
         .busy(nand_master_0_busy),
-        .clk(CLK25MHZ),
+        .clk(clk_wiz_0_clk_out1),
         .cmd_in(flash_programmer_0_cmd_in),
         .data_in(flash_programmer_0_data_in),
         .data_out(nand_master_0_data_out),
+        .debug(debug),
         .enable(flash_programmer_0_nand_enable),
         .nand_ale(nand_ale),
         .nand_cle(nand_cle),
@@ -99,5 +105,5 @@ module design_1
         .nand_nwe(nand_nwe),
         .nand_nwp(nand_nwp),
         .nand_rnb(nand_rnb),
-        .nreset(flash_programmer_0_nand_reset));
+        .nreset(clk_wiz_0_locked));
 endmodule

@@ -70,12 +70,13 @@ module design_1_nand_master_0_0 (
   data_in,
   busy,
   activate,
-  cmd_in
+  cmd_in,
+  debug
 );
 
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 clk CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_CLK25MHZ, INSERT_VIP 0" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, ASSOCIATED_RESET nreset, INSERT_VIP 0" *)
 input wire clk;
 input wire enable;
 output wire nand_cle;
@@ -91,6 +92,7 @@ input wire [7 : 0] data_in;
 output wire busy;
 input wire activate;
 input wire [7 : 0] cmd_in;
+output wire debug;
 
   nand_master inst (
     .clk(clk),
@@ -107,6 +109,7 @@ input wire [7 : 0] cmd_in;
     .data_in(data_in),
     .busy(busy),
     .activate(activate),
-    .cmd_in(cmd_in)
+    .cmd_in(cmd_in),
+    .debug(debug)
   );
 endmodule

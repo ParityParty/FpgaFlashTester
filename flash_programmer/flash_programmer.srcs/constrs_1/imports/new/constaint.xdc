@@ -854,4 +854,4 @@ set_property PACKAGE_PIN AE2 [get_ports {nand_data[10]}]
 set_property PACKAGE_PIN AH1 [get_ports {nand_data[9]}]
 set_property PACKAGE_PIN AH2 [get_ports {nand_data[8]}]
 
-create_clock -period 40.000 -name CLK25MHZ -waveform {0.000 20.000}
+#create_clock -period 40.000 -name CLK25MHZ -waveform {0.000 20.000}

@@ -44,7 +44,9 @@ entity nand_master is
 		data_in				: in	std_logic_vector(7 downto 0);
 		busy					: out	std_logic := '0';
 		activate				: in	std_logic;
-		cmd_in				: in	std_logic_vector(7 downto 0)
+		cmd_in				: in	std_logic_vector(7 downto 0);
+		
+		debug : out std_logic := '0'
 	);
 end nand_master;
 
@@ -273,13 +275,18 @@ begin
 											(state = M_NAND_READ_ID and substate = MS_READ_DATA0) or								-- initiate byte read for READ ID command
 											(state = MI_BYPASS_DATA_RD and substate = MS_BEGIN) else 							-- reading byte directly from the chip
 							'0';
+--    debug <= io_wr_activate;
 							
 	-- Activation of write byte mechanism
 	io_wr_activate	<=	'1'	when 	(state = M_NAND_PAGE_PROGRAM and substate = MS_WRITE_DATA3)	or						-- initiate byte write for PAGE_PROGRAM command
 											(state = MI_BYPASS_DATA_WR and substate = MS_WRITE_DATA0) else						-- writing byte directly to the chip
 							'0';
-	
-	MASTER: process(clk, nreset, activate, cmd_in, data_in, state_switch)
+    
+--    debug <= '1' when (state = M_NAND_READ) else '0';
+--    debug <= '1' when (state = M_IDLE) else '0';             
+							
+--	MASTER: process(clk, nreset, activate, cmd_in, data_in, state_switch)
+	MASTER: process(clk, nreset)
 		variable tmp_int		:	std_logic_vector(31 downto 0);
 		variable tmp			:	integer;
 	begin
@@ -290,6 +297,8 @@ begin
 --			state							<= state_switch(to_integer(unsigned(cmd_in)));
 			
 		elsif(rising_edge(clk) and enable = '0')then
+               debug <= '0';
+
 			case state is
 				-- RESET state. Speaks for itself
 				when M_RESET =>
@@ -309,9 +318,11 @@ begin
 					status				<= x"08";		-- We start write protected!
 --					nand_nce				<= '1';
 					nand_nwp				<= '0';
+--					debug <= '1';
 				
 				-- This is in fact a command interpreter
 				when M_IDLE =>
+--                    debug <= '1';
 					if(activate = '1')then
 						state				<= state_switch(to_integer(unsigned(cmd_in)));
 					end if;
@@ -490,6 +501,7 @@ begin
 						io_wr_data_in	<= x"00"&page_data(page_idx);
 						if(status(1) = '0')then
 							substate		<= MS_WRITE_DATA3;
+--							io_wr_activate <= '1';
 						else
 							substate		<= MS_WRITE_DATA2;
 						end if;
@@ -498,6 +510,7 @@ begin
 						page_idx			<= page_idx + 1;
 						io_wr_data_in(15 downto 8) <= page_data(page_idx);
 						substate			<= MS_WRITE_DATA3;
+--						io_wr_activate <= '1';
 						
 					elsif(substate = MS_WRITE_DATA3)then
 						if(byte_count < data_bytes_per_page + oob_bytes_per_page)then
@@ -511,7 +524,7 @@ begin
 					elsif(substate = MS_SUBMIT_COMMAND1)then
 						cle_data_in		<= x"0010";
 						n_state			<= M_NAND_PAGE_PROGRAM;
-						state				<= M_WAIT;
+--						state				<= M_WAIT;
 						substate			<= MS_WAIT;
 						
 					elsif(substate = MS_WAIT)then
@@ -531,6 +544,7 @@ begin
 				
 				-- Reads single page into the buffer.
 				when M_NAND_READ =>
+				    debug <= '1';
 					if(substate = MS_BEGIN)then
 						cle_data_in		<= x"0000";
 						substate			<= MS_SUBMIT_COMMAND;
@@ -566,6 +580,7 @@ begin
 						n_state			<= M_NAND_READ;
 						byte_count		<= 0;
 						page_idx			<= 0;
+                    
 						
 					elsif(substate = MS_READ_DATA0)then
 						byte_count		<= byte_count + 1;
@@ -582,6 +597,7 @@ begin
 						else
 							if(status(1) = '0')then
 								substate		<= MS_READ_DATA0;
+--								debug <= '1';
 							else
 								substate		<= MS_READ_DATA2;
 							end if;
@@ -594,6 +610,7 @@ begin
 							substate		<= MS_END;
 						else
 							substate		<= MS_READ_DATA0;
+--							debug <= '1';
 						end if;
 						
 					elsif(substate = MS_END)then
@@ -849,6 +866,7 @@ begin
 					if(substate = MS_BEGIN)then
 						io_wr_data_in(15 downto 0) <= x"00"&data_in(7 downto 0); --page_data(page_idx);
 						substate 		<= MS_WRITE_DATA0;
+--						io_wr_activate <= '1';
 						state 			<= M_WAIT;
 						n_state			<= MI_BYPASS_DATA_WR;
 						
@@ -871,7 +889,7 @@ begin
 				
 				-- For just in case ("Shit happens..." (C) Forrest Gump)
 				when others =>
-					state 				<= M_RESET;
+--					state 				<= M_RESET;
 --					debug <= '1';
 			end case;
 		end if;

@@ -12,9 +12,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity UART_TX is
   generic (
-    g_CLKS_PER_BIT : integer := 2604     -- Needs to be set correctly
+    g_CLKS_PER_BIT : integer := 10416     -- Needs to be set correctly
     );
   port (
+    i_reset : in std_logic := '0';
     i_Clk       : in  std_logic;
     i_TX_DV     : in  std_logic;
     i_TX_Byte   : in  std_logic_vector(7 downto 0);
@@ -39,9 +40,12 @@ architecture rtl_tx of UART_TX is
 begin
  
    
-  p_UART_TX : process (i_Clk)
+  p_UART_TX : process (i_Clk, i_reset)
   begin
-    if rising_edge(i_Clk) then
+    if i_reset = '0' then
+        r_SM_Main <= s_Idle;
+    
+    elsif rising_edge(i_Clk) then
          
       case r_SM_Main is
  
