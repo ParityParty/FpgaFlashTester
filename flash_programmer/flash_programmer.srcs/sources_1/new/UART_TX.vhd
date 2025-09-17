@@ -12,7 +12,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity UART_TX is
   generic (
-    g_CLKS_PER_BIT : integer := 2604     -- Needs to be set correctly
+    g_CLKS_PER_BIT : integer := 10416     -- Needs to be set correctly
     );
   port (
     i_reset : in std_logic := '0';

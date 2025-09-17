@@ -55,7 +55,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>9705c87e</spirit:value>
+            <spirit:value>04921383</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -68,7 +68,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>9705c87e</spirit:value>
+            <spirit:value>04921383</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -185,7 +185,7 @@
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
         <spirit:name>g_CLKS_PER_BIT</spirit:name>
         <spirit:displayName>G Clks Per Bit</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.g_CLKS_PER_BIT">2604</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.g_CLKS_PER_BIT">10416</spirit:value>
       </spirit:modelParameter>
     </spirit:modelParameters>
   </spirit:model>
@@ -205,7 +205,7 @@
     <spirit:parameter>
       <spirit:name>g_CLKS_PER_BIT</spirit:name>
       <spirit:displayName>G Clks Per Bit</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.g_CLKS_PER_BIT">2604</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.g_CLKS_PER_BIT">10416</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Component_Name</spirit:name>
@@ -227,7 +227,7 @@
         <xilinx:designToolContext>IPI</xilinx:designToolContext>
       </xilinx:designToolContexts>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2025-09-16T12:25:47Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2025-09-17T11:09:35Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.1</xilinx:xilinxVersion>

@@ -46,7 +46,7 @@ entity nand_master is
 		activate				: in	std_logic;
 		cmd_in				: in	std_logic_vector(7 downto 0);
 		
-		debug : out std_logic
+		debug : out std_logic := '0'
 	);
 end nand_master;
 
@@ -281,8 +281,12 @@ begin
 	io_wr_activate	<=	'1'	when 	(state = M_NAND_PAGE_PROGRAM and substate = MS_WRITE_DATA3)	or						-- initiate byte write for PAGE_PROGRAM command
 											(state = MI_BYPASS_DATA_WR and substate = MS_WRITE_DATA0) else						-- writing byte directly to the chip
 							'0';
-	
-	MASTER: process(clk, nreset, activate, cmd_in, data_in, state_switch)
+    
+--    debug <= '1' when (state = M_NAND_READ) else '0';
+--    debug <= '1' when (state = M_IDLE) else '0';             
+							
+--	MASTER: process(clk, nreset, activate, cmd_in, data_in, state_switch)
+	MASTER: process(clk, nreset)
 		variable tmp_int		:	std_logic_vector(31 downto 0);
 		variable tmp			:	integer;
 	begin
@@ -294,64 +298,7 @@ begin
 			
 		elsif(rising_edge(clk) and enable = '0')then
                debug <= '0';
---		      io_wr_activate <= '0';
-		          
---            if state = M_IDLE then
---                busy <= '0';
---            else
---                busy <= '1';
---            end if;
-            
---            -- Activation of command latch unit (cle_activate)
---            if (state = M_NAND_RESET) or
---               (state = M_NAND_READ_PARAM_PAGE and substate = MS_BEGIN) or
---               (state = M_NAND_BLOCK_ERASE and substate = MS_BEGIN) or
---               (state = M_NAND_BLOCK_ERASE and substate = MS_SUBMIT_COMMAND1) or
---               (state = M_NAND_READ_STATUS and substate = MS_BEGIN) or
---               (state = M_NAND_READ and substate = MS_BEGIN) or
---               (state = M_NAND_READ and substate = MS_SUBMIT_COMMAND1) or
---               (state = M_NAND_PAGE_PROGRAM and substate = MS_BEGIN) or
---               (state = M_NAND_PAGE_PROGRAM and substate = MS_SUBMIT_COMMAND1) or
---               (state = M_NAND_READ_ID and substate = MS_BEGIN) or
---               (state = MI_BYPASS_COMMAND and substate = MS_SUBMIT_COMMAND) then
---                cle_activate <= '1';
---            else
---                cle_activate <= '0';
---            end if;
-        
---            -- Activation of address latch unit (ale_activate)
---            if (state = M_NAND_READ_PARAM_PAGE and substate = MS_SUBMIT_COMMAND) or
---               (state = M_NAND_BLOCK_ERASE and substate = MS_SUBMIT_COMMAND) or
---               (state = M_NAND_READ and substate = MS_SUBMIT_COMMAND) or
---               (state = M_NAND_PAGE_PROGRAM and substate = MS_SUBMIT_ADDRESS) or
---               (state = M_NAND_READ_ID and substate = MS_SUBMIT_COMMAND) or
---               (state = MI_BYPASS_ADDRESS and substate = MS_SUBMIT_ADDRESS) then
---                ale_activate <= '1';
---            else
---                ale_activate <= '0';
---            end if;
-		
---            -- Activation of read byte mechanism
---            if (state = M_NAND_READ_PARAM_PAGE and substate = MS_READ_DATA0) or
---               (state = M_NAND_READ_STATUS and substate = MS_READ_DATA0) or
---               (state = M_NAND_READ and substate = MS_READ_DATA0) or
---               (state = M_NAND_READ_ID and substate = MS_READ_DATA0) or
---               (state = MI_BYPASS_DATA_RD and substate = MS_BEGIN) then
---                io_rd_activate <= '1';
---            else
---                io_rd_activate <= '0';
---            end if;
-        
---            debug <= io_rd_activate;
-        
---            -- Activation of write byte mechanism
---            if (state = M_NAND_PAGE_PROGRAM and substate = MS_WRITE_DATA3) or
---               (state = MI_BYPASS_DATA_WR and substate = MS_WRITE_DATA0) then
---                io_wr_activate <= '1';
---            else
---                io_wr_activate <= '0';
---            end if;
-		
+
 			case state is
 				-- RESET state. Speaks for itself
 				when M_RESET =>
@@ -371,9 +318,11 @@ begin
 					status				<= x"08";		-- We start write protected!
 --					nand_nce				<= '1';
 					nand_nwp				<= '0';
+--					debug <= '1';
 				
 				-- This is in fact a command interpreter
 				when M_IDLE =>
+--                    debug <= '1';
 					if(activate = '1')then
 						state				<= state_switch(to_integer(unsigned(cmd_in)));
 					end if;
@@ -517,7 +466,6 @@ begin
 				
 				-- Program one page.
 				when M_NAND_PAGE_PROGRAM =>
-                    debug <= '1';
 					if(substate = MS_BEGIN)then
 						cle_data_in		<= x"0080";
 						substate			<= MS_SUBMIT_COMMAND;
@@ -596,6 +544,7 @@ begin
 				
 				-- Reads single page into the buffer.
 				when M_NAND_READ =>
+				    debug <= '1';
 					if(substate = MS_BEGIN)then
 						cle_data_in		<= x"0000";
 						substate			<= MS_SUBMIT_COMMAND;
@@ -631,7 +580,7 @@ begin
 						n_state			<= M_NAND_READ;
 						byte_count		<= 0;
 						page_idx			<= 0;
-						
+                    
 						
 					elsif(substate = MS_READ_DATA0)then
 						byte_count		<= byte_count + 1;
@@ -863,7 +812,6 @@ begin
 				
 				-- Wait for latch and IO modules to become ready as well as for NAND's R/B# to be '1'
 				when M_WAIT =>
---				    debug <= '1';
 					if(delay > 1)then
 						delay				<= delay - 1;
 					elsif('0' = (cle_busy or ale_busy or io_rd_busy or io_wr_busy or (not nand_rnb)))then
@@ -941,7 +889,7 @@ begin
 				
 				-- For just in case ("Shit happens..." (C) Forrest Gump)
 				when others =>
-					state 				<= M_RESET;
+--					state 				<= M_RESET;
 --					debug <= '1';
 			end case;
 		end if;

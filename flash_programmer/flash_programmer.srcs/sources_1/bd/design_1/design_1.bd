@@ -7,7 +7,8 @@
       "name": "design_1",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "None",
-      "tool_version": "2025.1"
+      "tool_version": "2025.1",
+      "validated": "true"
     },
     "design_tree": {
       "flash_programmer_0": "",
@@ -52,8 +53,24 @@
         "type": "clk",
         "direction": "I",
         "parameters": {
+          "CLK_DOMAIN": {
+            "value": "design_1_CLK25MHZ",
+            "value_src": "default"
+          },
           "FREQ_HZ": {
             "value": "25000000"
+          },
+          "FREQ_TOLERANCE_HZ": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "PHASE": {
+            "value": "0.0",
+            "value_src": "default"
           }
         }
       },
@@ -87,7 +104,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "25000000"
+                "value": "100000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -170,7 +187,15 @@
             "direction": "I",
             "parameters": {
               "FREQ_HZ": {
-                "value": "25000000"
+                "value": "100000000"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_clk_wiz_0_0_clk_out1",
+                "value_src": "default_prop"
               },
               "ASSOCIATED_RESET": {
                 "value": "nreset"
@@ -204,7 +229,13 @@
             "right": "0"
           },
           "nreset": {
-            "direction": "I"
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "default_prop"
+              }
+            }
           },
           "data_out": {
             "direction": "O",
@@ -264,8 +295,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "25000000",
-                "value_src": "ip_prop"
+                "value": "100000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -314,13 +344,13 @@
             "value": "Buffer"
           },
           "CLKOUT1_JITTER": {
-            "value": "301.662"
+            "value": "190.517"
           },
           "CLKOUT1_PHASE_ERROR": {
-            "value": "226.541"
+            "value": "222.305"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "25.000"
+            "value": "100.000"
           },
           "CLKOUT2_DRIVES": {
             "value": "Buffer"
@@ -347,7 +377,7 @@
             "value": "OPTIMIZED"
           },
           "MMCM_CLKFBOUT_MULT_F": {
-            "value": "44.375"
+            "value": "48.000"
           },
           "MMCM_CLKIN1_PERIOD": {
             "value": "40.000"
@@ -356,7 +386,7 @@
             "value": "10.0"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "44.375"
+            "value": "12.000"
           },
           "MMCM_COMPENSATION": {
             "value": "AUTO"

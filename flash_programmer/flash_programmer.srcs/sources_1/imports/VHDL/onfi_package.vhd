@@ -17,7 +17,7 @@ use ieee.std_logic_1164.all;
 package onfi is
 	-- Clock cycle length in ns
 	-- IMPORTANT!!! The 'clock_cycle' is configured for 400MHz, change it appropriately!
-	constant clock_cycle	: real := 40.0;
+	constant clock_cycle	: real := 10.0;
 
 	-- NAND interface delays.
 	-- Delays of 7.5ns may need to be fixed to 7.0.
@@ -41,25 +41,45 @@ package onfi is
 --	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
 --	constant	t_adl		:	integer	:=	integer(70.0	/ clock_cycle);
 	
-    constant	t_cls		:	integer	:= integer(40.0	/ clock_cycle);
-	constant	t_clh		:	integer	:= integer(40.0 	/ clock_cycle);
-	constant	t_wp		:	integer	:= integer(40.0 	/ clock_cycle);
-	constant	t_wh		:	integer	:= integer(40.0		/ clock_cycle);
-	constant	t_wc		:	integer	:= integer(40.0	/ clock_cycle);
+--    constant	t_cls		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_clh		:	integer	:= integer(40.0 	/ clock_cycle);
+--	constant	t_wp		:	integer	:= integer(40.0 	/ clock_cycle);
+--	constant	t_wh		:	integer	:= integer(40.0		/ clock_cycle);
+--	constant	t_wc		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_ds		:	integer	:= integer(40.0		/ clock_cycle);
+--	constant	t_dh		:	integer	:= integer(40.0		/ clock_cycle);
+--	constant	t_als		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_alh		:	integer	:= integer(40.0		/ clock_cycle);
+--	constant	t_rr		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_rea		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_rp		:	integer	:= integer(80.0	/ clock_cycle);
+--	constant	t_reh		:	integer	:= integer(40.0		/ clock_cycle);
+--	constant	t_wb		:	integer	:= integer(120.0	/ clock_cycle);
+--	constant	t_rst		:	integer	:= integer(5000.0	/ clock_cycle);
+--	constant	t_bers	:	integer	:=	integer(700000.0 / clock_cycle);
+--	constant	t_whr		:	integer	:=	integer(80.0	/ clock_cycle);
+--	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
+--	constant	t_adl		:	integer	:=	integer(80.0	/ clock_cycle);
+
+    constant	t_cls		:	integer	:= integer(50.0	/ clock_cycle);
+	constant	t_clh		:	integer	:= integer(20.0 	/ clock_cycle);
+	constant	t_wp		:	integer	:= integer(50.0 	/ clock_cycle);
+	constant	t_wh		:	integer	:= integer(30.0		/ clock_cycle);
+	constant	t_wc		:	integer	:= integer(100.0	/ clock_cycle);
 	constant	t_ds		:	integer	:= integer(40.0		/ clock_cycle);
-	constant	t_dh		:	integer	:= integer(40.0		/ clock_cycle);
-	constant	t_als		:	integer	:= integer(40.0	/ clock_cycle);
-	constant	t_alh		:	integer	:= integer(40.0		/ clock_cycle);
+	constant	t_dh		:	integer	:= integer(20.0		/ clock_cycle);
+	constant	t_als		:	integer	:= integer(50.0	/ clock_cycle);
+	constant	t_alh		:	integer	:= integer(20.0		/ clock_cycle);
 	constant	t_rr		:	integer	:= integer(40.0	/ clock_cycle);
 	constant	t_rea		:	integer	:= integer(40.0	/ clock_cycle);
-	constant	t_rp		:	integer	:= integer(80.0	/ clock_cycle);
-	constant	t_reh		:	integer	:= integer(40.0		/ clock_cycle);
-	constant	t_wb		:	integer	:= integer(120.0	/ clock_cycle);
+	constant	t_rp		:	integer	:= integer(50.0	/ clock_cycle);
+	constant	t_reh		:	integer	:= integer(30.0		/ clock_cycle);
+	constant	t_wb		:	integer	:= integer(200.0	/ clock_cycle);
 	constant	t_rst		:	integer	:= integer(5000.0	/ clock_cycle);
 	constant	t_bers	:	integer	:=	integer(700000.0 / clock_cycle);
-	constant	t_whr		:	integer	:=	integer(80.0	/ clock_cycle);
+	constant	t_whr		:	integer	:=	integer(120.0	/ clock_cycle);
 	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
-	constant	t_adl		:	integer	:=	integer(80.0	/ clock_cycle);
+	constant	t_adl		:	integer	:=	integer(200.0	/ clock_cycle);
 	
 	type latch_t is (LATCH_CMD, LATCH_ADDR);
 	type io_t is (IO_READ, IO_WRITE);
