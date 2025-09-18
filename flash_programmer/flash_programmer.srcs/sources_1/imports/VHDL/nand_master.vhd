@@ -126,34 +126,6 @@ architecture struct of nand_master is
 	signal data_bytes_per_page	:	integer;
 	signal oob_bytes_per_page	:	integer;
 	signal addr_cycles			:	integer;
-	signal state_switch			:	states_t	:= 
-		(
-			0	=>	M_RESET,
-			1	=>	M_NAND_RESET,
-			2	=>	M_NAND_READ_PARAM_PAGE,
-			3	=>	M_NAND_READ_ID,
-			4	=>	M_NAND_BLOCK_ERASE,
-			5	=>	M_NAND_READ_STATUS,
-			6	=>	M_NAND_READ,
-			7	=>	M_NAND_PAGE_PROGRAM,
-			8	=>	MI_GET_STATUS,
-			9	=>	MI_CHIP_ENABLE,
-			10	=>	MI_CHIP_DISABLE,
-			11	=>	MI_WRITE_PROTECT,
-			12	=>	MI_WRITE_ENABLE,
-			13	=>	MI_RESET_INDEX,
-			14	=>	MI_GET_ID_BYTE,
-			15	=>	MI_GET_PARAM_PAGE_BYTE,
-			16	=>	MI_GET_DATA_PAGE_BYTE,
-			17	=>	MI_SET_DATA_PAGE_BYTE,
-			18	=>	MI_GET_CURRENT_ADDRESS_BYTE,
-			19	=>	MI_SET_CURRENT_ADDRESS_BYTE,
-			20 => MI_BYPASS_ADDRESS,
-			21 => MI_BYPASS_COMMAND,
-			22 => MI_BYPASS_DATA_WR,
-			23 => MI_BYPASS_DATA_RD,
-			others => M_IDLE
-		);
 	
 --	The following is a sort of a status register. Bit set to 1 means TRUE, bit set to 0 means FALSE:
 --	0 - is ONFI compliant
@@ -322,9 +294,59 @@ begin
 				
 				-- This is in fact a command interpreter
 				when M_IDLE =>
---                    debug <= '1';
 					if(activate = '1')then
-						state				<= state_switch(to_integer(unsigned(cmd_in)));
+						case to_integer(unsigned(cmd_in)) is
+                        when 0 =>
+                            state <= M_RESET;
+                        when 1 =>
+                            state <= M_NAND_RESET;
+                        when 2 =>
+                            state <= M_NAND_READ_PARAM_PAGE;
+                        when 3 =>
+                            state <= M_NAND_READ_ID;
+                        when 4 =>
+                            state <= M_NAND_BLOCK_ERASE;
+                        when 5 =>
+                            state <= M_NAND_READ_STATUS;
+                        when 6 =>
+                            state <= M_NAND_READ;
+                        when 7 =>
+                            state <= M_NAND_PAGE_PROGRAM;
+                        when 8 =>
+                            state <= MI_GET_STATUS;
+                        when 9 =>
+                            state <= MI_CHIP_ENABLE;
+                        when 10 =>
+                            state <= MI_CHIP_DISABLE;
+                        when 11 =>
+                            state <= MI_WRITE_PROTECT;
+                        when 12 =>
+                            state <= MI_WRITE_ENABLE;
+                        when 13 =>
+                            state <= MI_RESET_INDEX;
+                        when 14 =>
+                            state <= MI_GET_ID_BYTE;
+                        when 15 =>
+                            state <= MI_GET_PARAM_PAGE_BYTE;
+                        when 16 =>
+                            state <= MI_GET_DATA_PAGE_BYTE;
+                        when 17 =>
+                            state <= MI_SET_DATA_PAGE_BYTE;
+                        when 18 =>
+                            state <= MI_GET_CURRENT_ADDRESS_BYTE;
+                        when 19 =>
+                            state <= MI_SET_CURRENT_ADDRESS_BYTE;
+                        when 20 =>
+                            state <= MI_BYPASS_ADDRESS;
+                        when 21 =>
+                            state <= MI_BYPASS_COMMAND;
+                        when 22 =>
+                            state <= MI_BYPASS_DATA_WR;
+                        when 23 =>
+                            state <= MI_BYPASS_DATA_RD;
+                        when others =>
+                            state <= M_IDLE;
+                    end case;
 					end if;
 				
 				-- Reset the NAND chip
@@ -544,7 +566,7 @@ begin
 				
 				-- Reads single page into the buffer.
 				when M_NAND_READ =>
-				    debug <= '1';
+--				    debug <= '1';
 					if(substate = MS_BEGIN)then
 						cle_data_in		<= x"0000";
 						substate			<= MS_SUBMIT_COMMAND;
@@ -570,10 +592,12 @@ begin
 						cle_data_in		<= x"0030";
 --						delay 			<= t_wb;
 						substate			<= MS_DELAY;
-						state 			<= M_WAIT;
+--						state 			<= M_WAIT;
+						state 			<= M_WAIT_IGNORE_RB;
 						n_state			<= M_NAND_READ;
 						
 					elsif(substate = MS_DELAY)then
+--                        debug <= '1';
 						delay				<= t_wb;
 						substate			<= MS_READ_DATA0;
 						state				<= M_WAIT; --M_DELAY;
@@ -815,6 +839,13 @@ begin
 					if(delay > 1)then
 						delay				<= delay - 1;
 					elsif('0' = (cle_busy or ale_busy or io_rd_busy or io_wr_busy or (not nand_rnb)))then
+						state				<= n_state;
+					end if;
+					
+                when M_WAIT_IGNORE_RB =>
+					if(delay > 1)then
+						delay				<= delay - 1;
+					elsif('0' = (cle_busy or ale_busy or io_rd_busy or io_wr_busy))then
 						state				<= n_state;
 					end if;
 					

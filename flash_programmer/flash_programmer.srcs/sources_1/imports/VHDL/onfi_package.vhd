@@ -89,7 +89,7 @@ package onfi is
 		M_IDLE,								-- NAND Master is in idle state - awaits commands.
 		M_RESET,								-- NAND Master is being reset.
 		M_WAIT,								-- NAND Master waits for current operation to complete.
---        M_WAIT_IGNORE_RB,       -- (ADDED BY MK)  NAND Master waits for current operation to complete while ignoring the R/B signal
+        M_WAIT_IGNORE_RB,       -- (ADDED BY MK)  NAND Master waits for current operation to complete while ignoring the R/B signal
 		M_DELAY,								-- Execute timed delay.
 		M_NAND_RESET,						-- NAND Master executes NAND 'reset' command.
 		M_NAND_READ_PARAM_PAGE,			-- Read ONFI parameter page.

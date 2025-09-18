@@ -229,13 +229,7 @@
             "right": "0"
           },
           "nreset": {
-            "direction": "I",
-            "parameters": {
-              "POLARITY": {
-                "value": "ACTIVE_LOW",
-                "value_src": "default_prop"
-              }
-            }
+            "direction": "I"
           },
           "data_out": {
             "direction": "O",
