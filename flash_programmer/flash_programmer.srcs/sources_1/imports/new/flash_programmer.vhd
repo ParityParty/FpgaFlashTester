@@ -318,6 +318,8 @@ begin
             case read_substate is
             
             when READ_START =>
+                device_counter <= 0;
+                
                 address_bytes_counter <= 5;
                 page_address <= blocks_tested * PAGES_IN_BLOCK;
                 pages_left <= PAGES_IN_BLOCK;
@@ -347,6 +349,9 @@ begin
                 end if;
         
             when READ =>
+                nand_nce <= (others => '1');
+                nand_nce(device_counter) <= '0';
+                
                 data_in <= x"00";
                 cmd_in <= x"06";
                 reset_index_after_release <= '1';
@@ -383,14 +388,23 @@ begin
                 end if;
             
             when PAGE_READ_DONE =>
-                if pages_left > 1 then
-                    pages_left <= pages_left - 1;
-                    page_address <= page_address + 1;
+                if device_counter + 1 < NUM_OF_DEVICES then
+                    device_counter <= device_counter + 1;
                     read_substate <= READ_LOAD_ADDR;
                     address_bytes_counter <= 5;
                     state <= INDEX_RESET;
                 else
-                    state <= DONE;
+                    device_counter <= 0;
+                    -- if all devices are done, move to the next page
+                    if pages_left > 1 then
+                        pages_left <= pages_left - 1;
+                        page_address <= page_address + 1;
+                        read_substate <= READ_LOAD_ADDR;
+                        address_bytes_counter <= 5;
+                        state <= INDEX_RESET;
+                    else
+                        state <= DONE;
+                    end if;
                 end if;
                 
         end case;
