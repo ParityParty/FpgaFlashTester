@@ -260,7 +260,6 @@ begin
             when ERASE_CHECK =>
                 if data_out(5) = '1' then 
                     if data_out(0) = '1' then
-                        led_light <= '1';
                         state <= DONE;
                     else
                         write_substate <= PROGRAM_LOAD_ADDR;

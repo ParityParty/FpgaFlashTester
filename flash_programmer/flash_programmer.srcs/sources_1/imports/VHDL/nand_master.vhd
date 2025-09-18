@@ -590,20 +590,22 @@ begin
 						
 					elsif(substate = MS_SUBMIT_COMMAND1)then
 						cle_data_in		<= x"0030";
---						delay 			<= t_wb;
-						substate			<= MS_DELAY;
---						state 			<= M_WAIT;
-						state 			<= M_WAIT_IGNORE_RB;
-						n_state			<= M_NAND_READ;
-						
-					elsif(substate = MS_DELAY)then
---                        debug <= '1';
-						delay				<= t_wb;
-						substate			<= MS_READ_DATA0;
-						state				<= M_WAIT; --M_DELAY;
-						n_state			<= M_NAND_READ;
+						delay 			<= t_wb;
+                        substate			<= MS_READ_DATA0;
+						state 			<= M_WAIT;
+--						state 			<= M_WAIT_IGNORE_RB;
+                        n_state			<= M_NAND_READ;
 						byte_count		<= 0;
 						page_idx			<= 0;
+						
+--					elsif(substate = MS_DELAY)then
+----                        debug <= '1';
+--						delay				<= t_wb;
+--						substate			<= MS_READ_DATA0;
+--						state				<= M_WAIT; --M_DELAY;
+--						n_state			<= M_NAND_READ;
+--						byte_count		<= 0;
+--						page_idx			<= 0;
                     
 						
 					elsif(substate = MS_READ_DATA0)then

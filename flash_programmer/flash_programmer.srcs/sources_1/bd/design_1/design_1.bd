@@ -118,13 +118,7 @@
           },
           "i_reset": {
             "type": "rst",
-            "direction": "I",
-            "parameters": {
-              "POLARITY": {
-                "value": "ACTIVE_LOW",
-                "value_src": "default_prop"
-              }
-            }
+            "direction": "I"
           },
           "data_out": {
             "direction": "I",
@@ -438,16 +432,16 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "UART_TX_0/i_Clk",
-          "flash_programmer_0/i_clock",
-          "nand_master_0/clk"
+          "nand_master_0/clk",
+          "flash_programmer_0/i_clock"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
           "UART_TX_0/i_reset",
-          "flash_programmer_0/i_reset",
-          "nand_master_0/nreset"
+          "nand_master_0/nreset",
+          "flash_programmer_0/i_reset"
         ]
       },
       "flash_programmer_0_activate": {
