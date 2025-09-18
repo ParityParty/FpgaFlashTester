@@ -52,7 +52,7 @@
 
 (* X_CORE_INFO = "flash_programmer,Vivado 2025.1" *)
 (* CHECK_LICENSE_TYPE = "design_1_flash_programmer_0_0,flash_programmer,{}" *)
-(* CORE_GENERATION_INFO = "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024}" *)
+(* CORE_GENERATION_INFO = "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,NUM_OF_DEVICES=1}" *)
 (* IP_DEFINITION_SOURCE = "module_ref" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module design_1_flash_programmer_0_0 (
@@ -91,14 +91,15 @@ output wire i_TX_DV;
 output wire [7 : 0] i_TX_Byte;
 input wire o_TX_Active;
 input wire o_TX_Done;
-output wire nand_nce;
+output wire [0 : 0] nand_nce;
 
   flash_programmer #(
     .MAX_COUNT(25000),
     .DELAY_MAX_COUNT(3),
     .PAGE_SIZE(8640),
     .PAGES_IN_BLOCK(128),
-    .BLOCKS_TO_TEST(1024)
+    .BLOCKS_TO_TEST(1024),
+    .NUM_OF_DEVICES(1)
   ) inst (
     .led_light(led_light),
     .i_clock(i_clock),

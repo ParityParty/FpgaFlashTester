@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Thu Sep 18 14:13:16 2025
+//Date        : Thu Sep 18 15:31:02 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -30,7 +30,7 @@ module design_1
   output nand_ale;
   output nand_cle;
   inout [15:0]nand_data;
-  output nand_nce;
+  output [0:0]nand_nce;
   output nand_nre;
   output nand_nwe;
   output nand_nwp;
@@ -55,7 +55,7 @@ module design_1
   wire [15:0]nand_data;
   wire nand_master_0_busy;
   wire [7:0]nand_master_0_data_out;
-  wire nand_nce;
+  wire [0:0]nand_nce;
   wire nand_nre;
   wire nand_nwe;
   wire nand_nwp;

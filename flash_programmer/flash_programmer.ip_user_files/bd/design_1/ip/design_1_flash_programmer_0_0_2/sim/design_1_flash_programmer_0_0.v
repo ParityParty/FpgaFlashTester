@@ -90,14 +90,15 @@ output wire i_TX_DV;
 output wire [7 : 0] i_TX_Byte;
 input wire o_TX_Active;
 input wire o_TX_Done;
-output wire nand_nce;
+output wire [0 : 0] nand_nce;
 
   flash_programmer #(
     .MAX_COUNT(25000),
     .DELAY_MAX_COUNT(3),
     .PAGE_SIZE(8640),
     .PAGES_IN_BLOCK(128),
-    .BLOCKS_TO_TEST(1024)
+    .BLOCKS_TO_TEST(1024),
+    .NUM_OF_DEVICES(1)
   ) inst (
     .led_light(led_light),
     .i_clock(i_clock),

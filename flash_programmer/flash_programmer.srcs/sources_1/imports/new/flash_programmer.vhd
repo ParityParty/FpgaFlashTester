@@ -29,13 +29,12 @@ entity flash_programmer is
         DELAY_MAX_COUNT : integer := 3;
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
-        BLOCKS_TO_TEST : integer := 1024
+        BLOCKS_TO_TEST : integer := 1024;
+        NUM_OF_DEVICES : integer := 1
     );
     Port (
     led_light : out STD_LOGIC := '0';
     i_clock  : in  STD_LOGIC;
---    uart_tx : out STD_LOGIC;
---    debug : out std_logic := '1';
     i_reset : in std_logic := '0';
 
     data_out				: in	std_logic_vector(7 downto 0);
@@ -50,18 +49,18 @@ entity flash_programmer is
     o_TX_Active : in std_logic;
     o_TX_Done : in std_logic := '0';
     
-    nand_nce : out std_logic := '1'
+    nand_nce : out std_logic_vector(NUM_OF_DEVICES-1 downto 0) := (others => '1')
     );
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
      signal counter : integer := 0;
     signal delay_counter : integer := 0;
-    
+    signal device_counter : integer := 0;
 
 	type STATE_TYPE is (IDLE, INIT,  WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, GET_STATUS, DONE);
-	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV, ENABLE_DEV, READ_PARAM, READ_ID);
-	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, ERASE_CHECK, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
+	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV,  READ_PARAM);
+	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, ERASE_GET_STATUS, ERASE_CHECK, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
 	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	
 	signal state : STATE_TYPE := IDLE;
@@ -84,17 +83,6 @@ architecture Behavioral of flash_programmer is
 	signal int_activate : std_logic := '0';
 	signal int_uart_dv : std_logic := '0';
 begin
---    uart_tx_inst : entity work.UART_TX
---        port map (
---            i_Clk       => CLK25MHZ,
---            i_TX_DV     => i_TX_DV,
---            i_TX_Byte   => i_TX_Byte,
---            o_TX_Active => o_TX_Active,
---            o_TX_Serial => uart_tx,  -- Connect the transmit line
---            o_TX_Done   => o_TX_Done
---        );
-	
---	debug <= busy;
 	activate <= int_activate;
 	i_TX_DV <= int_uart_dv;
         
@@ -112,6 +100,7 @@ begin
         case state is
         when IDLE =>
             counter                   <= 0;
+            device_counter <= 0;
             state                     <= INIT;
             init_substate             <= INIT_START;
             write_substate            <= WRITE_START;
@@ -133,7 +122,7 @@ begin
             cmd_in                    <= (others => '0');
             nand_enable               <= '0';
             i_TX_Byte                 <= (others => '0');
-            nand_nce                  <= '1';
+            nand_nce                  <= (others => '1');
             
         -- These two states are responsible for releasing the command in cmd_in
         -- and waitng until done
@@ -179,36 +168,25 @@ begin
         --                int_uart_dv <= '1';
         --            end if;
                     cmd_in <= x"00";
-                    init_substate <= ENABLE_DEV;
+                    init_substate <= RESET_DEV;
                     state <= RELEASE;
                 else 
                     counter <= counter + 1;
                 end if;
-               
-           -- Enable device
-            when ENABLE_DEV =>
-                nand_nce <= '0';
---                    cmd_in <= x"09";
-                init_substate <= RESET_DEV;
---                    state <= RELEASE;
             
             -- Reset device
             when RESET_DEV =>
+                nand_nce <= (others => '0'); -- reset all devices at once
                 cmd_in <= x"01";
                 init_substate <= READ_PARAM;
                 state <= RELEASE;
             
             -- Read the parameter page
             when READ_PARAM =>
+                nand_nce <= (others => '1');
+                nand_nce(0) <= '0'; -- read the parameters only from one device
                 data_in <= x"00";
                 cmd_in <= x"02";
-                init_substate <= READ_ID;
-                state <= RELEASE;
-            
-            -- Read the device ID
-            when READ_ID =>
-                data_in <= x"00";
-                cmd_in <= x"03";
                 next_state <= WRITE_BLOCK;
                 write_substate <= WRITE_START;
                 state <= RELEASE;
@@ -250,19 +228,31 @@ begin
                 state <= RELEASE;
                 
             when ERASE =>
+                nand_nce <= (others => '0'); -- erase all at once
                 cmd_in <= x"04";
-                write_substate <= ERASE_CHECK;
+                write_substate <= ERASE_GET_STATUS;
                 reset_index_after_release <= '1';
-                get_status_after_release <= '1';
                 address_bytes_counter <= 5;
+                device_counter <= 0;
                 state <= RELEASE;
+            
+            when ERASE_GET_STATUS =>
+                if device_counter < NUM_OF_DEVICES then
+                    nand_nce <= (others => '1');
+                    nand_nce(device_counter) <= '0';
+                    write_substate <= ERASE_CHECK;
+                    state <= GET_STATUS;
+                    device_counter <= device_counter + 1;
+                else
+                    write_substate <= PROGRAM_LOAD_ADDR;
+                end if;
             
             when ERASE_CHECK =>
                 if data_out(5) = '1' then 
                     if data_out(0) = '1' then
                         state <= DONE;
                     else
-                        write_substate <= PROGRAM_LOAD_ADDR;
+                        write_substate <= ERASE_GET_STATUS;
                     end if;
                 else
                     state <= GET_STATUS;
@@ -302,6 +292,7 @@ begin
                 end if;
                 
             when PROGRAM =>
+                nand_nce <= (others => '0'); -- program all at once
                 cmd_in <= x"07";
                 write_substate <= PAGE_WRITE_DONE;
                 state <= RELEASE;
@@ -404,7 +395,7 @@ begin
                 
         end case;
         
-        when DONE => --null;
+        when DONE =>
         
             if blocks_tested + 1 < BLOCKS_TO_TEST then
                 write_substate <= WRITE_START;
