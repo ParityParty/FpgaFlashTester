@@ -432,16 +432,16 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "UART_TX_0/i_Clk",
-          "nand_master_0/clk",
-          "flash_programmer_0/i_clock"
+          "flash_programmer_0/i_clock",
+          "nand_master_0/clk"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
           "UART_TX_0/i_reset",
-          "nand_master_0/nreset",
-          "flash_programmer_0/i_reset"
+          "flash_programmer_0/i_reset",
+          "nand_master_0/nreset"
         ]
       },
       "flash_programmer_0_activate": {

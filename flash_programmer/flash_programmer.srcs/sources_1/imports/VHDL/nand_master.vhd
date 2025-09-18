@@ -550,7 +550,8 @@ begin
 						substate			<= MS_WAIT;
 						
 					elsif(substate = MS_WAIT)then
-						delay				<= t_wb + t_prog;
+--						delay				<= t_wb + t_prog;
+                        delay <= t_wb;
 						state				<= M_DELAY;
 						n_state			<= M_NAND_PAGE_PROGRAM;
 						substate			<= MS_END;
