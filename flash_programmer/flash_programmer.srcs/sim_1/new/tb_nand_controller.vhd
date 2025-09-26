@@ -129,13 +129,27 @@ begin
         report "Busy is low." severity note;
         wait for CLK_PERIOD;
         
+        -- Step 4: Send Block Erase command
+        report "Sending Block Erase command..." severity note;
+        s_cmd <= x"03";
+        s_address <= x"1122334455";
+        s_activate <= '1';
+        
+        wait for CLK_PERIOD;
+        s_activate <= '0';
+        if s_busy /= '0' then
+            wait until s_busy = '0';
+        end if;
+        wait for CLK_PERIOD;
+        
+        
         -- Step 5: Send Get Status command (70h)
         report "Sending Get Status command (70h)..." severity note;
         s_cmd <= x"02"; -- The controller's command for Get Status
         s_activate <= '1';
         wait for CLK_PERIOD;
         s_activate <= '0';
-               if s_busy /= '0' then
+        if s_busy /= '0' then
             wait until s_busy = '0';
         end if;
         report "Get Status command sent. Controller should be reading status." severity note;
@@ -175,6 +189,20 @@ begin
                 
                 s_nand_rb <= '1'; -- Ready
                 report "NAND Model: Reset done. Released r/b after 10 cycles." severity note;
+            
+            elsif s_io_nand_data = x"D0" then
+                if s_nand_cle /= '0' then
+                    wait until s_nand_cle = '0';
+                end if;
+                wait for CLK_PERIOD;
+                
+                s_nand_rb <= '0'; -- Go busy
+                report "NAND Model: Erase command detected. Going busy." severity note;
+                
+                wait for 20 * CLK_PERIOD;
+                
+                s_nand_rb <= '1'; -- Ready
+                report "NAND Model: Erase done. Released r/b after 20 cycles." severity note;
                 
             -- Check for the Get Status command (70h)
             elsif s_io_nand_data = x"70" then

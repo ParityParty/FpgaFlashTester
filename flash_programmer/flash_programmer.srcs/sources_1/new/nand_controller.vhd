@@ -23,6 +23,8 @@ package onfi_timings is
 	constant	t_whr		:	integer	:=	integer(120.0	/ clock_cycle);
 	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
 	constant	t_adl		:	integer	:=	integer(200.0	/ clock_cycle);
+	
+	constant ADDR_LENGTH : integer := 5;
 end onfi_timings;
 
 library IEEE;
@@ -34,7 +36,7 @@ entity nand_controller is
            i_rst : in STD_LOGIC;
            i_activate : in std_logic;
            i_cmd : in std_logic_vector(7 downto 0);
-           i_address : in std_logic_vector(39 downto 0);
+           i_address : in std_logic_vector(ADDR_LENGTH*8-1 downto 0);
            io_data : inout std_logic_vector(7 downto 0) := (others => '0');
            o_busy : out std_logic := '0';
            o_read_done : out std_logic := '0';
@@ -50,18 +52,21 @@ entity nand_controller is
 end nand_controller;
 
 architecture Behavioral of nand_controller is
-    type state_t is (S_IDLE, S_READY, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_SEND_CMD, S_SEND_ADR, S_HOLD, S_DELAY, S_WAIT);
+    type state_t is (S_IDLE, S_READY, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_WRITE_BYTE, S_HOLD, S_DELAY, S_WAIT, S_ERROR);
     signal state : state_t;
     signal n_state : state_t;
     signal hold_return_state : state_t;
     
-    type substate_t is (SS_INIT, SS_WAIT, SS_DELAY, SS_READ, SS_WRITE, SS_DONE);
+    type substate_t is (SS_INIT, SS_WAIT, SS_DELAY, SS_READ, SS_WRITE, SS_WRITE_ADR, SS_DONE);
     signal substate : substate_t;
     
     signal delay : integer := 0;
     signal byte_to_send : std_logic_vector(7 downto 0) := (others => '0');
     signal stage : integer := 0;
     signal byte_counter : integer := 0;
+    
+    signal write_with_cle : std_logic := '0';
+    signal write_with_ale : std_logic := '0';
 begin
     o_busy <= '0' when state = S_READY else '1';
 
@@ -85,15 +90,17 @@ begin
             
             state <= S_READY;
             n_state <= S_READY;
-        
+            write_with_cle <= '0';
+            write_with_ale <= '0';
+            
         when S_READY =>
             if i_activate = '1' then
                 substate <= SS_INIT;
                 case i_cmd is
                 when x"01" => state <= S_RESET;
                 when x"02" => state <= S_STATUS;
---                when x"03" => state <= S_ERASE;
-                when others => state <= S_IDLE; -- error
+                when x"03" => state <= S_ERASE;
+                when others => state <= S_ERROR; -- error
                 end case;
             end if;
             
@@ -102,7 +109,8 @@ begin
             when SS_INIT =>
                 byte_to_send <= x"FF";
                 stage <= 0;
-                state <= S_SEND_CMD;
+                state <= S_WRITE_BYTE;
+                write_with_cle <= '1';
                 n_state <= S_RESET;
                 substate <= SS_WAIT;
                 
@@ -113,7 +121,7 @@ begin
                 substate <= SS_DONE;
                 
             when SS_DONE => state <= S_READY;
-            when others => state <= S_IDLE; -- error
+            when others => state <= S_ERROR; -- error
             end case;
         
         when S_STATUS =>
@@ -121,7 +129,8 @@ begin
             when SS_INIT =>
                 byte_to_send <= x"70";
                 stage <= 0;
-                state <= S_SEND_CMD;
+                state <= S_WRITE_BYTE;
+                write_with_cle <= '1';
                 n_state <= S_STATUS;
                 substate <= SS_DELAY;
             
@@ -138,37 +147,50 @@ begin
                 substate <= SS_DONE;
                 
             when SS_DONE => state <= S_READY;
-            when others => state <= S_IDLE; -- error
+            when others => state <= S_ERROR; -- error
             end case;
         
---        when S_ERASE =>
---            case substate is
---            when SS_INIT =>
---                byte_to_send <= x"60";
---                stage <= 0;
---                state <= S_SEND_CMD;
---                n_state <= S_ERASE;
---                substate <= SS_WRITE;
---                byte_counter <= 0;
+        when S_ERASE =>
+            case substate is
+            when SS_INIT =>
+                byte_to_send <= x"60";
+                stage <= 0;
+                state <= S_WRITE_BYTE;
+                write_with_cle <= '1';
+                n_state <= S_ERASE;
+                substate <= SS_WRITE_ADR;
+                byte_counter <= 3;
             
---            when SS_WRITE =>
---                delay <= t_whr;
---                state <= S_DELAY;
---                n_state <= S_STATUS;
---                substate <= SS_READ;
+            when SS_WRITE_ADR =>
+                if byte_counter > 0 then
+                    byte_counter <= byte_counter - 1;
+                    byte_to_send <= i_address((ADDR_LENGTH-byte_counter)*8 + 7 downto (ADDR_LENGTH-byte_counter)*8);
+                    stage <= 0;
+                    state <= S_WRITE_BYTE;
+                    write_with_ale <= '1';
+                    n_state <= S_ERASE;
+                    substate <= SS_WRITE_ADR;
+                else
+                    byte_to_send <= x"D0";
+                    stage <= 0;
+                    state <= S_WRITE_BYTE;
+                    write_with_cle <= '1';
+                    n_state <= S_ERASE;
+                    substate <= SS_WAIT;
+                    byte_counter <= 3;
+                end if;
             
---            when SS_READ =>
---                stage <= 0;
---                state <= S_READ_BYTE;
---                n_state <= S_STATUS;
---                substate <= SS_DONE;
+            when SS_WAIT =>
+                delay <= t_wb;
+                state <= S_WAIT;
+                n_state <= S_ERASE;
+                substate <= SS_DONE;
                 
---            when SS_DONE => state <= S_READY;
---            when others => state <= S_IDLE; -- error
---            end case;
-            
+            when SS_DONE => state <= S_READY;
+            when others => state <= S_ERROR; -- error
+            end case;
         
-        -- this state performs a read sequence for a single byte
+        -- this state performs a read sequence of a single byte
         when S_READ_BYTE =>
             hold_return_state <= S_READ_BYTE;
             case stage is
@@ -180,16 +202,20 @@ begin
                 o_nand_re <= '1';
                 io_data <= io_nand_data;
                 state <= n_state;
-            when others => state <= S_IDLE; -- error
+            when others => state <= S_ERROR; -- error
             end case;
         
-        -- this state performs a single command sequence
-        when S_SEND_CMD =>
-            hold_return_state <= S_SEND_CMD;
+        -- this state performs a write sequence of a single byte
+        when S_WRITE_BYTE =>
+            hold_return_state <= S_WRITE_BYTE;
             case stage is
             when 0 =>
                 o_nand_we <= '0';
-                o_nand_cle <= '1';
+                if write_with_ale = '1' then
+                    o_nand_ale <= '1';
+                elsif write_with_cle = '1' then
+                    o_nand_cle <= '1';
+                end if;
                 io_nand_data <= byte_to_send;
                 delay <= t_wp;
                 state <= S_HOLD;
@@ -198,10 +224,16 @@ begin
                 delay <= t_clh;
                 state <= S_HOLD;
             when 2 =>
-                o_nand_cle <= '0';
+                if write_with_ale = '1' then
+                    o_nand_ale <= '0';
+                    write_with_ale <= '0';
+                elsif write_with_cle = '1' then
+                    o_nand_cle <= '0';
+                    write_with_cle <= '0';
+                end if;
                 io_nand_data <= (others => 'Z');
                 state <= n_state;
-            when others => state <= S_IDLE; -- error
+            when others => state <= S_ERROR; -- error
             end case;
         
         -- this state is for general delays, without waiting for anything else
@@ -212,7 +244,7 @@ begin
                 state <= n_state;
             end if;
         
-        -- this state is for delays between stages of S_SEND_CMD, S_READ_BYTE, etc.
+        -- this state is for delays between stages of S_READ_BYTE and S_WRITE_BYTE
         when S_HOLD =>
             if delay > 1 then
                 delay <= delay - 1;
@@ -228,6 +260,8 @@ begin
             elsif i_nand_rb = '1' then
                 state <= n_state;
             end if;
+        
+        when S_ERROR => null;
         
         when others => state <= S_IDLE;
         end case;
