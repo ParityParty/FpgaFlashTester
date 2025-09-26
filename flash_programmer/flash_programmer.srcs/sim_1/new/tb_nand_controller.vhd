@@ -17,13 +17,17 @@ end nand_controller_tb;
 architecture behavior of nand_controller_tb is
     -- Component Declaration for the Unit Under Test (UUT)
     component nand_controller is
+        generic (
+            PAGE_SIZE       : integer := 10
+        );
         port (
             i_clk : in std_logic;
             i_rst : in std_logic;
             i_activate : in std_logic;
             i_cmd : in std_logic_vector(7 downto 0);
             i_address : in std_logic_vector(39 downto 0);
-            io_data : inout std_logic_vector(7 downto 0);
+            i_data : in std_logic_vector(7 downto 0);
+            o_data : out std_logic_vector(7 downto 0);
             o_busy : out std_logic;
             o_read_done : out std_logic;
             
@@ -43,7 +47,8 @@ architecture behavior of nand_controller_tb is
     signal s_activate : std_logic := '0';
     signal s_cmd : std_logic_vector(7 downto 0) := (others => '0');
     signal s_address : std_logic_vector(39 downto 0) := (others => '0');
-    signal s_data : std_logic_vector(7 downto 0) := (others => 'Z');
+    signal s_i_data : std_logic_vector(7 downto 0);
+    signal s_o_data : std_logic_vector(7 downto 0) := (others => 'Z');
     signal s_busy : std_logic;
     signal s_read_done : std_logic;
     
@@ -57,7 +62,6 @@ architecture behavior of nand_controller_tb is
     
     -- Bidirectional data bus resolution
     signal s_io_nand_data : std_logic_vector(7 downto 0);
-    signal s_io_data : std_logic_vector(7 downto 0);
     
     -- Clock period constant
     constant CLK_PERIOD : time := real'pos(clock_cycle) * 1 ns;
@@ -71,7 +75,8 @@ begin
             i_activate => s_activate,
             i_cmd => s_cmd,
             i_address => s_address,
-            io_data => s_io_data,
+            i_data => s_i_data,
+            o_data => s_o_data,
             o_busy => s_busy,
             o_read_done => s_read_done,
             i_nand_rb => s_nand_rb,
@@ -82,9 +87,6 @@ begin
             o_nand_re => s_nand_re,
             io_nand_data => s_io_nand_data
         );
-
-    -- Connect the bidirectional buses
-    s_io_data <= s_data;
     
     -- Clock generation process
     clock_gen: process
@@ -142,10 +144,23 @@ begin
         end if;
         wait for CLK_PERIOD;
         
-        
         -- Step 5: Send Get Status command (70h)
         report "Sending Get Status command (70h)..." severity note;
         s_cmd <= x"02"; -- The controller's command for Get Status
+        s_activate <= '1';
+        wait for CLK_PERIOD;
+        s_activate <= '0';
+        if s_busy /= '0' then
+            wait until s_busy = '0';
+        end if;
+        report "Get Status command sent. Controller should be reading status." severity note;
+        wait for CLK_PERIOD;
+        
+        -- Step 6: 
+        report "Sending Program Page command (70h)..." severity note;
+        s_cmd <= x"04";
+        s_address <= x"1122334455";
+        s_i_data <= x"AA";
         s_activate <= '1';
         wait for CLK_PERIOD;
         s_activate <= '0';
@@ -203,6 +218,20 @@ begin
                 
                 s_nand_rb <= '1'; -- Ready
                 report "NAND Model: Erase done. Released r/b after 20 cycles." severity note;
+            
+            elsif s_io_nand_data = x"10" then
+                if s_nand_cle /= '0' then
+                    wait until s_nand_cle = '0';
+                end if;
+                wait for CLK_PERIOD;
+                
+                s_nand_rb <= '0'; -- Go busy
+                report "NAND Model: Program command detected. Going busy." severity note;
+                
+                wait for 20 * CLK_PERIOD;
+                
+                s_nand_rb <= '1'; -- Ready
+                report "NAND Model: Program done. Released r/b after 20 cycles." severity note;
                 
             -- Check for the Get Status command (70h)
             elsif s_io_nand_data = x"70" then

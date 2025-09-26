@@ -32,12 +32,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 use work.onfi_timings.all;
 
 entity nand_controller is
+    Generic (
+        PAGE_SIZE : integer := 8640
+    );
     Port ( i_clk : in STD_LOGIC;
            i_rst : in STD_LOGIC;
            i_activate : in std_logic;
            i_cmd : in std_logic_vector(7 downto 0);
            i_address : in std_logic_vector(ADDR_LENGTH*8-1 downto 0);
-           io_data : inout std_logic_vector(7 downto 0) := (others => '0');
+           i_data : in std_logic_vector(7 downto 0);
+           o_data : out std_logic_vector(7 downto 0) := (others => '0');
            o_busy : out std_logic := '0';
            o_read_done : out std_logic := '0';
            
@@ -78,7 +82,7 @@ begin
     elsif rising_edge(i_clk) then
         case state is
         when S_IDLE =>
-            io_data <= (others => '0');
+            o_data <= (others => '0');
             o_read_done <= '0';
             
             o_nand_we <= '1';
@@ -100,6 +104,7 @@ begin
                 when x"01" => state <= S_RESET;
                 when x"02" => state <= S_STATUS;
                 when x"03" => state <= S_ERASE;
+                when x"04" => state <= S_PROGRAM;
                 when others => state <= S_ERROR; -- error
                 end case;
             end if;
@@ -168,27 +173,72 @@ begin
                     stage <= 0;
                     state <= S_WRITE_BYTE;
                     write_with_ale <= '1';
-                    n_state <= S_ERASE;
                     substate <= SS_WRITE_ADR;
                 else
                     byte_to_send <= x"D0";
                     stage <= 0;
                     state <= S_WRITE_BYTE;
                     write_with_cle <= '1';
-                    n_state <= S_ERASE;
                     substate <= SS_WAIT;
-                    byte_counter <= 3;
                 end if;
             
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                n_state <= S_ERASE;
                 substate <= SS_DONE;
                 
             when SS_DONE => state <= S_READY;
             when others => state <= S_ERROR; -- error
             end case;
+        
+        when S_PROGRAM =>
+            case substate is
+            when SS_INIT =>
+                byte_to_send <= x"80";
+                stage <= 0;
+                state <= S_WRITE_BYTE;
+                write_with_cle <= '1';
+                n_state <= S_PROGRAM;
+                substate <= SS_WRITE_ADR;
+                byte_counter <= 5;
+            
+            when SS_WRITE_ADR =>
+                if byte_counter > 0 then
+                    byte_counter <= byte_counter - 1;
+                    byte_to_send <= i_address((ADDR_LENGTH-byte_counter)*8 + 7 downto (ADDR_LENGTH-byte_counter)*8);
+                    stage <= 0;
+                    state <= S_WRITE_BYTE;
+                    write_with_ale <= '1';
+                else
+                    delay <= t_adl;
+                    state <= S_DELAY;
+                    substate <= SS_WRITE;
+                    byte_counter <= PAGE_SIZE;
+                end if;
+            
+            when SS_WRITE =>
+                if byte_counter > 0 then
+                    byte_counter <= byte_counter - 1;
+                    byte_to_send <= i_data;
+                    stage <= 0;
+                    state <= S_WRITE_BYTE;
+                else
+                    byte_to_send <= x"10";
+                    stage <= 0;
+                    state <= S_WRITE_BYTE;
+                    write_with_cle <= '1';
+                    substate <= SS_WAIT;
+                end if;
+                
+            when SS_WAIT =>
+                delay <= t_wb;
+                state <= S_WAIT;
+                substate <= SS_DONE;
+                
+            when SS_DONE => state <= S_READY;
+            when others => state <= S_ERROR; -- error
+            end case;
+            
         
         -- this state performs a read sequence of a single byte
         when S_READ_BYTE =>
@@ -200,7 +250,7 @@ begin
                 state <= S_HOLD;
             when 1 =>
                 o_nand_re <= '1';
-                io_data <= io_nand_data;
+                o_data <= io_nand_data;
                 state <= n_state;
             when others => state <= S_ERROR; -- error
             end case;
