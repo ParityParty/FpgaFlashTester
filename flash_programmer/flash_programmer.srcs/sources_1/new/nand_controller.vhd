@@ -158,6 +158,7 @@ begin
         when S_ERASE =>
             case substate is
             when SS_INIT =>
+                o_nand_wp <= '1';
                 byte_to_send <= x"60";
                 stage <= 0;
                 state <= S_WRITE_BYTE;
@@ -187,13 +188,16 @@ begin
                 state <= S_WAIT;
                 substate <= SS_DONE;
                 
-            when SS_DONE => state <= S_READY;
+            when SS_DONE => 
+                state <= S_READY;
+                o_nand_wp <= '0';
             when others => state <= S_ERROR; -- error
             end case;
         
         when S_PROGRAM =>
             case substate is
             when SS_INIT =>
+                o_nand_wp <= '0';
                 byte_to_send <= x"80";
                 stage <= 0;
                 state <= S_WRITE_BYTE;
@@ -235,7 +239,9 @@ begin
                 state <= S_WAIT;
                 substate <= SS_DONE;
                 
-            when SS_DONE => state <= S_READY;
+            when SS_DONE => 
+                state <= S_READY;
+                o_nand_wp <= '0';
             when others => state <= S_ERROR; -- error
             end case;
         

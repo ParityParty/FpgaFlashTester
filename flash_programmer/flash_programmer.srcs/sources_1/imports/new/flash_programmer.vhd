@@ -36,55 +36,48 @@ entity flash_programmer is
     led_light : out STD_LOGIC := '0';
     i_clock  : in  STD_LOGIC;
     i_reset : in std_logic := '0';
-
-    data_out				: in	std_logic_vector(7 downto 0);
-    data_in				: out	std_logic_vector(7 downto 0);
-    busy					: in	std_logic := '0';
-    activate				: out	std_logic := '0';
-    cmd_in				: out	std_logic_vector(7 downto 0);
-    nand_enable         : out std_logic := '0';
     
-    i_TX_DV : out std_logic := '0';         -- Data Valid for Transmission
-    i_TX_Byte : out std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
-    o_TX_Active : in std_logic;
-    o_TX_Done : in std_logic := '0';
+    o_activate : out std_logic := '0';
+    o_cmd : out std_logic_vector(7 downto 0) := (others => '0');
+    o_address : out std_logic_vector(39 downto 0) := (others => '0');
+    o_data : out std_logic_vector(7 downto 0) := (others => '0');
+    i_data : in std_logic_vector(7 downto 0);
+    i_busy : in std_logic;
+    i_read_done : in std_logic;
     
-    nand_nce : out std_logic_vector(NUM_OF_DEVICES-1 downto 0) := (others => '1')
+    o_TX_DV : out std_logic := '0';         -- Data Valid for Transmission
+    o_TX_Byte : out std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
+    i_TX_Active : in std_logic;
+    i_TX_Done : in std_logic := '0';
+    
+    o_nand_nce : out std_logic_vector(NUM_OF_DEVICES-1 downto 0) := (others => '1')
     );
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
-     signal counter : integer := 0;
-    signal delay_counter : integer := 0;
+    signal counter : integer := 0;
     signal device_counter : integer := 0;
 
-	type STATE_TYPE is (IDLE, INIT,  WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, INDEX_RESET, GET_STATUS, DONE);
-	type INIT_SUBSTATE_TYPE is (INIT_START, RESET_DEV,  READ_PARAM);
-	type WRITE_SUBSTATE_TYPE is (WRITE_START, DISABLE_WP, ERASE_LOAD_ADDR, ERASE, ERASE_GET_STATUS, ERASE_CHECK, PROGRAM_LOAD_ADDR, PROGRAM_WRITE_BYTE, PROGRAM, PAGE_WRITE_DONE);
-	type READ_SUBSTATE_TYPE is (READ_START, READ_LOAD_ADDR, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
+	type STATE_TYPE is (IDLE, INIT,  WRITE_BLOCK, READ_BLOCK, RELEASE, CTRL_BUSY, DONE);
+	type WRITE_SUBSTATE_TYPE is (WRITE_START, ERASE, ERASE_GET_STATUS, ERASE_CHECK, PROGRAM, PAGE_WRITE_DONE);
+	type READ_SUBSTATE_TYPE is (READ_START, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	
 	signal state : STATE_TYPE := IDLE;
-	signal init_substate :INIT_SUBSTATE_TYPE := INIT_START;
 	signal write_substate : WRITE_SUBSTATE_TYPE := WRITE_START;
 	signal read_substate : READ_SUBSTATE_TYPE := READ_START;
 	
 	signal next_state : STATE_TYPE;
 	
-	signal address_bytes_counter : integer := 0;
-	signal data_bytes_counter : integer := 0;
-	
-	signal reset_index_after_release : std_logic := '0';
-	signal get_status_after_release : std_logic := '0';
-	
 	signal pages_left : integer := PAGES_IN_BLOCK;
 	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 	signal blocks_tested : integer := 0;
+	signal data_bytes_counter : integer := 0;
 	
 	signal int_activate : std_logic := '0';
 	signal int_uart_dv : std_logic := '0';
 begin
-	activate <= int_activate;
-	i_TX_DV <= int_uart_dv;
+	o_activate <= int_activate;
+	o_TX_DV <= int_uart_dv;
         
     process(i_clock, i_reset)
     begin
@@ -102,15 +95,9 @@ begin
             counter                   <= 0;
             device_counter <= 0;
             state                     <= INIT;
-            init_substate             <= INIT_START;
             write_substate            <= WRITE_START;
             read_substate             <= READ_START;
             next_state                <= INIT;
-            delay_counter             <= 0;
-            address_bytes_counter     <= 0;
-            data_bytes_counter        <= 0;
-            reset_index_after_release <= '0';
-            get_status_after_release  <= '0';
             pages_left                <= PAGES_IN_BLOCK;
             page_address              <= 0;
             blocks_tested             <= 0;
@@ -118,11 +105,10 @@ begin
             int_uart_dv               <= '0';
     
             led_light                 <= '0';
-            data_in                   <= (others => '0');
-            cmd_in                    <= (others => '0');
-            nand_enable               <= '0';
-            i_TX_Byte                 <= (others => '0');
-            nand_nce                  <= (others => '1');
+            o_data                   <= (others => '0');
+            o_cmd                    <= (others => '0');
+            o_TX_Byte                 <= (others => '0');
+            o_nand_nce                  <= (others => '1');
             
         -- These two states are responsible for releasing the command in cmd_in
         -- and waitng until done
@@ -135,165 +121,74 @@ begin
             end if;
             
         when CTRL_BUSY =>
-            if busy = '0' and delay_counter > DELAY_MAX_COUNT then
-                if reset_index_after_release = '1' then
-                    state <= INDEX_RESET;
-                elsif get_status_after_release = '1' then
-                    state <= GET_STATUS;
-                else 
-                    state <= next_state;
-                end if;
-                delay_counter <= 0;
-            else
-                delay_counter <= delay_counter + 1;
+            if i_busy = '0' then
+                state <= next_state;
             end if;
             
-        when INDEX_RESET =>
-            cmd_in <= x"0d";
-            reset_index_after_release <= '0';
-            state <= RELEASE;
-        when GET_STATUS =>
-            cmd_in <= x"05";
-            get_status_after_release <= '0';
-            state <= RELEASE;
-            
         when INIT =>
-            case init_substate is
-            when INIT_START =>
-                next_state <= INIT;
-                
-                if counter = MAX_COUNT then
-        --            if o_TX_Active = '0' and int_uart_dv = '0' then
-        --                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
-        --                int_uart_dv <= '1';
-        --            end if;
-                    cmd_in <= x"00";
-                    init_substate <= RESET_DEV;
-                    state <= RELEASE;
-                else 
-                    counter <= counter + 1;
-                end if;
-            
-            -- Reset device
-            when RESET_DEV =>
-                nand_nce <= (others => '0'); -- reset all devices at once
-                cmd_in <= x"01";
-                init_substate <= READ_PARAM;
-                state <= RELEASE;
-            
-            -- Read the parameter page
-            when READ_PARAM =>
-                nand_nce <= (others => '1');
-                nand_nce(0) <= '0'; -- read the parameters only from one device
-                data_in <= x"00";
-                cmd_in <= x"02";
+            if counter = MAX_COUNT then
+    --            if o_TX_Active = '0' and int_uart_dv = '0' then
+    --                i_TX_Byte <= std_logic_vector(to_unsigned(71, 8));
+    --                int_uart_dv <= '1';
+    --            end if;
+                o_nand_nce <= (others => '0'); -- reset all devices at once
+                o_cmd <= x"01";
                 next_state <= WRITE_BLOCK;
                 write_substate <= WRITE_START;
                 state <= RELEASE;
-           end case;
+            else 
+                counter <= counter + 1;
+            end if;
             
         when WRITE_BLOCK =>
             case write_substate is
             when WRITE_START =>
                 pages_left <= PAGES_IN_BLOCK;
                 page_address <= blocks_tested * PAGES_IN_BLOCK;
-                address_bytes_counter <= 5;
-                write_substate <= ERASE_LOAD_ADDR;
-                state <= INDEX_RESET;
-                
-            when ERASE_LOAD_ADDR =>
-                case address_bytes_counter is
-                    when 5 =>
-                        data_in <= x"00";
-                    when 4 =>
-                        data_in <= x"00";
-                    when 3 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(7 downto 0));
-                    when 2 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(15 downto 8));
-                    when 1 =>
-                        data_in <= "00000" & std_logic_vector(to_unsigned(page_address, 19)(18 downto 16));
-                    when others => data_in <= x"00";
-                end case;
-                cmd_in <= x"13";
-                address_bytes_counter <= address_bytes_counter - 1;
-                state <= RELEASE;
-                if address_bytes_counter = 1 then
-                  write_substate <= DISABLE_WP;
-                end if;
-            
-            when DISABLE_WP =>
-                cmd_in <= x"0c";
                 write_substate <= ERASE;
-                state <= RELEASE;
                 
             when ERASE =>
-                nand_nce <= (others => '0'); -- erase all at once
-                cmd_in <= x"04";
+                o_address <= (others => '0');
+                o_address(34 downto 16) <= std_logic_vector(to_unsigned(page_address, 19));
+                
+                o_nand_nce <= (others => '0'); -- erase all at once
+                o_cmd <= x"03";
                 write_substate <= ERASE_GET_STATUS;
-                reset_index_after_release <= '1';
-                address_bytes_counter <= 5;
                 device_counter <= 0;
                 state <= RELEASE;
             
             when ERASE_GET_STATUS =>
                 if device_counter < NUM_OF_DEVICES then
-                    nand_nce <= (others => '1');
-                    nand_nce(device_counter) <= '0';
+                    o_nand_nce <= (others => '1');
+                    o_nand_nce(device_counter) <= '0';
+                    
                     write_substate <= ERASE_CHECK;
-                    state <= GET_STATUS;
                     device_counter <= device_counter + 1;
+                    o_cmd <= x"02";
+                    state <= RELEASE;
                 else
-                    write_substate <= PROGRAM_LOAD_ADDR;
+                    write_substate <= PROGRAM;
                 end if;
             
             when ERASE_CHECK =>
-                if data_out(5) = '1' then 
-                    if data_out(0) = '1' then
+                if i_data(5) = '1' then 
+                    if i_data(0) = '1' then
                         state <= DONE;
                     else
                         write_substate <= ERASE_GET_STATUS;
                     end if;
                 else
-                    state <= GET_STATUS;
-                end if;
-                
-                
-            when PROGRAM_LOAD_ADDR =>
-                case address_bytes_counter is
-                    when 5 =>
-                        data_in <= x"00";
-                    when 4 =>
-                        data_in <= x"00";
-                    when 3 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(7 downto 0));
-                    when 2 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(15 downto 8));
-                    when 1 =>
-                        data_in <= "00000" & std_logic_vector(to_unsigned(page_address, 19)(18 downto 16));
-                    when others => data_in <= x"00";
-                end case;
-                cmd_in <= x"13";
-                address_bytes_counter <= address_bytes_counter - 1;
-                state <= RELEASE;
-                if address_bytes_counter = 1 then
-                  write_substate <= PROGRAM_WRITE_BYTE;
-                  data_bytes_counter <= PAGE_SIZE;
-                  reset_index_after_release <= '1';
-                end if;
-            
-            when PROGRAM_WRITE_BYTE =>
-                data_in <= x"AA";
-                cmd_in <= x"11";
-                data_bytes_counter <= data_bytes_counter - 1;
-                state <= RELEASE;
-                if data_bytes_counter = 1 then
-                  write_substate <= PROGRAM;
+                    o_cmd <= x"02";
+                    state <= RELEASE;
                 end if;
                 
             when PROGRAM =>
-                nand_nce <= (others => '0'); -- program all at once
-                cmd_in <= x"07";
+                o_address <= (others => '0');
+                o_address(34 downto 16) <= std_logic_vector(to_unsigned(page_address, 19));
+                
+                o_nand_nce <= (others => '0'); -- program all at once
+                o_cmd <= x"04";
+                o_data <= x"AA";
                 write_substate <= PAGE_WRITE_DONE;
                 state <= RELEASE;
                 
@@ -301,15 +196,10 @@ begin
                 if pages_left > 1 then
                     pages_left <= pages_left - 1;
                     page_address <= page_address + 1;
-                    write_substate <= PROGRAM_LOAD_ADDR;
-                    address_bytes_counter <= 5;
-                    state <= INDEX_RESET;
+                    write_substate <= PROGRAM;
                 else
-                    -- enable WP
-                    cmd_in <= x"0b";
-                    next_state <= READ_BLOCK;
                     read_substate <= READ_START;
-                    state <= RELEASE;
+                    state <= READ_BLOCK;
                 end if;
                 
             end case;
@@ -319,70 +209,42 @@ begin
             
             when READ_START =>
                 device_counter <= 0;
-                
-                address_bytes_counter <= 5;
+                next_state <= READ_BLOCK;
                 page_address <= blocks_tested * PAGES_IN_BLOCK;
                 pages_left <= PAGES_IN_BLOCK;
-                read_substate <= READ_LOAD_ADDR;
-                state <= INDEX_RESET;
-                
-            
-            when READ_LOAD_ADDR =>
-                case address_bytes_counter is
-                    when 5 =>
-                        data_in <= x"00";
-                    when 4 =>
-                        data_in <= x"00";
-                    when 3 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(7 downto 0));
-                    when 2 =>
-                        data_in <= std_logic_vector(to_unsigned(page_address, 19)(15 downto 8));
-                    when 1 =>
-                        data_in <= "00000" & std_logic_vector(to_unsigned(page_address, 19)(18 downto 16));
-                    when others => data_in <= x"00";
-                end case;
-                cmd_in <= x"13";
-                address_bytes_counter <= address_bytes_counter - 1;
-                state <= RELEASE;
-                if address_bytes_counter = 1 then
-                  read_substate <= READ;
-                end if;
+                read_substate <= READ;
         
             when READ =>
-                nand_nce <= (others => '1');
-                nand_nce(device_counter) <= '0';
+                o_nand_nce <= (others => '1');
+                o_nand_nce(device_counter) <= '0';
                 
-                data_in <= x"00";
-                cmd_in <= x"06";
-                reset_index_after_release <= '1';
+                o_address <= (others => '0');
+                o_address(34 downto 16) <= std_logic_vector(to_unsigned(page_address, 19));
+                
+                o_cmd <= x"05";
                 read_substate <= EXTRACT;
---                    next_state <= DONE;
                 data_bytes_counter <= 0;
                 state <= RELEASE;
             
             when EXTRACT =>
---                    cmd_in <= x"08";
-                cmd_in <= x"10";
-                read_substate <= EXTRACT_READBYTE;
-                state <= RELEASE;
-                data_bytes_counter <= data_bytes_counter + 1;
                 if data_bytes_counter = PAGE_SIZE then
                     read_substate <= PAGE_READ_DONE;
---                    state <= WRITE_BLOCK;
---                    write_substate <= WRITE_START;
---                    led_light <= '1'; 
+                else
+                    read_substate <= EXTRACT_READBYTE;
+                    state <= RELEASE;
+                    data_bytes_counter <= data_bytes_counter + 1;
                 end if;             
             
             when EXTRACT_READBYTE =>
-                if data_out = x"AA" then
+                if i_data = x"AA" then
                     read_substate <= EXTRACT;
                 else
                     read_substate <= SEND_ERR; 
                 end if;
             
             when SEND_ERR => 
-                if o_TX_Active = '0' and int_uart_dv = '0' then
-                    i_TX_Byte <= data_out;
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= i_data;
                     int_uart_dv <= '1';
                     read_substate <= EXTRACT;
                 end if;
@@ -390,27 +252,21 @@ begin
             when PAGE_READ_DONE =>
                 if device_counter + 1 < NUM_OF_DEVICES then
                     device_counter <= device_counter + 1;
-                    read_substate <= READ_LOAD_ADDR;
-                    address_bytes_counter <= 5;
-                    state <= INDEX_RESET;
+                    read_substate <= READ;
                 else
                     device_counter <= 0;
                     -- if all devices are done, move to the next page
                     if pages_left > 1 then
                         pages_left <= pages_left - 1;
                         page_address <= page_address + 1;
-                        read_substate <= READ_LOAD_ADDR;
-                        address_bytes_counter <= 5;
-                        state <= INDEX_RESET;
+                        read_substate <= READ;
                     else
                         state <= DONE;
                     end if;
                 end if;
-                
-        end case;
+            end case;
         
         when DONE =>
-        
             if blocks_tested + 1 < BLOCKS_TO_TEST then
                 write_substate <= WRITE_START;
                 state <= WRITE_BLOCK;
