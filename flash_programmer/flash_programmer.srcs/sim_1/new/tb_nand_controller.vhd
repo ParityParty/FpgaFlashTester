@@ -16,9 +16,10 @@ end nand_controller_tb;
 
 architecture behavior of nand_controller_tb is
     -- Component Declaration for the Unit Under Test (UUT)
+    constant PAGE_SIZE : integer := 10;
     component nand_controller is
         generic (
-            PAGE_SIZE       : integer := 10
+            PAGE_SIZE       : integer := PAGE_SIZE
         );
         port (
             i_clk : in std_logic;
@@ -157,7 +158,7 @@ begin
         wait for CLK_PERIOD;
         
         -- Step 6: 
-        report "Sending Program Page command (70h)..." severity note;
+        report "Sending Program Page command..." severity note;
         s_cmd <= x"04";
         s_address <= x"1122334455";
         s_i_data <= x"AA";
@@ -167,9 +168,32 @@ begin
         if s_busy /= '0' then
             wait until s_busy = '0';
         end if;
+        wait for CLK_PERIOD;
+        
+        -- Step 7: 
+        report "Sending Read Page command..." severity note;
+        s_cmd <= x"05";
+        s_address <= x"1122334455";
+        s_activate <= '1';
+        wait for CLK_PERIOD;
+        s_activate <= '0';
+        if s_busy /= '0' then
+            wait until s_busy = '0';
+        end if;
+        
+        for i in 1 to PAGE_SIZE loop
+            wait for CLK_PERIOD;
+            s_activate <= '1';
+            wait for CLK_PERIOD;
+            s_activate <= '0';
+            if s_busy /= '0' then
+                wait until s_busy = '0';
+            end if;
+        end loop;
+        
         report "Get Status command sent. Controller should be reading status." severity note;
         
-        -- Step 6: End simulation
+        -- Step 8: End simulation
         report "Simulation finished." severity note;
         wait;
     end process stimulus;
@@ -205,33 +229,14 @@ begin
                 s_nand_rb <= '1'; -- Ready
                 report "NAND Model: Reset done. Released r/b after 10 cycles." severity note;
             
-            elsif s_io_nand_data = x"D0" then
+            elsif s_io_nand_data = x"D0" or s_io_nand_data = x"10" or s_io_nand_data = x"30" then
                 if s_nand_cle /= '0' then
                     wait until s_nand_cle = '0';
                 end if;
                 wait for CLK_PERIOD;
-                
                 s_nand_rb <= '0'; -- Go busy
-                report "NAND Model: Erase command detected. Going busy." severity note;
-                
                 wait for 20 * CLK_PERIOD;
-                
                 s_nand_rb <= '1'; -- Ready
-                report "NAND Model: Erase done. Released r/b after 20 cycles." severity note;
-            
-            elsif s_io_nand_data = x"10" then
-                if s_nand_cle /= '0' then
-                    wait until s_nand_cle = '0';
-                end if;
-                wait for CLK_PERIOD;
-                
-                s_nand_rb <= '0'; -- Go busy
-                report "NAND Model: Program command detected. Going busy." severity note;
-                
-                wait for 20 * CLK_PERIOD;
-                
-                s_nand_rb <= '1'; -- Ready
-                report "NAND Model: Program done. Released r/b after 20 cycles." severity note;
                 
             -- Check for the Get Status command (70h)
             elsif s_io_nand_data = x"70" then
@@ -245,6 +250,12 @@ begin
                 end if;
                 s_io_nand_data <= (others => 'Z');
             end if;
+        elsif s_nand_re = '0' then
+            s_io_nand_data <= x"AA";
+            if s_nand_re /= '1' then
+                wait until s_nand_re = '1';
+            end if;
+            s_io_nand_data <= (others => 'Z');
         end if;
         
         
