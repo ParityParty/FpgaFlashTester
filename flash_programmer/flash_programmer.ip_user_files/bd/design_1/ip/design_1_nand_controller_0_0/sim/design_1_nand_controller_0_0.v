@@ -1,11 +1,10 @@
-
-// file: clk_wiz_0.v
-// (c) Copyright 2017-2018, 2023 Advanced Micro Devices, Inc. All rights reserved.
-//
+// (c) Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+// (c) Copyright 2022-2025 Advanced Micro Devices, Inc. All rights reserved.
+// 
 // This file contains confidential and proprietary information
 // of AMD and is protected under U.S. and international copyright
 // and other intellectual property laws.
-//
+// 
 // DISCLAIMER
 // This disclaimer is not a license and does not grant any
 // rights to the materials distributed herewith. Except as
@@ -27,7 +26,7 @@
 // by a third party) even if such damage or loss was
 // reasonably foreseeable or AMD had been advised of the
 // possibility of the same.
-//
+// 
 // CRITICAL APPLICATIONS
 // AMD products are not designed or intended to be fail-
 // safe, or for use in any application requiring fail-safe
@@ -41,49 +40,80 @@
 // liability of any use of AMD products in Critical
 // Applications, subject only to applicable laws and
 // regulations governing limitations on product liability.
-//
+// 
 // THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 // PART OF THIS FILE AT ALL TIMES.
-//----------------------------------------------------------------------------
-// User entered comments
-//----------------------------------------------------------------------------
-// None
-//
-//----------------------------------------------------------------------------
-//  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
-//   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
-//----------------------------------------------------------------------------
-// _clk_int__25.00000______0.000______50.0______301.662____226.541
-//
-//----------------------------------------------------------------------------
-// Input Clock   Freq (MHz)    Input Jitter (UI)
-//----------------------------------------------------------------------------
-// __primary__________25.000____________0.010
+// 
+// DO NOT MODIFY THIS FILE.
 
-`timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "clk_wiz_0,clk_wiz_v6_0_16_0_0,{component_name=clk_wiz_0,use_phase_alignment=false,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=40.000,clkin2_period=10.0,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+// IP VLNV: xilinx.com:module_ref:nand_controller:1.0
+// IP Revision: 1
 
-module clk_wiz_0 
- (
-  // Clock out ports
-  output        clk_int,
-  // Status and control signals
-  input         reset,
-  output        locked,
- // Clock in ports
-  input         CLK25MHZ
- );
+`timescale 1ns/1ps
 
-  clk_wiz_0_clk_wiz inst
-  (
-  // Clock out ports  
-  .clk_int(clk_int),
-  // Status and control signals               
-  .reset(reset), 
-  .locked(locked),
- // Clock in ports
-  .CLK25MHZ(CLK25MHZ)
+(* IP_DEFINITION_SOURCE = "module_ref" *)
+(* DowngradeIPIdentifiedWarnings = "yes" *)
+module design_1_nand_controller_0_0 (
+  i_clk,
+  i_rst,
+  i_activate,
+  i_cmd,
+  i_address,
+  i_data,
+  o_data,
+  o_busy,
+  o_read_done,
+  i_nand_rb,
+  o_nand_we,
+  o_nand_wp,
+  o_nand_cle,
+  o_nand_ale,
+  o_nand_re,
+  io_nand_data
+);
+
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clk CLK" *)
+(* X_INTERFACE_MODE = "slave" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clk, ASSOCIATED_RESET i_rst, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0" *)
+input wire i_clk;
+(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_rst RST" *)
+(* X_INTERFACE_MODE = "slave" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_rst, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
+input wire i_rst;
+input wire i_activate;
+input wire [7 : 0] i_cmd;
+input wire [39 : 0] i_address;
+input wire [7 : 0] i_data;
+output wire [7 : 0] o_data;
+output wire o_busy;
+output wire o_read_done;
+input wire i_nand_rb;
+output wire o_nand_we;
+output wire o_nand_wp;
+output wire o_nand_cle;
+output wire o_nand_ale;
+output wire o_nand_re;
+inout wire [7 : 0] io_nand_data;
+
+  nand_controller #(
+    .PAGE_SIZE(8640)
+  ) inst (
+    .i_clk(i_clk),
+    .i_rst(i_rst),
+    .i_activate(i_activate),
+    .i_cmd(i_cmd),
+    .i_address(i_address),
+    .i_data(i_data),
+    .o_data(o_data),
+    .o_busy(o_busy),
+    .o_read_done(o_read_done),
+    .i_nand_rb(i_nand_rb),
+    .o_nand_we(o_nand_we),
+    .o_nand_wp(o_nand_wp),
+    .o_nand_cle(o_nand_cle),
+    .o_nand_ale(o_nand_ale),
+    .o_nand_re(o_nand_re),
+    .io_nand_data(io_nand_data)
   );
-
 endmodule

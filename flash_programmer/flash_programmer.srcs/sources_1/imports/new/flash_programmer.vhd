@@ -71,7 +71,6 @@ architecture Behavioral of flash_programmer is
 	signal pages_left : integer := PAGES_IN_BLOCK;
 	signal page_address     : integer range 0 to 2**19 - 1 := 0;
 	signal blocks_tested : integer := 0;
-	signal data_bytes_counter : integer := 0;
 	
 	signal int_activate : std_logic := '0';
 	signal int_uart_dv : std_logic := '0';
@@ -223,16 +222,14 @@ begin
                 
                 o_cmd <= x"05";
                 read_substate <= EXTRACT;
-                data_bytes_counter <= 0;
                 state <= RELEASE;
             
             when EXTRACT =>
-                if data_bytes_counter = PAGE_SIZE then
+                if i_read_done = '1' then
                     read_substate <= PAGE_READ_DONE;
                 else
                     read_substate <= EXTRACT_READBYTE;
                     state <= RELEASE;
-                    data_bytes_counter <= data_bytes_counter + 1;
                 end if;             
             
             when EXTRACT_READBYTE =>

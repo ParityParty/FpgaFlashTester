@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xC945BB6846FD6CDD",
+      "boundary_crc": "0xFE00E7F71E7068DB",
       "device": "xck26-sfvc784-2LV-c",
       "gen_directory": "../../../../flash_programmer.gen/sources_1/bd/design_1",
       "name": "design_1",
@@ -12,9 +12,9 @@
     },
     "design_tree": {
       "flash_programmer_0": "",
-      "nand_master_0": "",
       "UART_TX_0": "",
-      "clk_wiz_0": ""
+      "clk_wiz_0": "",
+      "nand_controller_0": ""
     },
     "ports": {
       "nand_rnb": {
@@ -22,19 +22,19 @@
       },
       "nand_data": {
         "direction": "IO",
-        "left": "15",
+        "left": "7",
         "right": "0"
       },
-      "nand_nre": {
+      "nand_re": {
         "direction": "O"
       },
       "nand_ale": {
         "direction": "O"
       },
-      "nand_nwp": {
+      "nand_wp": {
         "direction": "O"
       },
-      "nand_nwe": {
+      "nand_we": {
         "direction": "O"
       },
       "nand_nce": {
@@ -122,136 +122,53 @@
             "type": "rst",
             "direction": "I"
           },
-          "data_out": {
+          "o_activate": {
+            "direction": "O"
+          },
+          "o_cmd": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "o_address": {
+            "direction": "O",
+            "left": "39",
+            "right": "0"
+          },
+          "o_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "i_data": {
             "direction": "I",
             "left": "7",
             "right": "0"
           },
-          "data_in": {
+          "i_busy": {
+            "direction": "I"
+          },
+          "i_read_done": {
+            "direction": "I"
+          },
+          "o_TX_DV": {
+            "direction": "O"
+          },
+          "o_TX_Byte": {
             "direction": "O",
             "left": "7",
             "right": "0"
           },
-          "busy": {
+          "i_TX_Active": {
             "direction": "I"
           },
-          "activate": {
-            "direction": "O"
-          },
-          "cmd_in": {
-            "direction": "O",
-            "left": "7",
-            "right": "0"
-          },
-          "nand_enable": {
-            "direction": "O"
-          },
-          "i_TX_DV": {
-            "direction": "O"
-          },
-          "i_TX_Byte": {
-            "direction": "O",
-            "left": "7",
-            "right": "0"
-          },
-          "o_TX_Active": {
+          "i_TX_Done": {
             "direction": "I"
           },
-          "o_TX_Done": {
-            "direction": "I"
-          },
-          "nand_nce": {
+          "o_nand_nce": {
             "direction": "O",
             "left": "0",
             "right": "0"
-          }
-        }
-      },
-      "nand_master_0": {
-        "vlnv": "xilinx.com:module_ref:nand_master:1.0",
-        "ip_revision": "1",
-        "xci_name": "design_1_nand_master_0_0",
-        "xci_path": "ip/design_1_nand_master_0_0/design_1_nand_master_0_0.xci",
-        "inst_hier_path": "nand_master_0",
-        "has_run_ip_tcl": "true",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "nand_master",
-          "boundary_crc": "0x0"
-        },
-        "ports": {
-          "clk": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "100000000"
-              },
-              "PHASE": {
-                "value": "0.0",
-                "value_src": "ip_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "design_1_clk_wiz_0_0_clk_out1",
-                "value_src": "default_prop"
-              },
-              "ASSOCIATED_RESET": {
-                "value": "nreset"
-              }
-            }
-          },
-          "enable": {
-            "direction": "I"
-          },
-          "nand_cle": {
-            "direction": "O"
-          },
-          "nand_ale": {
-            "direction": "O"
-          },
-          "nand_nwe": {
-            "direction": "O"
-          },
-          "nand_nwp": {
-            "direction": "O"
-          },
-          "nand_nre": {
-            "direction": "O"
-          },
-          "nand_rnb": {
-            "direction": "I"
-          },
-          "nand_data": {
-            "direction": "IO",
-            "left": "15",
-            "right": "0"
-          },
-          "nreset": {
-            "direction": "I"
-          },
-          "data_out": {
-            "direction": "O",
-            "left": "7",
-            "right": "0"
-          },
-          "data_in": {
-            "direction": "I",
-            "left": "7",
-            "right": "0"
-          },
-          "busy": {
-            "direction": "O"
-          },
-          "activate": {
-            "direction": "I"
-          },
-          "cmd_in": {
-            "direction": "I",
-            "left": "7",
-            "right": "0"
-          },
-          "debug": {
-            "direction": "O"
           }
         }
       },
@@ -399,6 +316,99 @@
             "value": "false"
           }
         }
+      },
+      "nand_controller_0": {
+        "vlnv": "xilinx.com:module_ref:nand_controller:1.0",
+        "ip_revision": "1",
+        "xci_name": "design_1_nand_controller_0_0",
+        "xci_path": "ip/design_1_nand_controller_0_0/design_1_nand_controller_0_0.xci",
+        "inst_hier_path": "nand_controller_0",
+        "has_run_ip_tcl": "true",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "nand_controller",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "i_clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "i_rst",
+                "value_src": "constant"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "design_1_clk_wiz_0_0_clk_out1",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "i_rst": {
+            "type": "rst",
+            "direction": "I"
+          },
+          "i_activate": {
+            "direction": "I"
+          },
+          "i_cmd": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "i_address": {
+            "direction": "I",
+            "left": "39",
+            "right": "0"
+          },
+          "i_data": {
+            "direction": "I",
+            "left": "7",
+            "right": "0"
+          },
+          "o_data": {
+            "direction": "O",
+            "left": "7",
+            "right": "0"
+          },
+          "o_busy": {
+            "direction": "O"
+          },
+          "o_read_done": {
+            "direction": "O"
+          },
+          "i_nand_rb": {
+            "direction": "I"
+          },
+          "o_nand_we": {
+            "direction": "O"
+          },
+          "o_nand_wp": {
+            "direction": "O"
+          },
+          "o_nand_cle": {
+            "direction": "O"
+          },
+          "o_nand_ale": {
+            "direction": "O"
+          },
+          "o_nand_re": {
+            "direction": "O"
+          },
+          "io_nand_data": {
+            "direction": "IO",
+            "left": "7",
+            "right": "0"
+          }
+        }
       }
     },
     "nets": {
@@ -408,22 +418,22 @@
           "clk_wiz_0/clk_in1"
         ]
       },
-      "Net1": {
+      "Net": {
         "ports": [
           "nand_data",
-          "nand_master_0/nand_data"
+          "nand_controller_0/io_nand_data"
         ]
       },
       "UART_TX_0_o_TX_Active": {
         "ports": [
           "UART_TX_0/o_TX_Active",
-          "flash_programmer_0/o_TX_Active"
+          "flash_programmer_0/i_TX_Active"
         ]
       },
       "UART_TX_0_o_TX_Done": {
         "ports": [
           "UART_TX_0/o_TX_Done",
-          "flash_programmer_0/o_TX_Done"
+          "flash_programmer_0/i_TX_Done"
         ]
       },
       "UART_TX_0_o_TX_Serial": {
@@ -436,45 +446,27 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "UART_TX_0/i_Clk",
-          "nand_master_0/clk",
-          "flash_programmer_0/i_clock"
+          "flash_programmer_0/i_clock",
+          "nand_controller_0/i_clk"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
           "UART_TX_0/i_reset",
-          "nand_master_0/nreset",
-          "flash_programmer_0/i_reset"
-        ]
-      },
-      "flash_programmer_0_activate": {
-        "ports": [
-          "flash_programmer_0/activate",
-          "nand_master_0/activate"
-        ]
-      },
-      "flash_programmer_0_cmd_in": {
-        "ports": [
-          "flash_programmer_0/cmd_in",
-          "nand_master_0/cmd_in"
-        ]
-      },
-      "flash_programmer_0_data_in": {
-        "ports": [
-          "flash_programmer_0/data_in",
-          "nand_master_0/data_in"
+          "flash_programmer_0/i_reset",
+          "nand_controller_0/i_rst"
         ]
       },
       "flash_programmer_0_i_TX_Byte": {
         "ports": [
-          "flash_programmer_0/i_TX_Byte",
+          "flash_programmer_0/o_TX_Byte",
           "UART_TX_0/i_TX_Byte"
         ]
       },
       "flash_programmer_0_i_TX_DV": {
         "ports": [
-          "flash_programmer_0/i_TX_DV",
+          "flash_programmer_0/o_TX_DV",
           "UART_TX_0/i_TX_DV"
         ]
       },
@@ -484,70 +476,88 @@
           "led_light"
         ]
       },
-      "flash_programmer_0_nand_enable": {
-        "ports": [
-          "flash_programmer_0/nand_enable",
-          "nand_master_0/enable"
-        ]
-      },
       "flash_programmer_0_nand_nce1": {
         "ports": [
-          "flash_programmer_0/nand_nce",
+          "flash_programmer_0/o_nand_nce",
           "nand_nce"
         ]
       },
-      "nand_master_0_busy": {
+      "flash_programmer_0_o_activate": {
         "ports": [
-          "nand_master_0/busy",
-          "flash_programmer_0/busy"
+          "flash_programmer_0/o_activate",
+          "nand_controller_0/i_activate"
         ]
       },
-      "nand_master_0_data_out": {
+      "flash_programmer_0_o_address": {
         "ports": [
-          "nand_master_0/data_out",
-          "flash_programmer_0/data_out"
+          "flash_programmer_0/o_address",
+          "nand_controller_0/i_address"
         ]
       },
-      "nand_master_0_debug": {
+      "flash_programmer_0_o_cmd": {
         "ports": [
-          "nand_master_0/debug",
-          "debug"
+          "flash_programmer_0/o_cmd",
+          "nand_controller_0/i_cmd"
         ]
       },
-      "nand_master_0_nand_ale": {
+      "flash_programmer_0_o_data": {
         "ports": [
-          "nand_master_0/nand_ale",
+          "flash_programmer_0/o_data",
+          "nand_controller_0/i_data"
+        ]
+      },
+      "nand_controller_0_o_busy": {
+        "ports": [
+          "nand_controller_0/o_busy",
+          "flash_programmer_0/i_busy"
+        ]
+      },
+      "nand_controller_0_o_data": {
+        "ports": [
+          "nand_controller_0/o_data",
+          "flash_programmer_0/i_data"
+        ]
+      },
+      "nand_controller_0_o_nand_ale": {
+        "ports": [
+          "nand_controller_0/o_nand_ale",
           "nand_ale"
         ]
       },
-      "nand_master_0_nand_cle": {
+      "nand_controller_0_o_nand_cle": {
         "ports": [
-          "nand_master_0/nand_cle",
+          "nand_controller_0/o_nand_cle",
           "nand_cle"
         ]
       },
-      "nand_master_0_nand_nre": {
+      "nand_controller_0_o_nand_re": {
         "ports": [
-          "nand_master_0/nand_nre",
-          "nand_nre"
+          "nand_controller_0/o_nand_re",
+          "nand_re"
         ]
       },
-      "nand_master_0_nand_nwe": {
+      "nand_controller_0_o_nand_we": {
         "ports": [
-          "nand_master_0/nand_nwe",
-          "nand_nwe"
+          "nand_controller_0/o_nand_we",
+          "nand_we"
         ]
       },
-      "nand_master_0_nand_nwp": {
+      "nand_controller_0_o_nand_wp": {
         "ports": [
-          "nand_master_0/nand_nwp",
-          "nand_nwp"
+          "nand_controller_0/o_nand_wp",
+          "nand_wp"
+        ]
+      },
+      "nand_controller_0_o_read_done": {
+        "ports": [
+          "nand_controller_0/o_read_done",
+          "flash_programmer_0/i_read_done"
         ]
       },
       "nand_rnb_1": {
         "ports": [
           "nand_rnb",
-          "nand_master_0/nand_rnb"
+          "nand_controller_0/i_nand_rb"
         ]
       }
     }

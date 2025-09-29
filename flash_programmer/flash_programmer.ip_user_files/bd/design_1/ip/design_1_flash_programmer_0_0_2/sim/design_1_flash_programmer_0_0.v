@@ -58,17 +58,18 @@ module design_1_flash_programmer_0_0 (
   led_light,
   i_clock,
   i_reset,
-  data_out,
-  data_in,
-  busy,
-  activate,
-  cmd_in,
-  nand_enable,
-  i_TX_DV,
-  i_TX_Byte,
-  o_TX_Active,
-  o_TX_Done,
-  nand_nce
+  o_activate,
+  o_cmd,
+  o_address,
+  o_data,
+  i_data,
+  i_busy,
+  i_read_done,
+  o_TX_DV,
+  o_TX_Byte,
+  i_TX_Active,
+  i_TX_Done,
+  o_nand_nce
 );
 
 output wire led_light;
@@ -80,17 +81,18 @@ input wire i_clock;
 (* X_INTERFACE_MODE = "slave" *)
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
 input wire i_reset;
-input wire [7 : 0] data_out;
-output wire [7 : 0] data_in;
-input wire busy;
-output wire activate;
-output wire [7 : 0] cmd_in;
-output wire nand_enable;
-output wire i_TX_DV;
-output wire [7 : 0] i_TX_Byte;
-input wire o_TX_Active;
-input wire o_TX_Done;
-output wire [0 : 0] nand_nce;
+output wire o_activate;
+output wire [7 : 0] o_cmd;
+output wire [39 : 0] o_address;
+output wire [7 : 0] o_data;
+input wire [7 : 0] i_data;
+input wire i_busy;
+input wire i_read_done;
+output wire o_TX_DV;
+output wire [7 : 0] o_TX_Byte;
+input wire i_TX_Active;
+input wire i_TX_Done;
+output wire [0 : 0] o_nand_nce;
 
   flash_programmer #(
     .MAX_COUNT(25000),
@@ -103,16 +105,17 @@ output wire [0 : 0] nand_nce;
     .led_light(led_light),
     .i_clock(i_clock),
     .i_reset(i_reset),
-    .data_out(data_out),
-    .data_in(data_in),
-    .busy(busy),
-    .activate(activate),
-    .cmd_in(cmd_in),
-    .nand_enable(nand_enable),
-    .i_TX_DV(i_TX_DV),
-    .i_TX_Byte(i_TX_Byte),
-    .o_TX_Active(o_TX_Active),
-    .o_TX_Done(o_TX_Done),
-    .nand_nce(nand_nce)
+    .o_activate(o_activate),
+    .o_cmd(o_cmd),
+    .o_address(o_address),
+    .o_data(o_data),
+    .i_data(i_data),
+    .i_busy(i_busy),
+    .i_read_done(i_read_done),
+    .o_TX_DV(o_TX_DV),
+    .o_TX_Byte(o_TX_Byte),
+    .i_TX_Active(i_TX_Active),
+    .i_TX_Done(i_TX_Done),
+    .o_nand_nce(o_nand_nce)
   );
 endmodule

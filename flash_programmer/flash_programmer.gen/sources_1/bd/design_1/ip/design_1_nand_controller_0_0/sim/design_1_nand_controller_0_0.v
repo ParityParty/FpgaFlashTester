@@ -47,68 +47,73 @@
 // DO NOT MODIFY THIS FILE.
 
 
-// IP VLNV: xilinx.com:module_ref:nand_master:1.0
+// IP VLNV: xilinx.com:module_ref:nand_controller:1.0
 // IP Revision: 1
 
 `timescale 1ns/1ps
 
 (* IP_DEFINITION_SOURCE = "module_ref" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
-module design_1_nand_master_0_0 (
-  clk,
-  enable,
-  nand_cle,
-  nand_ale,
-  nand_nwe,
-  nand_nwp,
-  nand_nre,
-  nand_rnb,
-  nand_data,
-  nreset,
-  data_out,
-  data_in,
-  busy,
-  activate,
-  cmd_in,
-  debug
+module design_1_nand_controller_0_0 (
+  i_clk,
+  i_rst,
+  i_activate,
+  i_cmd,
+  i_address,
+  i_data,
+  o_data,
+  o_busy,
+  o_read_done,
+  i_nand_rb,
+  o_nand_we,
+  o_nand_wp,
+  o_nand_cle,
+  o_nand_ale,
+  o_nand_re,
+  io_nand_data
 );
 
-(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 clk CLK" *)
+(* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clk CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, ASSOCIATED_RESET nreset, INSERT_VIP 0" *)
-input wire clk;
-input wire enable;
-output wire nand_cle;
-output wire nand_ale;
-output wire nand_nwe;
-output wire nand_nwp;
-output wire nand_nre;
-input wire nand_rnb;
-inout wire [15 : 0] nand_data;
-input wire nreset;
-output wire [7 : 0] data_out;
-input wire [7 : 0] data_in;
-output wire busy;
-input wire activate;
-input wire [7 : 0] cmd_in;
-output wire debug;
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clk, ASSOCIATED_RESET i_rst, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0" *)
+input wire i_clk;
+(* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_rst RST" *)
+(* X_INTERFACE_MODE = "slave" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_rst, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
+input wire i_rst;
+input wire i_activate;
+input wire [7 : 0] i_cmd;
+input wire [39 : 0] i_address;
+input wire [7 : 0] i_data;
+output wire [7 : 0] o_data;
+output wire o_busy;
+output wire o_read_done;
+input wire i_nand_rb;
+output wire o_nand_we;
+output wire o_nand_wp;
+output wire o_nand_cle;
+output wire o_nand_ale;
+output wire o_nand_re;
+inout wire [7 : 0] io_nand_data;
 
-  nand_master inst (
-    .clk(clk),
-    .enable(enable),
-    .nand_cle(nand_cle),
-    .nand_ale(nand_ale),
-    .nand_nwe(nand_nwe),
-    .nand_nwp(nand_nwp),
-    .nand_nre(nand_nre),
-    .nand_rnb(nand_rnb),
-    .nand_data(nand_data),
-    .nreset(nreset),
-    .data_out(data_out),
-    .data_in(data_in),
-    .busy(busy),
-    .activate(activate),
-    .cmd_in(cmd_in),
-    .debug(debug)
+  nand_controller #(
+    .PAGE_SIZE(8640)
+  ) inst (
+    .i_clk(i_clk),
+    .i_rst(i_rst),
+    .i_activate(i_activate),
+    .i_cmd(i_cmd),
+    .i_address(i_address),
+    .i_data(i_data),
+    .o_data(o_data),
+    .o_busy(o_busy),
+    .o_read_done(o_read_done),
+    .i_nand_rb(i_nand_rb),
+    .o_nand_we(o_nand_we),
+    .o_nand_wp(o_nand_wp),
+    .o_nand_cle(o_nand_cle),
+    .o_nand_ale(o_nand_ale),
+    .o_nand_re(o_nand_re),
+    .io_nand_data(io_nand_data)
   );
 endmodule
