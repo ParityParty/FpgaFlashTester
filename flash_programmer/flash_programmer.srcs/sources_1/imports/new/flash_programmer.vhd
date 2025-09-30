@@ -55,6 +55,10 @@ entity flash_programmer is
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
+
+    type int_array_t is array (1 to 2) of integer;
+    signal bad_blocks : int_array_t := (3, 5);
+
     signal counter : integer := 0;
     signal device_counter : integer := 0;
 
@@ -269,6 +273,13 @@ begin
                 state <= WRITE_BLOCK;
                 next_state <= WRITE_BLOCK;
                 blocks_tested <= blocks_tested + 1;
+                
+                for i in bad_blocks'range loop
+                    if bad_blocks(i) = blocks_tested + 1 then
+                        state <= DONE;
+                        exit;
+                    end if;
+                end loop;
             else
                led_light <= '1'; 
             end if;
