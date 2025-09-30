@@ -1,52 +1,52 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.782776",
-   "Default View_TopLeft":"-123,-106",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-198,-241",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 TLS
 #  -string -flagsOSRD
-preplace port port-id_nand_rnb -pg 1 -lvl 0 -x 0 -y 400 -defaultsOSRD
-preplace port port-id_nand_re -pg 1 -lvl 5 -x 1280 -y 230 -defaultsOSRD
-preplace port port-id_nand_ale -pg 1 -lvl 5 -x 1280 -y 200 -defaultsOSRD
-preplace port port-id_nand_wp -pg 1 -lvl 5 -x 1280 -y 140 -defaultsOSRD
-preplace port port-id_nand_we -pg 1 -lvl 5 -x 1280 -y 110 -defaultsOSRD
-preplace port port-id_nand_cle -pg 1 -lvl 5 -x 1280 -y 170 -defaultsOSRD
-preplace port port-id_debug -pg 1 -lvl 5 -x 1280 -y 50 -defaultsOSRD
-preplace port port-id_led_light -pg 1 -lvl 5 -x 1280 -y 300 -defaultsOSRD
-preplace port port-id_CLK25MHZ -pg 1 -lvl 0 -x 0 -y 210 -defaultsOSRD
-preplace port port-id_uart_tx -pg 1 -lvl 5 -x 1280 -y 360 -defaultsOSRD
-preplace portBus nand_data -pg 1 -lvl 5 -x 1280 -y 260 -defaultsOSRD
-preplace portBus nand_nce -pg 1 -lvl 5 -x 1280 -y 20 -defaultsOSRD
-preplace inst flash_programmer_0 -pg 1 -lvl 3 -x 700 -y 190 -defaultsOSRD
-preplace inst UART_TX_0 -pg 1 -lvl 2 -x 360 -y 250 -defaultsOSRD
+preplace port port-id_nand_rb -pg 1 -lvl 0 -x -10 -y 370 -defaultsOSRD
+preplace port port-id_nand_re -pg 1 -lvl 5 -x 1340 -y 230 -defaultsOSRD
+preplace port port-id_nand_ale -pg 1 -lvl 5 -x 1340 -y 200 -defaultsOSRD
+preplace port port-id_nand_wp -pg 1 -lvl 5 -x 1340 -y 140 -defaultsOSRD
+preplace port port-id_nand_we -pg 1 -lvl 5 -x 1340 -y 110 -defaultsOSRD
+preplace port port-id_nand_cle -pg 1 -lvl 5 -x 1340 -y 170 -defaultsOSRD
+preplace port port-id_debug -pg 1 -lvl 5 -x 1340 -y 50 -defaultsOSRD
+preplace port port-id_led_light -pg 1 -lvl 5 -x 1340 -y 300 -defaultsOSRD
+preplace port port-id_CLK25MHZ -pg 1 -lvl 0 -x -10 -y 210 -defaultsOSRD
+preplace port port-id_uart_tx -pg 1 -lvl 5 -x 1340 -y 360 -defaultsOSRD
+preplace portBus nand_data -pg 1 -lvl 5 -x 1340 -y 260 -defaultsOSRD
+preplace portBus nand_ce -pg 1 -lvl 5 -x 1340 -y 20 -defaultsOSRD
+preplace inst flash_programmer_0 -pg 1 -lvl 3 -x 730 -y 190 -defaultsOSRD
+preplace inst UART_TX_0 -pg 1 -lvl 2 -x 380 -y 250 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 110 -y 210 -defaultsOSRD
-preplace inst nand_controller_0 -pg 1 -lvl 4 -x 1060 -y 160 -defaultsOSRD
+preplace inst nand_controller_0 -pg 1 -lvl 4 -x 1100 -y 160 -defaultsOSRD
 preplace netloc CLK25MHZ_1 1 0 1 NJ 210
+preplace netloc Net 1 4 1 1280J 240n
 preplace netloc UART_TX_0_o_TX_Active 1 2 1 N 230
-preplace netloc UART_TX_0_o_TX_Done 1 2 1 520 250n
-preplace netloc UART_TX_0_o_TX_Serial 1 2 3 500J 360 NJ 360 NJ
-preplace netloc clk_wiz_0_clk_out1 1 1 3 220 160 500 60 880J
-preplace netloc clk_wiz_0_locked 1 1 3 200 390 510 320 890J
-preplace netloc flash_programmer_0_i_TX_Byte 1 1 3 210 380 NJ 380 850
-preplace netloc flash_programmer_0_i_TX_DV 1 1 3 220 370 NJ 370 860
-preplace netloc flash_programmer_0_led_light 1 3 2 880J 300 NJ
-preplace netloc flash_programmer_0_nand_nce1 1 3 2 870J 20 NJ
+preplace netloc UART_TX_0_o_TX_Done 1 2 1 540 250n
+preplace netloc UART_TX_0_o_TX_Serial 1 2 3 530J 360 NJ 360 NJ
+preplace netloc clk_wiz_0_clk_out1 1 1 3 220 130 560 60 910J
+preplace netloc clk_wiz_0_locked 1 1 3 230 150 550 50 920J
+preplace netloc flash_programmer_0_i_TX_Byte 1 1 3 230 340 NJ 340 880
+preplace netloc flash_programmer_0_i_TX_DV 1 1 3 220 350 NJ 350 890
+preplace netloc flash_programmer_0_led_light 1 3 2 910J 300 NJ
+preplace netloc flash_programmer_0_nand_nce1 1 3 2 900J 310 1290J
 preplace netloc flash_programmer_0_o_activate 1 3 1 N 140
-preplace netloc flash_programmer_0_o_cmd 1 3 1 N 160
 preplace netloc flash_programmer_0_o_address 1 3 1 N 180
+preplace netloc flash_programmer_0_o_cmd 1 3 1 N 160
 preplace netloc flash_programmer_0_o_data 1 3 1 N 200
-preplace netloc nand_rnb_1 1 0 4 NJ 400 NJ 400 NJ 400 900J
-preplace netloc nand_controller_0_o_read_done 1 2 3 530 350 NJ 350 1230
-preplace netloc nand_controller_0_o_busy 1 2 3 550 330 NJ 330 1220
-preplace netloc nand_controller_0_o_data 1 2 3 540 340 NJ 340 1240
-preplace netloc nand_controller_0_o_nand_re 1 4 1 1260J 220n
-preplace netloc nand_controller_0_o_nand_cle 1 4 1 1260J 170n
+preplace netloc nand_controller_0_o_busy 1 2 3 570 10 NJ 10 1280
+preplace netloc nand_controller_0_o_data 1 2 3 580 20 NJ 20 1270
 preplace netloc nand_controller_0_o_nand_ale 1 4 1 NJ 200
-preplace netloc nand_controller_0_o_nand_we 1 4 1 1250J 110n
-preplace netloc nand_controller_0_o_nand_wp 1 4 1 1260J 140n
-preplace netloc Net 1 4 1 1260J 240n
-levelinfo -pg 1 0 110 360 700 1060 1280
-pagesize -pg 1 -db -bbox -sgen -130 0 1440 420
+preplace netloc nand_controller_0_o_nand_cle 1 4 1 1300J 170n
+preplace netloc nand_controller_0_o_nand_re 1 4 1 1300J 220n
+preplace netloc nand_controller_0_o_nand_we 1 4 1 1280J 110n
+preplace netloc nand_controller_0_o_nand_wp 1 4 1 1300J 140n
+preplace netloc nand_controller_0_o_read_done 1 2 3 580 320 NJ 320 1270
+preplace netloc nand_rnb_1 1 0 4 NJ 370 NJ 370 NJ 370 920J
+levelinfo -pg 1 -10 110 380 730 1100 1340
+pagesize -pg 1 -db -bbox -sgen -140 0 1510 420
 "
 }
 {

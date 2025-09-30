@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 
 package onfi_timings is
     constant clock_cycle	: real := 10.0; -- ns
+--    constant clock_cycle	: real := 1.0; -- ns
 
     constant	t_cls		:	integer	:= integer(50.0	/ clock_cycle);
 	constant	t_clh		:	integer	:= integer(20.0 	/ clock_cycle);
@@ -97,6 +98,7 @@ begin
             o_busy <= '1';
             
         when S_READY =>
+            o_nand_wp <= '1';
             o_busy <= '0';
             if i_activate = '1' then
                 o_busy <= '1';
@@ -158,7 +160,7 @@ begin
         when S_ERASE =>
             case substate is
             when SS_INIT =>
-                o_nand_wp <= '1';
+--                o_nand_wp <= '1';
                 byte_to_send <= x"60";
                 stage <= 0;
                 state <= S_WRITE_BYTE;
@@ -190,14 +192,14 @@ begin
                 
             when SS_DONE => 
                 state <= S_READY;
-                o_nand_wp <= '0';
+--                o_nand_wp <= '0';
             when others => state <= S_ERROR; -- error
             end case;
         
         when S_PROGRAM =>
             case substate is
             when SS_INIT =>
-                o_nand_wp <= '0';
+--                o_nand_wp <= '1';
                 byte_to_send <= x"80";
                 stage <= 0;
                 state <= S_WRITE_BYTE;
@@ -241,7 +243,7 @@ begin
                 
             when SS_DONE => 
                 state <= S_READY;
-                o_nand_wp <= '0';
+--                o_nand_wp <= '0';
             when others => state <= S_ERROR; -- error
             end case;
         

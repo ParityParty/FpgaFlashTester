@@ -2,8 +2,8 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Sat Sep 27 17:19:51 2025
-//Host        : agata running 64-bit Ubuntu 24.04.3 LTS
+//Date        : Tue Sep 30 11:52:19 2025
+//Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
 //Purpose     : IP block netlist
@@ -16,11 +16,11 @@ module design_1
     debug,
     led_light,
     nand_ale,
+    nand_ce,
     nand_cle,
     nand_data,
-    nand_nce,
+    nand_rb,
     nand_re,
-    nand_rnb,
     nand_we,
     nand_wp,
     uart_tx);
@@ -28,11 +28,11 @@ module design_1
   output debug;
   output led_light;
   output nand_ale;
+  output [0:0]nand_ce;
   output nand_cle;
   inout [7:0]nand_data;
-  output [0:0]nand_nce;
+  input nand_rb;
   output nand_re;
-  input nand_rnb;
   output nand_we;
   output nand_wp;
   output uart_tx;
@@ -50,14 +50,14 @@ module design_1
   wire [7:0]flash_programmer_0_o_data;
   wire led_light;
   wire nand_ale;
+  wire [0:0]nand_ce;
   wire nand_cle;
   wire nand_controller_0_o_busy;
   wire [7:0]nand_controller_0_o_data;
   wire nand_controller_0_o_read_done;
   wire [7:0]nand_data;
-  wire [0:0]nand_nce;
+  wire nand_rb;
   wire nand_re;
-  wire nand_rnb;
   wire nand_we;
   wire nand_wp;
   wire uart_tx;
@@ -89,14 +89,14 @@ module design_1
         .o_address(flash_programmer_0_o_address),
         .o_cmd(flash_programmer_0_o_cmd),
         .o_data(flash_programmer_0_o_data),
-        .o_nand_nce(nand_nce));
+        .o_nand_nce(nand_ce));
   design_1_nand_controller_0_0 nand_controller_0
        (.i_activate(flash_programmer_0_o_activate),
         .i_address(flash_programmer_0_o_address),
         .i_clk(clk_wiz_0_clk_out1),
         .i_cmd(flash_programmer_0_o_cmd),
         .i_data(flash_programmer_0_o_data),
-        .i_nand_rb(nand_rnb),
+        .i_nand_rb(nand_rb),
         .i_rst(clk_wiz_0_locked),
         .io_nand_data(nand_data),
         .o_busy(nand_controller_0_o_busy),
