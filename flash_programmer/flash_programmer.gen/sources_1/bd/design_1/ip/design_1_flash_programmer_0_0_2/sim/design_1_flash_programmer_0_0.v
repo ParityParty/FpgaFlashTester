@@ -75,7 +75,7 @@ module design_1_flash_programmer_0_0 (
 output wire led_light;
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 i_clock CLK" *)
 (* X_INTERFACE_MODE = "slave" *)
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, ASSOCIATED_RESET i_reset, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME i_clock, ASSOCIATED_RESET i_reset, FREQ_HZ 10000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0" *)
 input wire i_clock;
 (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 i_reset RST" *)
 (* X_INTERFACE_MODE = "slave" *)
@@ -92,7 +92,7 @@ output wire o_TX_DV;
 output wire [7 : 0] o_TX_Byte;
 input wire i_TX_Active;
 input wire i_TX_Done;
-output wire [0 : 0] o_nand_nce;
+output wire [1 : 0] o_nand_nce;
 
   flash_programmer #(
     .MAX_COUNT(25000),
@@ -100,7 +100,7 @@ output wire [0 : 0] o_nand_nce;
     .PAGE_SIZE(8640),
     .PAGES_IN_BLOCK(128),
     .BLOCKS_TO_TEST(1024),
-    .NUM_OF_DEVICES(1)
+    .NUM_OF_DEVICES(2)
   ) inst (
     .led_light(led_light),
     .i_clock(i_clock),

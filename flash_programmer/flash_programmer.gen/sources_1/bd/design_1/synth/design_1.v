@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Tue Sep 30 11:52:19 2025
+//Date        : Tue Sep 30 16:08:43 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -28,7 +28,7 @@ module design_1
   output debug;
   output led_light;
   output nand_ale;
-  output [0:0]nand_ce;
+  output [1:0]nand_ce;
   output nand_cle;
   inout [7:0]nand_data;
   input nand_rb;
@@ -50,7 +50,7 @@ module design_1
   wire [7:0]flash_programmer_0_o_data;
   wire led_light;
   wire nand_ale;
-  wire [0:0]nand_ce;
+  wire [1:0]nand_ce;
   wire nand_cle;
   wire nand_controller_0_o_busy;
   wire [7:0]nand_controller_0_o_data;

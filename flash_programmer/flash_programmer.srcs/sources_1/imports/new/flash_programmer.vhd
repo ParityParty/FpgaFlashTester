@@ -30,7 +30,7 @@ entity flash_programmer is
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
         BLOCKS_TO_TEST : integer := 1024;
-        NUM_OF_DEVICES : integer := 1
+        NUM_OF_DEVICES : integer := 2
     );
     Port (
     led_light : out STD_LOGIC := '0';
