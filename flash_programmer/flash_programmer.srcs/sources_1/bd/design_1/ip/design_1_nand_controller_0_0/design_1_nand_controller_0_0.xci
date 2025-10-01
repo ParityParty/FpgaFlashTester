@@ -9,10 +9,14 @@
     "parameters": {
       "component_parameters": {
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "NUM_OF_DEVICES": [ { "value": "2", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "MAX_RETRIES": [ { "value": "5", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_nand_controller_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
-        "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "NUM_OF_DEVICES": [ { "value": "2", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "MAX_RETRIES": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynquplus" } ],
@@ -49,13 +53,15 @@
         "o_data": [ { "direction": "out", "size_left": "7", "size_right": "0", "driver_value": "0" } ],
         "o_busy": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_read_done": [ { "direction": "out", "driver_value": "0x0" } ],
+        "o_command_received": [ { "direction": "out", "driver_value": "0x0" } ],
         "i_nand_rb": [ { "direction": "in" } ],
         "o_nand_we": [ { "direction": "out", "driver_value": "0x1" } ],
         "o_nand_wp": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_nand_cle": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_nand_ale": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_nand_re": [ { "direction": "out", "driver_value": "0x1" } ],
-        "io_nand_data": [ { "direction": "inout", "size_left": "7", "size_right": "0", "driver_value": "0" } ]
+        "io_nand_data": [ { "direction": "inout", "size_left": "7", "size_right": "0", "driver_value": "0" } ],
+        "o_nand_ce": [ { "direction": "out", "size_left": "1", "size_right": "0", "driver_value": "1" } ]
       },
       "interfaces": {
         "i_rst": {
@@ -78,8 +84,8 @@
             "ASSOCIATED_RESET": [ { "value": "i_rst", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
             "FREQ_HZ": [ { "value": "10000000", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "FREQ_TOLERANCE_HZ": [ { "value": "0", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
-            "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
-            "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_0_clk_out1", "value_src": "default_prop", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
+            "PHASE": [ { "value": "0.0", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
+            "CLK_DOMAIN": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "ASSOCIATED_BUSIF": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "ASSOCIATED_PORT": [ { "value": "", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
             "INSERT_VIP": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "simulation.rtl", "is_ips_inferred": true, "is_static_object": false } ]

@@ -24,6 +24,7 @@ package onfi_timings is
 	constant	t_whr		:	integer	:=	integer(120.0	/ clock_cycle);
 	constant	t_prog	:	integer	:=	integer(600000.0 / clock_cycle);
 	constant	t_adl		:	integer	:=	integer(200.0	/ clock_cycle);
+	constant	t_cs		:	integer	:=	integer(70.0	/ clock_cycle);
 	
 	constant ADDR_LENGTH : integer := 5;
 end onfi_timings;
@@ -34,7 +35,9 @@ use work.onfi_timings.all;
 
 entity nand_controller is
     Generic (
-        PAGE_SIZE : integer := 8640
+        PAGE_SIZE : integer := 8640;
+        NUM_OF_DEVICES : integer := 2;
+        MAX_RETRIES : integer := 5
     );
     Port ( i_clk : in STD_LOGIC;
            i_rst : in STD_LOGIC;
@@ -45,6 +48,7 @@ entity nand_controller is
            o_data : out std_logic_vector(7 downto 0) := (others => '0');
            o_busy : out std_logic := '0';
            o_read_done : out std_logic := '0';
+           o_command_received : out std_logic := '0';
            
            i_nand_rb : in std_logic;
            o_nand_we : out std_logic := '1';
@@ -52,12 +56,13 @@ entity nand_controller is
            o_nand_cle : out std_logic := '0';
            o_nand_ale : out std_logic := '0';
            o_nand_re : out std_logic := '1';
-           io_nand_data : inout std_logic_vector(7 downto 0) := (others => 'Z')
+           io_nand_data : inout std_logic_vector(7 downto 0) := (others => 'Z');
+           o_nand_ce : out std_logic_vector(NUM_OF_DEVICES-1 downto 0) := (others => '1')
            );
 end nand_controller;
 
 architecture Behavioral of nand_controller is
-    type state_t is (S_IDLE, S_READY, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_WRITE_BYTE, S_HOLD, S_DELAY, S_WAIT, S_ERROR);
+    type state_t is (S_IDLE, S_READY, S_ENABLE, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_WRITE_BYTE, S_HOLD, S_DELAY, S_WAIT, S_ERROR);
     signal state : state_t;
     signal n_state : state_t;
     signal hold_return_state : state_t;
@@ -69,10 +74,15 @@ architecture Behavioral of nand_controller is
     signal byte_to_send : std_logic_vector(7 downto 0) := (others => '0');
     signal stage : integer := 0;
     signal byte_counter : integer := 0;
+    signal retry_counter : integer := 0;
     
     signal write_with_cle : std_logic := '0';
     signal write_with_ale : std_logic := '0';
+    
+    signal command_received : std_logic := '0';
 begin
+    o_command_received <= command_received;
+
     process(i_clk, i_rst)
     begin
     if i_rst = '0' then
@@ -90,12 +100,16 @@ begin
             o_nand_ale <= '0';
             o_nand_re <= '1';
             io_nand_data <= (others => 'Z');
+            o_nand_ce <= (others => '1');
             
             state <= S_READY;
             n_state <= S_READY;
             write_with_cle <= '0';
             write_with_ale <= '0';
             o_busy <= '1';
+            
+            command_received <= '0';
+            retry_counter <= 0;
             
         when S_READY =>
             o_nand_wp <= '1';
@@ -104,6 +118,7 @@ begin
                 o_busy <= '1';
                 substate <= SS_INIT;
                 case i_cmd is
+                when x"10" => state <= S_ENABLE;
                 when x"01" => state <= S_RESET;
                 when x"02" => state <= S_STATUS;
                 when x"03" => state <= S_ERASE;
@@ -112,6 +127,12 @@ begin
                 when others => state <= S_ERROR; -- error
                 end case;
             end if;
+        
+        when S_ENABLE =>
+            o_nand_ce <= i_data(NUM_OF_DEVICES-1 downto 0);
+            delay <= t_cs;
+            state <= S_DELAY;
+            n_state <= S_READY;
             
         when S_RESET =>
             case substate is
@@ -126,7 +147,7 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                n_state <= S_RESET;
+                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => state <= S_READY;
@@ -188,6 +209,7 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
+                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => 
@@ -239,6 +261,7 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
+                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => 
@@ -276,6 +299,7 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
+                command_received <= '0';
                 substate <= SS_DELAY;
             
             when SS_DELAY =>
@@ -372,10 +396,24 @@ begin
         
         -- this state is for waiting for the r/b signal
         when S_WAIT =>
+            if i_nand_rb = '0' then
+                command_received <= '1';
+            end if;
+            
             if delay > 1 then
                 delay <= delay - 1;
             elsif i_nand_rb = '1' then
-                state <= n_state;
+                if command_received = '0' and retry_counter < MAX_RETRIES then
+                    state <= n_state;
+                    substate <= SS_INIT;
+                    retry_counter <= retry_counter + 1;
+                elsif command_received = '0' then -- retry count exceeded
+                    state <= S_READY;
+                    retry_counter <= 0;
+                else
+                    state <= n_state;
+                    retry_counter <= 0;
+                end if;
             end if;
         
         when S_ERROR => null;
