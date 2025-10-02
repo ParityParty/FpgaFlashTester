@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Wed Oct  1 10:50:16 2025
+//Date        : Wed Oct  1 18:59:41 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1_wrapper.bd
 //Design      : design_1_wrapper
@@ -27,7 +27,7 @@ module design_1_wrapper
   output debug;
   output led_light;
   output nand_ale;
-  output [1:0]nand_ce;
+  output [0:0]nand_ce;
   output nand_cle;
   inout [7:0]nand_data;
   input nand_rb;
@@ -40,7 +40,7 @@ module design_1_wrapper
   wire debug;
   wire led_light;
   wire nand_ale;
-  wire [1:0]nand_ce;
+  wire [0:0]nand_ce;
   wire nand_cle;
   wire [7:0]nand_data;
   wire nand_rb;

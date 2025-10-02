@@ -30,7 +30,7 @@ entity flash_programmer is
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
         BLOCKS_TO_TEST : integer := 1024;
-        NUM_OF_DEVICES : integer := 2;
+        NUM_OF_DEVICES : integer := 1;
         MAX_FAULTS : integer := 5
     );
     Port (
@@ -46,6 +46,8 @@ entity flash_programmer is
     i_busy : in std_logic;
     i_read_done : in std_logic;
     i_command_received : in std_logic;
+    
+    o_debug : out std_logic := '0';
     
     o_TX_DV : out std_logic := '0';         -- Data Valid for Transmission
     o_TX_Byte : out std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
@@ -84,6 +86,8 @@ begin
         state <= S_IDLE;
     
     elsif rising_edge(i_clock) then
+    
+        o_debug <= '0';
     
         if int_uart_dv = '1' then
             int_uart_dv <= '0';
@@ -162,7 +166,7 @@ begin
                 end if;
             
             when SS_NEXT_DEVICE =>
-                if device_counter < NUM_OF_DEVICES then
+                if device_counter + 1 < NUM_OF_DEVICES then
                     device_counter <= device_counter + 1;
                     state <= S_PICK_DEVICE;
                     substate <= SS_SEND_CMD;
@@ -171,10 +175,15 @@ begin
                 end if;
             
             when SS_DONE => 
-                device_counter <= 0;
-                state <= S_PICK_DEVICE;
-                next_state <= S_ERASE_BLOCK;
-                substate <= SS_INIT;
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= x"A0";
+                    int_uart_dv <= '1';
+                    
+                    device_counter <= 0;
+                    state <= S_PICK_DEVICE;
+                    next_state <= S_ERASE_BLOCK;
+                    substate <= SS_INIT;
+                end if;
             
             when others => state <= S_ERROR;
             end case;
@@ -214,6 +223,7 @@ begin
                 if i_data(5) = '1' then 
                     if i_data(0) = '1' and fault_counter < MAX_FAULTS then
                         substate <= SS_SEND_CMD;
+                        fault_counter <= fault_counter + 1;
                     elsif i_data(0) = '1' then 
                         if i_TX_Active = '0' and int_uart_dv = '0' then
                             o_TX_Byte <= x"E2";
@@ -228,9 +238,15 @@ begin
                 end if;
             
             when SS_DONE =>
-                state <= S_PROGRAM_BLOCK;
-                substate <= SS_INIT;
-                
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= x"A1";
+                    int_uart_dv <= '1';
+                    
+                    state <= S_PROGRAM_BLOCK;
+                    substate <= SS_INIT;
+                end if;
+            
+            when others => state <= S_ERROR;
             end case;
         
         when S_PROGRAM_BLOCK =>
@@ -268,6 +284,7 @@ begin
             when SS_CHECK_DATA =>
                 if i_data(5) = '1' then 
                     if i_data(0) = '1' and fault_counter < MAX_FAULTS then
+                        fault_counter <= fault_counter + 1;
                         substate <= SS_SEND_CMD;
                     elsif i_data(0) = '1' then 
                         if i_TX_Active = '0' and int_uart_dv = '0' then
@@ -323,6 +340,7 @@ begin
                 end if;
             
             when SS_GET_DATA =>
+                o_debug <= '1';
                 if i_read_done = '1' then
                     substate <= SS_NEXT_PAGE;
                 else
@@ -350,8 +368,7 @@ begin
                 end if;
             
             when SS_DONE =>
-                state <= S_READ_BLOCK;
-                substate <= SS_INIT;
+                state <= S_NEXT_BLOCK;
 
             when others => state <= S_ERROR;
             end case;

@@ -64,6 +64,8 @@ architecture behavior of nand_controller_tb is
     -- Bidirectional data bus resolution
     signal s_io_nand_data : std_logic_vector(7 downto 0);
     
+    signal fault_sim : std_logic := '0';
+    
     -- Clock period constant
     constant CLK_PERIOD : time := real'pos(clock_cycle) * 1 ns;
 
@@ -221,7 +223,12 @@ begin
                 end if;
                 wait for CLK_PERIOD;
                 
-                s_nand_rb <= '0'; -- Go busy
+                if fault_sim = '0' then
+                    fault_sim <= '1';
+                else
+                    s_nand_rb <= '0'; -- Go busy
+                    fault_sim <= '0';
+                end if;
                 report "NAND Model: Reset command detected. Going busy." severity note;
                 
                 wait for 10 * CLK_PERIOD;
@@ -234,7 +241,12 @@ begin
                     wait until s_nand_cle = '0';
                 end if;
                 wait for CLK_PERIOD;
-                s_nand_rb <= '0'; -- Go busy
+                 if fault_sim = '0' then
+                    fault_sim <= '1';
+                else
+                    s_nand_rb <= '0'; -- Go busy
+                    fault_sim <= '0';
+                end if;
                 wait for 20 * CLK_PERIOD;
                 s_nand_rb <= '1'; -- Ready
                 

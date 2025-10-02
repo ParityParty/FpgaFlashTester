@@ -5,117 +5,143 @@ use IEEE.NUMERIC_STD.ALL;
 entity tb_flash_programmer is
 end tb_flash_programmer;
 
-architecture sim of tb_flash_programmer is
-    -- DUT component declaration
+architecture behavior of tb_flash_programmer is
+
+    -- Component Declaration
     component flash_programmer
         generic (
-            MAX_COUNT       : integer := 25;
-            DELAY_MAX_COUNT : integer := 10
+            MAX_COUNT : integer := 5;
+            DELAY_MAX_COUNT : integer := 3;
+            PAGE_SIZE : integer := 8640;
+            PAGES_IN_BLOCK : integer := 128;
+            BLOCKS_TO_TEST : integer := 1024;
+            NUM_OF_DEVICES : integer := 2;
+            MAX_FAULTS : integer := 5
         );
         port (
-            led_light   : out STD_LOGIC;
-            CLK25MHZ    : in  STD_LOGIC;
-            uart_tx     : out STD_LOGIC;
-            clk_monitor : out STD_LOGIC;
+            led_light : out STD_LOGIC;
+            i_clock : in STD_LOGIC;
+            i_reset : in STD_LOGIC;
 
-            nand_cle    : out std_logic;
-            nand_ale    : out std_logic;
-            nand_nwe    : out std_logic;
-            nand_nwp    : out std_logic;
-            nand_nce    : out std_logic;
-            nand_nre    : out std_logic;
-            nand_rnb    : in  std_logic;
-            nand_data   : inout std_logic_vector(15 downto 0);
-            
-            dbg_state   : out std_logic_vector(3 downto 0);
-            dbg_data_out : out std_logic_vector(7 downto 0)
+            o_activate : out std_logic;
+            o_cmd : out std_logic_vector(7 downto 0);
+            o_address : out std_logic_vector(39 downto 0);
+            o_data : out std_logic_vector(7 downto 0);
+            i_data : in std_logic_vector(7 downto 0);
+            i_busy : in std_logic;
+            i_read_done : in std_logic;
+            i_command_received : in std_logic;
+
+            o_TX_DV : out std_logic;
+            o_TX_Byte : out std_logic_vector(7 downto 0);
+            i_TX_Active : in std_logic;
+            i_TX_Done : in std_logic
         );
     end component;
 
-    -- signals for DUT
-    signal clk        : std_logic := '0';
-    signal led        : std_logic;
-    signal uart_tx    : std_logic;
-    signal clk_mon    : std_logic;
-    signal nand_cle   : std_logic;
-    signal nand_ale   : std_logic;
-    signal nand_nwe   : std_logic;
-    signal nand_nwp   : std_logic;
-    signal nand_nce   : std_logic;
-    signal nand_nre   : std_logic;
-    signal nand_rnb   : std_logic := '1'; -- NAND ready by default
-    signal nand_data  : std_logic_vector(15 downto 0) := (others => 'Z');
-    
-    signal dbg_state   : std_logic_vector(3 downto 0);
-    signal dbg_data_out : std_logic_vector(7 downto 0);
+    -- Signals to connect to the DUT
+    signal clk             : std_logic := '0';
+    signal rst             : std_logic := '0';
+
+    signal led_light       : std_logic;
+    signal o_activate      : std_logic;
+    signal o_cmd           : std_logic_vector(7 downto 0);
+    signal o_address       : std_logic_vector(39 downto 0);
+    signal o_data          : std_logic_vector(7 downto 0);
+    signal i_data          : std_logic_vector(7 downto 0) := (others => '0');
+    signal i_busy          : std_logic := '0';
+    signal i_read_done     : std_logic := '0';
+    signal i_command_received : std_logic := '0';
+
+    signal o_TX_DV         : std_logic;
+    signal o_TX_Byte       : std_logic_vector(7 downto 0);
+    signal i_TX_Active     : std_logic := '0';
+    signal i_TX_Done       : std_logic := '0';
+
+    constant CLK_PERIOD    : time := 10 ns;
 
 begin
-    -- DUT instantiation
-    DUT: flash_programmer
-        generic map (
-            MAX_COUNT       => 25,   -- shorten counters for sim
-            DELAY_MAX_COUNT => 10
-        )
-        port map (
-            led_light   => led,
-            CLK25MHZ    => clk,
-            uart_tx     => uart_tx,
-            clk_monitor => clk_mon,
 
-            nand_cle    => nand_cle,
-            nand_ale    => nand_ale,
-            nand_nwe    => nand_nwe,
-            nand_nwp    => nand_nwp,
-            nand_nce    => nand_nce,
-            nand_nre    => nand_nre,
-            nand_rnb    => nand_rnb,
-            nand_data   => nand_data,
-            
-            dbg_state => dbg_state,
-            dbg_data_out => dbg_data_out
-        );
-
-    -- generate 25 MHz clock (40 ns period)
+    -- Clock Generation
     clk_process : process
     begin
-        while true loop
+        while now < 5 ms loop
             clk <= '0';
-            wait for 20 ns;
+            wait for CLK_PERIOD / 2;
             clk <= '1';
-            wait for 20 ns;
+            wait for CLK_PERIOD / 2;
+        end loop;
+        wait;
+    end process;
+
+    -- DUT Instantiation
+    uut: flash_programmer
+        port map (
+            led_light => led_light,
+            i_clock => clk,
+            i_reset => rst,
+
+            o_activate => o_activate,
+            o_cmd => o_cmd,
+            o_address => o_address,
+            o_data => o_data,
+            i_data => i_data,
+            i_busy => i_busy,
+            i_read_done => i_read_done,
+            i_command_received => i_command_received,
+
+            o_TX_DV => o_TX_DV,
+            o_TX_Byte => o_TX_Byte,
+            i_TX_Active => i_TX_Active,
+            i_TX_Done => i_TX_Done
+        );
+
+    -- Reset Process
+    reset_process : process
+    begin
+        rst <= '0';
+        wait for 50 ns;
+        rst <= '1';  -- Release reset after some time
+        wait;
+    end process;
+
+    -- Stimulus Process (simulate external controller responses)
+    stimulus_process : process
+    begin
+
+        -- Respond to activate signal by toggling busy
+        loop
+            wait until rising_edge(clk);
+
+            -- Simulate that controller becomes busy during o_activate
+            if o_activate = '1' then
+                i_busy <= '1';
+                wait for 40 ns;
+                i_command_received <= '1';
+                wait for 40 ns;
+--                i_command_received <= '0';
+                i_busy <= '0';
+            end if;
+
+            -- Respond to read done if a read command is issued
+            if o_cmd = x"05" then
+                wait for 100 ns;
+                i_read_done <= '1';
+                i_data <= x"AA";  -- Simulate successful read
+                wait for 20 ns;
+                i_read_done <= '0';
+            end if;
+
+            -- Simulate i_TX_Active being busy for a while
+            if o_TX_DV = '1' then
+                i_TX_Active <= '1';
+                wait for 30 ns;
+                i_TX_Active <= '0';
+                i_TX_Done <= '1';
+                wait for 20 ns;
+                i_TX_Done <= '0';
+            end if;
         end loop;
     end process;
 
-    -- stimulus process
-    stim_proc : process
-    begin
---        -- Let the design initialize
---        wait for 200 ns;
-        
-        wait_loop: loop
-            if nand_nre = '0' then  -- mem_done comes from memory entity
-                exit wait_loop;
-            end if;
-            wait for 5ns;
-        end loop wait_loop;
-
---        wait for 155ns;
-		nand_data <= x"002c";
-		wait for 240ns;
-		nand_data <= x"00e5";
-		wait for 240ns;
-		nand_data <= x"00ff";
-		wait for 240ns;
-		nand_data <= x"0003";
-		wait for 240ns;
-		nand_data <= x"0086";
-		wait for 240ns;
-		nand_data <= "ZZZZZZZZZZZZZZZZ";
-		wait for 5ns;
-        -- Let the FSM cycle a few times
-        wait for 2 us;
-
-        -- finish simulation
-        wait;
-    end process;
-end sim;
+end behavior;

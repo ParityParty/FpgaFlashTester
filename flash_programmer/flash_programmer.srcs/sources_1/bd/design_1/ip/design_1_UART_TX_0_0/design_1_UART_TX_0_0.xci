@@ -20,7 +20,7 @@
         "BOARD_CONNECTIONS": [ { "value": "" } ],
         "DEVICE": [ { "value": "xck26" } ],
         "PACKAGE": [ { "value": "sfvc784" } ],
-        "PREFHDL": [ { "value": "VERILOG" } ],
+        "PREFHDL": [ { "value": "VHDL" } ],
         "SILICON_REVISION": [ { "value": "" } ],
         "SIMULATOR_LANGUAGE": [ { "value": "MIXED" } ],
         "SPEEDGRADE": [ { "value": "-2LV" } ],

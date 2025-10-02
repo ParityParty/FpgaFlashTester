@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
-//Date        : Wed Oct  1 10:50:16 2025
+//Date        : Wed Oct  1 18:59:40 2025
 //Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -28,7 +28,7 @@ module design_1
   output debug;
   output led_light;
   output nand_ale;
-  output [1:0]nand_ce;
+  output [0:0]nand_ce;
   output nand_cle;
   inout [7:0]nand_data;
   input nand_rb;
@@ -42,6 +42,7 @@ module design_1
   wire UART_TX_0_o_TX_Done;
   wire clk_wiz_0_clk_out1;
   wire clk_wiz_0_locked;
+  wire debug;
   wire [7:0]flash_programmer_0_i_TX_Byte;
   wire flash_programmer_0_i_TX_DV;
   wire flash_programmer_0_o_activate;
@@ -50,9 +51,10 @@ module design_1
   wire [7:0]flash_programmer_0_o_data;
   wire led_light;
   wire nand_ale;
-  wire [1:0]nand_ce;
+  wire [0:0]nand_ce;
   wire nand_cle;
   wire nand_controller_0_o_busy;
+  wire nand_controller_0_o_command_received;
   wire [7:0]nand_controller_0_o_data;
   wire nand_controller_0_o_read_done;
   wire [7:0]nand_data;
@@ -79,6 +81,7 @@ module design_1
         .i_TX_Done(UART_TX_0_o_TX_Done),
         .i_busy(nand_controller_0_o_busy),
         .i_clock(clk_wiz_0_clk_out1),
+        .i_command_received(nand_controller_0_o_command_received),
         .i_data(nand_controller_0_o_data),
         .i_read_done(nand_controller_0_o_read_done),
         .i_reset(clk_wiz_0_locked),
@@ -89,7 +92,7 @@ module design_1
         .o_address(flash_programmer_0_o_address),
         .o_cmd(flash_programmer_0_o_cmd),
         .o_data(flash_programmer_0_o_data),
-        .o_nand_nce(nand_ce));
+        .o_debug(debug));
   design_1_nand_controller_0_0 nand_controller_0
        (.i_activate(flash_programmer_0_o_activate),
         .i_address(flash_programmer_0_o_address),
@@ -100,8 +103,10 @@ module design_1
         .i_rst(clk_wiz_0_locked),
         .io_nand_data(nand_data),
         .o_busy(nand_controller_0_o_busy),
+        .o_command_received(nand_controller_0_o_command_received),
         .o_data(nand_controller_0_o_data),
         .o_nand_ale(nand_ale),
+        .o_nand_ce(nand_ce),
         .o_nand_cle(nand_cle),
         .o_nand_re(nand_re),
         .o_nand_we(nand_we),

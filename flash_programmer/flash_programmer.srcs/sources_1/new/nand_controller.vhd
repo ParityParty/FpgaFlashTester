@@ -36,7 +36,7 @@ use work.onfi_timings.all;
 entity nand_controller is
     Generic (
         PAGE_SIZE : integer := 8640;
-        NUM_OF_DEVICES : integer := 2;
+        NUM_OF_DEVICES : integer := 1;
         MAX_RETRIES : integer := 5
     );
     Port ( i_clk : in STD_LOGIC;
@@ -396,9 +396,9 @@ begin
         
         -- this state is for waiting for the r/b signal
         when S_WAIT =>
-            if i_nand_rb = '0' then
+--            if i_nand_rb = '0' then
                 command_received <= '1';
-            end if;
+--            end if;
             
             if delay > 1 then
                 delay <= delay - 1;

@@ -789,7 +789,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports led_light]
 
 
 set_property DRIVE 12 [get_ports led_light]
-set_property PACKAGE_PIN AG14 [get_ports led_light]
+set_property PACKAGE_PIN AB15 [get_ports led_light]
 
 
 set_property SLEW SLOW [get_ports led_light]
@@ -800,7 +800,7 @@ set_property IOSTANDARD LVCMOS18 [get_ports CLK25MHZ]
 set_property PACKAGE_PIN W11 [get_ports uart_tx]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_tx]
 
-set_property PACKAGE_PIN AH14 [get_ports debug]
+set_property PACKAGE_PIN AG14 [get_ports debug]
 set_property IOSTANDARD LVCMOS33 [get_ports debug]
 
 set_property IOSTANDARD LVCMOS33 [get_ports nand_ale]
@@ -854,6 +854,9 @@ set_property DRIVE 16 [get_ports nand_we]
 set_property DRIVE 16 [get_ports nand_wp]
 set_property DRIVE 12 [get_ports uart_tx]
 
-set_property IOSTANDARD LVCMOS33 [get_ports {nand_ce[1]}]
-set_property PACKAGE_PIN AE10 [get_ports {nand_ce[1]}]
-set_property DRIVE 16 [get_ports {nand_ce[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {nand_ce[1]}]
+#set_property PACKAGE_PIN AE10 [get_ports {nand_ce[1]}]
+#set_property DRIVE 16 [get_ports {nand_ce[1]}]
+
+set_property PACKAGE_PIN AG14 [get_ports debug]
+set_property DRIVE 16 [get_ports debug]
