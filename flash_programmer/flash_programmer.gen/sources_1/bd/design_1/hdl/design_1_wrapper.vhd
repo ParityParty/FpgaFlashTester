@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Thu Oct  2 09:57:32 2025
+--Date        : Thu Oct  2 10:51:32 2025
 --Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 --Command     : generate_target design_1_wrapper.bd
 --Design      : design_1_wrapper
@@ -18,7 +18,7 @@ entity design_1_wrapper is
     debug : out STD_LOGIC;
     led_light : out STD_LOGIC;
     nand_ale : out STD_LOGIC;
-    nand_ce : out STD_LOGIC_VECTOR ( 0 to 0 );
+    nand_ce : out STD_LOGIC;
     nand_cle : out STD_LOGIC;
     nand_data : inout STD_LOGIC_VECTOR ( 7 downto 0 );
     nand_rb : in STD_LOGIC;
@@ -33,17 +33,17 @@ architecture STRUCTURE of design_1_wrapper is
   component design_1 is
   port (
     nand_rb : in STD_LOGIC;
-    nand_data : inout STD_LOGIC_VECTOR ( 7 downto 0 );
     nand_re : out STD_LOGIC;
     nand_ale : out STD_LOGIC;
     nand_wp : out STD_LOGIC;
     nand_we : out STD_LOGIC;
-    nand_ce : out STD_LOGIC_VECTOR ( 0 to 0 );
     nand_cle : out STD_LOGIC;
     debug : out STD_LOGIC;
     led_light : out STD_LOGIC;
     CLK25MHZ : in STD_LOGIC;
-    uart_tx : out STD_LOGIC
+    uart_tx : out STD_LOGIC;
+    nand_ce : out STD_LOGIC;
+    nand_data : inout STD_LOGIC_VECTOR ( 7 downto 0 )
   );
   end component design_1;
 begin
@@ -53,7 +53,7 @@ design_1_i: component design_1
       debug => debug,
       led_light => led_light,
       nand_ale => nand_ale,
-      nand_ce(0) => nand_ce(0),
+      nand_ce => nand_ce,
       nand_cle => nand_cle,
       nand_data(7 downto 0) => nand_data(7 downto 0),
       nand_rb => nand_rb,

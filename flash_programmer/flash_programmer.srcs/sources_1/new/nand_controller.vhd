@@ -36,7 +36,6 @@ use work.onfi_timings.all;
 entity nand_controller is
     Generic (
         PAGE_SIZE : integer := 8640;
-        NUM_OF_DEVICES : integer := 1;
         MAX_RETRIES : integer := 5
     );
     Port ( i_clk : in STD_LOGIC;
@@ -57,12 +56,12 @@ entity nand_controller is
            o_nand_ale : out std_logic := '0';
            o_nand_re : out std_logic := '1';
            io_nand_data : inout std_logic_vector(7 downto 0) := (others => 'Z');
-           o_nand_ce : out std_logic_vector(NUM_OF_DEVICES-1 downto 0) := (others => '1')
+           o_nand_ce : out std_logic := '1'
            );
 end nand_controller;
 
 architecture Behavioral of nand_controller is
-    type state_t is (S_IDLE, S_READY, S_ENABLE, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_WRITE_BYTE, S_HOLD, S_DELAY, S_WAIT, S_ERROR);
+    type state_t is (S_IDLE, S_READY, S_RESET, S_ERASE, S_STATUS, S_PROGRAM, S_READ, S_READ_BYTE, S_WRITE_BYTE, S_HOLD, S_DELAY, S_WAIT, S_ERROR);
     signal state : state_t;
     signal n_state : state_t;
     signal hold_return_state : state_t;
@@ -100,7 +99,7 @@ begin
             o_nand_ale <= '0';
             o_nand_re <= '1';
             io_nand_data <= (others => 'Z');
-            o_nand_ce <= (others => '1');
+            o_nand_ce <= '1';
             
             state <= S_READY;
             n_state <= S_READY;
@@ -112,13 +111,13 @@ begin
             retry_counter <= 0;
             
         when S_READY =>
+            o_nand_ce <= '0';
             o_nand_wp <= '1';
             o_busy <= '0';
             if i_activate = '1' then
                 o_busy <= '1';
                 substate <= SS_INIT;
                 case i_cmd is
-                when x"10" => state <= S_ENABLE;
                 when x"01" => state <= S_RESET;
                 when x"02" => state <= S_STATUS;
                 when x"03" => state <= S_ERASE;
@@ -127,12 +126,6 @@ begin
                 when others => state <= S_ERROR; -- error
                 end case;
             end if;
-        
-        when S_ENABLE =>
-            o_nand_ce <= i_data(NUM_OF_DEVICES-1 downto 0);
-            delay <= t_cs;
-            state <= S_DELAY;
-            n_state <= S_READY;
             
         when S_RESET =>
             case substate is

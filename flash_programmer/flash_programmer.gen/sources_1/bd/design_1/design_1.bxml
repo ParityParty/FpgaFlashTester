@@ -2,17 +2,11 @@
 <Root MajorVersion="0" MinorVersion="43">
   <CompositeFile CompositeFileTopName="design_1" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1759391852"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1759391852"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1759391852"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1759391852"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1759395093"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1759395093"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1759395093"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1759395093"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
-      <File Name="sim/design_1.protoinst">
-        <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="SIMULATION"/>
-        <ProcessingOrder Val="NORMAL"/>
-      </File>
       <File Name="synth/design_1.vhd" Type="VHDL">
         <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
         <Library Name="xil_defaultlib"/>
@@ -49,6 +43,12 @@
         <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="HW_HANDOFF"/>
+        <ProcessingOrder Val="NORMAL"/>
+      </File>
+      <File Name="sim/design_1.protoinst">
+        <Properties IsEditable="false" IsVisible="true" IsNetlistSimulation="false" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SIMULATION"/>
         <ProcessingOrder Val="NORMAL"/>
       </File>
     </FileCollection>

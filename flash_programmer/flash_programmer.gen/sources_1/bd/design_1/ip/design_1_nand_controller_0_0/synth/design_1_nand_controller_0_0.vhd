@@ -72,7 +72,7 @@ ENTITY design_1_nand_controller_0_0 IS
     o_nand_ale : OUT STD_LOGIC;
     o_nand_re : OUT STD_LOGIC;
     io_nand_data : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    o_nand_ce : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    o_nand_ce : OUT STD_LOGIC
   );
 END design_1_nand_controller_0_0;
 
@@ -82,7 +82,6 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   COMPONENT nand_controller IS
     GENERIC (
       PAGE_SIZE : INTEGER;
-      NUM_OF_DEVICES : INTEGER;
       MAX_RETRIES : INTEGER
     );
     PORT (
@@ -103,7 +102,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
       o_nand_ale : OUT STD_LOGIC;
       o_nand_re : OUT STD_LOGIC;
       io_nand_data : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o_nand_ce : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+      o_nand_ce : OUT STD_LOGIC
     );
   END COMPONENT nand_controller;
   ATTRIBUTE X_CORE_INFO : STRING;
@@ -111,7 +110,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_nand_controller_0_0_arch : ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=nand_controller,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,PAGE_SIZE=8640,NUM_OF_DEVICES=1,MAX_RETRIES=5}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=nand_controller,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,PAGE_SIZE=8640,MAX_RETRIES=5}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -127,7 +126,6 @@ BEGIN
   U0 : nand_controller
     GENERIC MAP (
       PAGE_SIZE => 8640,
-      NUM_OF_DEVICES => 1,
       MAX_RETRIES => 5
     )
     PORT MAP (

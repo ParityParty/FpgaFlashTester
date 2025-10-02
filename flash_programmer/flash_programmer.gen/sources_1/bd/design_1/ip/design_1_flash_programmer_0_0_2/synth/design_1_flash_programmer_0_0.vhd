@@ -84,7 +84,6 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       PAGE_SIZE : INTEGER;
       PAGES_IN_BLOCK : INTEGER;
       BLOCKS_TO_TEST : INTEGER;
-      NUM_OF_DEVICES : INTEGER;
       MAX_FAULTS : INTEGER
     );
     PORT (
@@ -111,7 +110,7 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_flash_programmer_0_0_arch : ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,NUM_OF_DEVICES=1,MAX_FAULTS=5}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,MAX_FAULTS=5}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -131,7 +130,6 @@ BEGIN
       PAGE_SIZE => 8640,
       PAGES_IN_BLOCK => 128,
       BLOCKS_TO_TEST => 1024,
-      NUM_OF_DEVICES => 1,
       MAX_FAULTS => 5
     )
     PORT MAP (

@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x73CAF26D1F4D934A",
+      "boundary_crc": "0x7C03D2666EA2BC7D",
       "device": "xck26-sfvc784-2LV-c",
       "gen_directory": "../../../../flash_programmer.gen/sources_1/bd/design_1",
       "name": "design_1",
@@ -20,11 +20,6 @@
       "nand_rb": {
         "direction": "I"
       },
-      "nand_data": {
-        "direction": "IO",
-        "left": "7",
-        "right": "0"
-      },
       "nand_re": {
         "direction": "O"
       },
@@ -36,11 +31,6 @@
       },
       "nand_we": {
         "direction": "O"
-      },
-      "nand_ce": {
-        "direction": "O",
-        "left": "0",
-        "right": "0"
       },
       "nand_cle": {
         "direction": "O"
@@ -78,6 +68,21 @@
       },
       "uart_tx": {
         "direction": "O"
+      },
+      "nand_ce": {
+        "direction": "O"
+      },
+      "nand_data": {
+        "type": "data",
+        "direction": "IO",
+        "left": "7",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
       }
     },
     "components": {
@@ -406,9 +411,7 @@
             "right": "0"
           },
           "o_nand_ce": {
-            "direction": "O",
-            "left": "0",
-            "right": "0"
+            "direction": "O"
           }
         }
       }
@@ -448,16 +451,16 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "UART_TX_0/i_Clk",
-          "nand_controller_0/i_clk",
-          "flash_programmer_0/i_clock"
+          "flash_programmer_0/i_clock",
+          "nand_controller_0/i_clk"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
           "UART_TX_0/i_reset",
-          "nand_controller_0/i_rst",
-          "flash_programmer_0/i_reset"
+          "flash_programmer_0/i_reset",
+          "nand_controller_0/i_rst"
         ]
       },
       "flash_programmer_0_i_TX_Byte": {
@@ -476,12 +479,6 @@
         "ports": [
           "flash_programmer_0/led_light",
           "led_light"
-        ]
-      },
-      "flash_programmer_0_nand_nce1": {
-        "ports": [
-          "nand_controller_0/o_nand_ce",
-          "nand_ce"
         ]
       },
       "flash_programmer_0_o_activate": {
@@ -536,6 +533,12 @@
         "ports": [
           "nand_controller_0/o_nand_ale",
           "nand_ale"
+        ]
+      },
+      "nand_controller_0_o_nand_ce": {
+        "ports": [
+          "nand_controller_0/o_nand_ce",
+          "nand_ce"
         ]
       },
       "nand_controller_0_o_nand_cle": {

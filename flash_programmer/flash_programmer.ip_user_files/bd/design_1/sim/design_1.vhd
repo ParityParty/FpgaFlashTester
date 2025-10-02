@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Thu Oct  2 09:57:31 2025
+--Date        : Thu Oct  2 10:51:32 2025
 --Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -18,7 +18,7 @@ entity design_1 is
     debug : out STD_LOGIC;
     led_light : out STD_LOGIC;
     nand_ale : out STD_LOGIC;
-    nand_ce : out STD_LOGIC_VECTOR ( 0 to 0 );
+    nand_ce : out STD_LOGIC;
     nand_cle : out STD_LOGIC;
     nand_data : inout STD_LOGIC_VECTOR ( 7 downto 0 );
     nand_rb : in STD_LOGIC;
@@ -91,7 +91,7 @@ architecture STRUCTURE of design_1 is
     o_nand_ale : out STD_LOGIC;
     o_nand_re : out STD_LOGIC;
     io_nand_data : inout STD_LOGIC_VECTOR ( 7 downto 0 );
-    o_nand_ce : out STD_LOGIC_VECTOR ( 0 to 0 )
+    o_nand_ce : out STD_LOGIC
   );
   end component design_1_nand_controller_0_0;
   signal UART_TX_0_o_TX_Active : STD_LOGIC;
@@ -112,6 +112,8 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of CLK25MHZ : signal is "xilinx.com:signal:clock:1.0 CLK.CLK25MHZ CLK";
   attribute X_INTERFACE_PARAMETER : string;
   attribute X_INTERFACE_PARAMETER of CLK25MHZ : signal is "XIL_INTERFACENAME CLK.CLK25MHZ, CLK_DOMAIN design_1_CLK25MHZ, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, INSERT_VIP 0, PHASE 0.0";
+  attribute X_INTERFACE_INFO of nand_data : signal is "xilinx.com:signal:data:1.0 DATA.NAND_DATA DATA";
+  attribute X_INTERFACE_PARAMETER of nand_data : signal is "XIL_INTERFACENAME DATA.NAND_DATA, LAYERED_METADATA undef";
 begin
 UART_TX_0: component design_1_UART_TX_0_0
      port map (
@@ -162,7 +164,7 @@ nand_controller_0: component design_1_nand_controller_0_0
       o_command_received => nand_controller_0_o_command_received,
       o_data(7 downto 0) => nand_controller_0_o_data(7 downto 0),
       o_nand_ale => nand_ale,
-      o_nand_ce(0) => nand_ce(0),
+      o_nand_ce => nand_ce,
       o_nand_cle => nand_cle,
       o_nand_re => nand_re,
       o_nand_we => nand_we,

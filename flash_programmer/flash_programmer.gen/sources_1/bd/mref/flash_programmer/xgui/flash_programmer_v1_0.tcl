@@ -7,7 +7,6 @@ proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "DELAY_MAX_COUNT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MAX_COUNT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MAX_FAULTS" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "NUM_OF_DEVICES" -parent ${Page_0}
   ipgui::add_param $IPINST -name "PAGES_IN_BLOCK" -parent ${Page_0}
   ipgui::add_param $IPINST -name "PAGE_SIZE" -parent ${Page_0}
 
@@ -47,15 +46,6 @@ proc update_PARAM_VALUE.MAX_FAULTS { PARAM_VALUE.MAX_FAULTS } {
 
 proc validate_PARAM_VALUE.MAX_FAULTS { PARAM_VALUE.MAX_FAULTS } {
 	# Procedure called to validate MAX_FAULTS
-	return true
-}
-
-proc update_PARAM_VALUE.NUM_OF_DEVICES { PARAM_VALUE.NUM_OF_DEVICES } {
-	# Procedure called to update NUM_OF_DEVICES when any of the dependent parameters in the arguments change
-}
-
-proc validate_PARAM_VALUE.NUM_OF_DEVICES { PARAM_VALUE.NUM_OF_DEVICES } {
-	# Procedure called to validate NUM_OF_DEVICES
 	return true
 }
 
@@ -101,11 +91,6 @@ proc update_MODELPARAM_VALUE.PAGES_IN_BLOCK { MODELPARAM_VALUE.PAGES_IN_BLOCK PA
 proc update_MODELPARAM_VALUE.BLOCKS_TO_TEST { MODELPARAM_VALUE.BLOCKS_TO_TEST PARAM_VALUE.BLOCKS_TO_TEST } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.BLOCKS_TO_TEST}] ${MODELPARAM_VALUE.BLOCKS_TO_TEST}
-}
-
-proc update_MODELPARAM_VALUE.NUM_OF_DEVICES { MODELPARAM_VALUE.NUM_OF_DEVICES PARAM_VALUE.NUM_OF_DEVICES } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.NUM_OF_DEVICES}] ${MODELPARAM_VALUE.NUM_OF_DEVICES}
 }
 
 proc update_MODELPARAM_VALUE.MAX_FAULTS { MODELPARAM_VALUE.MAX_FAULTS PARAM_VALUE.MAX_FAULTS } {

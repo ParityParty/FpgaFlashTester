@@ -9,13 +9,11 @@
     "parameters": {
       "component_parameters": {
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "NUM_OF_DEVICES": [ { "value": "1", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "MAX_RETRIES": [ { "value": "5", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_nand_controller_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "NUM_OF_DEVICES": [ { "value": "1", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "MAX_RETRIES": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
@@ -61,7 +59,7 @@
         "o_nand_ale": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_nand_re": [ { "direction": "out", "driver_value": "0x1" } ],
         "io_nand_data": [ { "direction": "inout", "size_left": "7", "size_right": "0", "driver_value": "0" } ],
-        "o_nand_ce": [ { "direction": "out", "size_left": "0", "size_right": "0", "driver_value": "1" } ]
+        "o_nand_ce": [ { "direction": "out", "driver_value": "0x1" } ]
       },
       "interfaces": {
         "i_rst": {

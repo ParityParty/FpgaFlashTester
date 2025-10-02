@@ -72,7 +72,7 @@ ENTITY design_1_nand_controller_0_0 IS
     o_nand_ale : OUT STD_LOGIC;
     o_nand_re : OUT STD_LOGIC;
     io_nand_data : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    o_nand_ce : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    o_nand_ce : OUT STD_LOGIC
   );
 END design_1_nand_controller_0_0;
 
@@ -82,7 +82,6 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   COMPONENT nand_controller IS
     GENERIC (
       PAGE_SIZE : INTEGER;
-      NUM_OF_DEVICES : INTEGER;
       MAX_RETRIES : INTEGER
     );
     PORT (
@@ -103,7 +102,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
       o_nand_ale : OUT STD_LOGIC;
       o_nand_re : OUT STD_LOGIC;
       io_nand_data : INOUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      o_nand_ce : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+      o_nand_ce : OUT STD_LOGIC
     );
   END COMPONENT nand_controller;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -119,7 +118,6 @@ BEGIN
   U0 : nand_controller
     GENERIC MAP (
       PAGE_SIZE => 8640,
-      NUM_OF_DEVICES => 1,
       MAX_RETRIES => 5
     )
     PORT MAP (

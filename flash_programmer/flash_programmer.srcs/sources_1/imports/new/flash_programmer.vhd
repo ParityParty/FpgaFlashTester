@@ -30,7 +30,6 @@ entity flash_programmer is
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
         BLOCKS_TO_TEST : integer := 1024;
-        NUM_OF_DEVICES : integer := 1;
         MAX_FAULTS : integer := 5
     );
     Port (
@@ -58,11 +57,10 @@ end flash_programmer;
 
 architecture Behavioral of flash_programmer is
     signal counter : integer := 0;
-    signal device_counter : integer := 0;
     signal fault_counter : integer := 0;
 
-	type state_t is (S_IDLE, S_INIT, S_SEND_CHECK, S_NAND_RESET, S_PICK_DEVICE, S_ERASE_BLOCK, S_PROGRAM_BLOCK, S_READ_BLOCK, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
-	type substate_t is (SS_INIT, SS_SEND_CMD, SS_CHECK_RECEIVED, SS_GET_DATA, SS_CHECK_DATA, SS_NEXT_DEVICE, SS_NEXT_PAGE, SS_DONE);
+	type state_t is (S_IDLE, S_INIT, S_SEND_CHECK, S_NAND_RESET, S_ERASE_BLOCK, S_PROGRAM_BLOCK, S_READ_BLOCK, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
+	type substate_t is (SS_INIT, SS_SEND_CMD, SS_CHECK_RECEIVED, SS_GET_DATA, SS_CHECK_DATA, SS_NEXT_PAGE, SS_DONE);
 	
 	type READ_SUBSTATE_TYPE is (READ_START, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	
@@ -124,12 +122,6 @@ begin
                 state <= next_state;
             end if;
             
-        when S_PICK_DEVICE =>
-            o_data <= (others => '1');
-            o_data(device_counter) <= '0';
-            o_cmd <= x"10";
-            state <= S_RELEASE;
-            
         when S_INIT =>
             if counter = MAX_COUNT then
     --            if o_TX_Active = '0' and int_uart_dv = '0' then
@@ -145,8 +137,6 @@ begin
             case substate is
             when SS_INIT =>
                 next_state <= S_NAND_RESET;
-                device_counter <= 0;
-                state <= S_PICK_DEVICE;
                 substate <= SS_SEND_CMD;
                 
             when SS_SEND_CMD =>
@@ -159,17 +149,8 @@ begin
                     if i_TX_Active = '0' and int_uart_dv = '0' then
                         o_TX_Byte <= x"E0";
                         int_uart_dv <= '1';
-                        substate <= SS_NEXT_DEVICE;
+                        state <= S_ERROR;
                     end if;
-                else
-                    substate <= SS_NEXT_DEVICE;
-                end if;
-            
-            when SS_NEXT_DEVICE =>
-                if device_counter + 1 < NUM_OF_DEVICES then
-                    device_counter <= device_counter + 1;
-                    state <= S_PICK_DEVICE;
-                    substate <= SS_SEND_CMD;
                 else
                     substate <= SS_DONE;
                 end if;
@@ -179,9 +160,7 @@ begin
                     o_TX_Byte <= x"A0";
                     int_uart_dv <= '1';
                     
-                    device_counter <= 0;
-                    state <= S_PICK_DEVICE;
-                    next_state <= S_ERASE_BLOCK;
+                    state <= S_ERASE_BLOCK;
                     substate <= SS_INIT;
                 end if;
             
@@ -375,8 +354,7 @@ begin
         
         when S_NEXT_BLOCK =>
             if blocks_tested + 1 < BLOCKS_TO_TEST then
-                state <= S_PICK_DEVICE;
-                next_state <= S_ERASE_BLOCK;
+                state <= S_ERASE_BLOCK;
                 substate <= SS_INIT;
                 blocks_tested <= blocks_tested + 1;
             else

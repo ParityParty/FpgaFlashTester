@@ -84,7 +84,6 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       PAGE_SIZE : INTEGER;
       PAGES_IN_BLOCK : INTEGER;
       BLOCKS_TO_TEST : INTEGER;
-      NUM_OF_DEVICES : INTEGER;
       MAX_FAULTS : INTEGER
     );
     PORT (
@@ -123,7 +122,6 @@ BEGIN
       PAGE_SIZE => 8640,
       PAGES_IN_BLOCK => 128,
       BLOCKS_TO_TEST => 1024,
-      NUM_OF_DEVICES => 1,
       MAX_FAULTS => 5
     )
     PORT MAP (
