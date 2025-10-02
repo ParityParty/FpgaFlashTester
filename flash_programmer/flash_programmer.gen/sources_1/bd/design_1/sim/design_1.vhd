@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Thu Oct  2 12:07:07 2025
+--Date        : Thu Oct  2 15:13:33 2025
 --Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -49,9 +49,9 @@ architecture STRUCTURE of design_1 is
     i_command_received : in STD_LOGIC;
     o_debug : out STD_LOGIC;
     o_TX_DV : out STD_LOGIC;
-    o_TX_Byte : out STD_LOGIC_VECTOR ( 7 downto 0 );
-    i_TX_Active : in STD_LOGIC;
-    i_TX_Done : in STD_LOGIC
+    o_TX_Data : out STD_LOGIC_VECTOR ( 55 downto 0 );
+    o_TX_Num_Bytes : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    i_TX_Active : in STD_LOGIC
   );
   end component design_1_flash_programmer_0_0;
   component design_1_UART_TX_0_0 is
@@ -59,10 +59,10 @@ architecture STRUCTURE of design_1 is
     i_reset : in STD_LOGIC;
     i_Clk : in STD_LOGIC;
     i_TX_DV : in STD_LOGIC;
-    i_TX_Byte : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    i_TX_Data : in STD_LOGIC_VECTOR ( 55 downto 0 );
+    i_TX_Num_Bytes : in STD_LOGIC_VECTOR ( 2 downto 0 );
     o_TX_Active : out STD_LOGIC;
-    o_TX_Serial : out STD_LOGIC;
-    o_TX_Done : out STD_LOGIC
+    o_TX_Serial : out STD_LOGIC
   );
   end component design_1_UART_TX_0_0;
   component design_1_clk_wiz_0_0 is
@@ -95,11 +95,11 @@ architecture STRUCTURE of design_1 is
   );
   end component design_1_nand_controller_0_0;
   signal UART_TX_0_o_TX_Active : STD_LOGIC;
-  signal UART_TX_0_o_TX_Done : STD_LOGIC;
   signal clk_wiz_0_clk_out1 : STD_LOGIC;
   signal clk_wiz_0_locked : STD_LOGIC;
-  signal flash_programmer_0_i_TX_Byte : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal flash_programmer_0_i_TX_DV : STD_LOGIC;
+  signal flash_programmer_0_o_TX_Data : STD_LOGIC_VECTOR ( 55 downto 0 );
+  signal flash_programmer_0_o_TX_Num_Bytes : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal flash_programmer_0_o_activate : STD_LOGIC;
   signal flash_programmer_0_o_address : STD_LOGIC_VECTOR ( 39 downto 0 );
   signal flash_programmer_0_o_cmd : STD_LOGIC_VECTOR ( 7 downto 0 );
@@ -118,11 +118,11 @@ begin
 UART_TX_0: component design_1_UART_TX_0_0
      port map (
       i_Clk => clk_wiz_0_clk_out1,
-      i_TX_Byte(7 downto 0) => flash_programmer_0_i_TX_Byte(7 downto 0),
       i_TX_DV => flash_programmer_0_i_TX_DV,
+      i_TX_Data(55 downto 0) => flash_programmer_0_o_TX_Data(55 downto 0),
+      i_TX_Num_Bytes(2 downto 0) => flash_programmer_0_o_TX_Num_Bytes(2 downto 0),
       i_reset => clk_wiz_0_locked,
       o_TX_Active => UART_TX_0_o_TX_Active,
-      o_TX_Done => UART_TX_0_o_TX_Done,
       o_TX_Serial => uart_tx
     );
 clk_wiz_0: component design_1_clk_wiz_0_0
@@ -134,7 +134,6 @@ clk_wiz_0: component design_1_clk_wiz_0_0
 flash_programmer_0: component design_1_flash_programmer_0_0
      port map (
       i_TX_Active => UART_TX_0_o_TX_Active,
-      i_TX_Done => UART_TX_0_o_TX_Done,
       i_busy => nand_controller_0_o_busy,
       i_clock => clk_wiz_0_clk_out1,
       i_command_received => nand_controller_0_o_command_received,
@@ -142,8 +141,9 @@ flash_programmer_0: component design_1_flash_programmer_0_0
       i_read_done => nand_controller_0_o_read_done,
       i_reset => clk_wiz_0_locked,
       led_light => led_light,
-      o_TX_Byte(7 downto 0) => flash_programmer_0_i_TX_Byte(7 downto 0),
       o_TX_DV => flash_programmer_0_i_TX_DV,
+      o_TX_Data(55 downto 0) => flash_programmer_0_o_TX_Data(55 downto 0),
+      o_TX_Num_Bytes(2 downto 0) => flash_programmer_0_o_TX_Num_Bytes(2 downto 0),
       o_activate => flash_programmer_0_o_activate,
       o_address(39 downto 0) => flash_programmer_0_o_address(39 downto 0),
       o_cmd(7 downto 0) => flash_programmer_0_o_cmd(7 downto 0),

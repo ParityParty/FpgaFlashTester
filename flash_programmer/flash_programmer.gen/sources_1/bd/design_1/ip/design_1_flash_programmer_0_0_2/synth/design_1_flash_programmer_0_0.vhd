@@ -68,9 +68,9 @@ ENTITY design_1_flash_programmer_0_0 IS
     i_command_received : IN STD_LOGIC;
     o_debug : OUT STD_LOGIC;
     o_TX_DV : OUT STD_LOGIC;
-    o_TX_Byte : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-    i_TX_Active : IN STD_LOGIC;
-    i_TX_Done : IN STD_LOGIC
+    o_TX_Data : OUT STD_LOGIC_VECTOR(55 DOWNTO 0);
+    o_TX_Num_Bytes : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+    i_TX_Active : IN STD_LOGIC
   );
 END design_1_flash_programmer_0_0;
 
@@ -84,7 +84,8 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       PAGE_SIZE : INTEGER;
       PAGES_IN_BLOCK : INTEGER;
       BLOCKS_TO_TEST : INTEGER;
-      MAX_FAULTS : INTEGER
+      MAX_FAULTS : INTEGER;
+      UART_MAX_BYTES : INTEGER
     );
     PORT (
       led_light : OUT STD_LOGIC;
@@ -100,9 +101,9 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       i_command_received : IN STD_LOGIC;
       o_debug : OUT STD_LOGIC;
       o_TX_DV : OUT STD_LOGIC;
-      o_TX_Byte : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      i_TX_Active : IN STD_LOGIC;
-      i_TX_Done : IN STD_LOGIC
+      o_TX_Data : OUT STD_LOGIC_VECTOR(55 DOWNTO 0);
+      o_TX_Num_Bytes : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+      i_TX_Active : IN STD_LOGIC
     );
   END COMPONENT flash_programmer;
   ATTRIBUTE X_CORE_INFO : STRING;
@@ -110,7 +111,7 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_flash_programmer_0_0_arch : ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,MAX_FAULTS=5}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,MAX_FAULTS=5,UART_MAX_BYTES=7}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -130,7 +131,8 @@ BEGIN
       PAGE_SIZE => 8640,
       PAGES_IN_BLOCK => 128,
       BLOCKS_TO_TEST => 1024,
-      MAX_FAULTS => 5
+      MAX_FAULTS => 5,
+      UART_MAX_BYTES => 7
     )
     PORT MAP (
       led_light => led_light,
@@ -146,8 +148,8 @@ BEGIN
       i_command_received => i_command_received,
       o_debug => o_debug,
       o_TX_DV => o_TX_DV,
-      o_TX_Byte => o_TX_Byte,
-      i_TX_Active => i_TX_Active,
-      i_TX_Done => i_TX_Done
+      o_TX_Data => o_TX_Data,
+      o_TX_Num_Bytes => o_TX_Num_Bytes,
+      i_TX_Active => i_TX_Active
     );
 END design_1_flash_programmer_0_0_arch;

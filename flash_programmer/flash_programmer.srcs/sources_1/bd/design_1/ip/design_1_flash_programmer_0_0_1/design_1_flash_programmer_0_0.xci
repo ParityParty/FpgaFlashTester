@@ -14,6 +14,7 @@
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "MAX_FAULTS": [ { "value": "5", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "UART_MAX_BYTES": [ { "value": "7", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_flash_programmer_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
@@ -22,7 +23,8 @@
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "MAX_FAULTS": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "MAX_FAULTS": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "UART_MAX_BYTES": [ { "value": "7", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynquplus" } ],
@@ -63,9 +65,9 @@
         "i_command_received": [ { "direction": "in" } ],
         "o_debug": [ { "direction": "out", "driver_value": "0x0" } ],
         "o_TX_DV": [ { "direction": "out", "driver_value": "0x0" } ],
-        "o_TX_Byte": [ { "direction": "out", "size_left": "7", "size_right": "0", "driver_value": "0" } ],
-        "i_TX_Active": [ { "direction": "in" } ],
-        "i_TX_Done": [ { "direction": "in", "driver_value": "0x0" } ]
+        "o_TX_Data": [ { "direction": "out", "size_left": "55", "size_right": "0" } ],
+        "o_TX_Num_Bytes": [ { "direction": "out", "size_left": "2", "size_right": "0" } ],
+        "i_TX_Active": [ { "direction": "in" } ]
       },
       "interfaces": {
         "i_reset": {

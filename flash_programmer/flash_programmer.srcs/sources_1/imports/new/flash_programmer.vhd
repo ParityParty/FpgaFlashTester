@@ -30,7 +30,8 @@ entity flash_programmer is
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
         BLOCKS_TO_TEST : integer := 1024;
-        MAX_FAULTS : integer := 5
+        MAX_FAULTS : integer := 5;
+        UART_MAX_BYTES : integer := 7
     );
     Port (
     led_light : out STD_LOGIC := '0';
@@ -49,14 +50,15 @@ entity flash_programmer is
     o_debug : out std_logic := '0';
     
     o_TX_DV : out std_logic := '0';         -- Data Valid for Transmission
-    o_TX_Byte : out std_logic_vector(7 downto 0) := (others => '0');  -- Byte to transmit
-    i_TX_Active : in std_logic;
-    i_TX_Done : in std_logic := '0'
+    o_TX_Data    : out  std_logic_vector(UART_MAX_BYTES*8 - 1 downto 0); -- Bytes to transmit
+    o_TX_Num_Bytes : out std_logic_vector(2 downto 0);
+    i_TX_Active : in std_logic
     );
 end flash_programmer;
 
 architecture Behavioral of flash_programmer is
     signal counter : integer := 0;
+    signal byte_counter : integer range 0 to 2**16 - 1 := 0;
     signal fault_counter : integer := 0;
 
 	type state_t is (S_IDLE, S_INIT, S_SEND_CHECK, S_NAND_RESET, S_ERASE_BLOCK, S_PROGRAM_PAGE, S_READ_PAGE, S_NEXT_PAGE, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
@@ -105,7 +107,7 @@ begin
             led_light                 <= '0';
             o_data                   <= (others => '0');
             o_cmd                    <= (others => '0');
-            o_TX_Byte                 <= (others => '0');
+            o_TX_Data                 <= (others => '0');
             
         -- These two states are responsible for releasing the command in cmd_in
         -- and waitng until done
@@ -147,7 +149,8 @@ begin
             when SS_CHECK_RECEIVED =>
                 if i_command_received = '0' then
                     if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Byte <= x"E0";
+                        o_TX_Data(7 downto 0) <= x"E0";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                         int_uart_dv <= '1';
                         state <= S_ERROR;
                     end if;
@@ -157,7 +160,8 @@ begin
             
             when SS_DONE => 
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Byte <= x"A0";
+                    o_TX_Data(7 downto 0) <= x"A0";
+                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
                     state <= S_ERASE_BLOCK;
@@ -185,7 +189,8 @@ begin
             when SS_CHECK_RECEIVED =>
                 if i_command_received = '0' then
                     if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Byte <= x"E1";
+                        o_TX_Data(7 downto 0) <= x"E1";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                         int_uart_dv <= '1';
                         state <= S_NEXT_BLOCK;
                     end if;
@@ -205,7 +210,8 @@ begin
                         fault_counter <= fault_counter + 1;
                     elsif i_data(0) = '1' then 
                         if i_TX_Active = '0' and int_uart_dv = '0' then
-                            o_TX_Byte <= x"E2";
+                            o_TX_Data(7 downto 0) <= x"E2";
+                            o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                             int_uart_dv <= '1';
                             state <= S_NEXT_BLOCK;
                         end if;
@@ -218,7 +224,8 @@ begin
             
             when SS_DONE =>
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Byte <= x"A1";
+                    o_TX_Data(7 downto 0) <= x"A1";
+                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
                     state <= S_PROGRAM_PAGE;
@@ -246,7 +253,8 @@ begin
             when SS_CHECK_RECEIVED =>
                 if i_command_received = '0' then
                     if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Byte <= x"E3";
+                        o_TX_Data(7 downto 0) <= x"E3";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                         int_uart_dv <= '1';
                         state <= S_NEXT_PAGE;
                     end if;
@@ -266,7 +274,8 @@ begin
                         substate <= SS_SEND_CMD;
                     elsif i_data(0) = '1' then 
                         if i_TX_Active = '0' and int_uart_dv = '0' then
-                            o_TX_Byte <= x"E4";
+                            o_TX_Data(7 downto 0) <= x"E4";
+                            o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                             int_uart_dv <= '1';
                             state <= S_NEXT_PAGE;
                         end if;
@@ -279,7 +288,8 @@ begin
             
             when SS_DONE =>
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Byte <= x"A2";
+                    o_TX_Data(7 downto 0) <= x"A2";
+                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
                     state <= S_READ_PAGE;
@@ -294,6 +304,7 @@ begin
             when SS_INIT =>
                 next_state <= S_READ_PAGE;
                 substate <= SS_SEND_CMD;
+                byte_counter <= 0;
         
             when SS_SEND_CMD =>
                 o_address <= (others => '0');
@@ -305,7 +316,8 @@ begin
             when SS_CHECK_RECEIVED =>
                 if i_command_received = '0' then
                     if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Byte <= x"E5";
+                        o_TX_Data(7 downto 0) <= x"E5";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                         int_uart_dv <= '1';
                         state <= S_NEXT_PAGE;
                     end if;
@@ -325,17 +337,24 @@ begin
             when SS_CHECK_DATA =>
                 if i_data = x"AA" then
                     substate <= SS_GET_DATA;
+                    byte_counter <= byte_counter + 1;
                 else
                     if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Byte <= i_data;
+                        o_TX_Data <= (others => '0');
+                        o_TX_Data(7 downto 0) <= x"E6";
+                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter, 16));
+                        o_TX_Data(31 downto 24) <= i_data;
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(4, 3));
                         int_uart_dv <= '1';
                         substate <= SS_GET_DATA;
+                        byte_counter <= byte_counter + 1;
                     end if;
                 end if;
             
             when SS_DONE =>
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Byte <= x"A3";
+                    o_TX_Data(7 downto 0) <= x"A3";
+                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
                     state <= S_NEXT_PAGE;
@@ -351,7 +370,8 @@ begin
                 substate <= SS_INIT;
             else
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Byte <= x"A4";
+                    o_TX_Data(7 downto 0) <= x"A4";
+                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
                     state <= S_NEXT_BLOCK;

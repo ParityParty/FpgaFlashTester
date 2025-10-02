@@ -165,15 +165,17 @@
           "o_TX_DV": {
             "direction": "O"
           },
-          "o_TX_Byte": {
+          "o_TX_Data": {
             "direction": "O",
-            "left": "7",
+            "left": "55",
+            "right": "0"
+          },
+          "o_TX_Num_Bytes": {
+            "direction": "O",
+            "left": "2",
             "right": "0"
           },
           "i_TX_Active": {
-            "direction": "I"
-          },
-          "i_TX_Done": {
             "direction": "I"
           }
         }
@@ -219,18 +221,20 @@
           "i_TX_DV": {
             "direction": "I"
           },
-          "i_TX_Byte": {
+          "i_TX_Data": {
             "direction": "I",
-            "left": "7",
+            "left": "55",
+            "right": "0"
+          },
+          "i_TX_Num_Bytes": {
+            "direction": "I",
+            "left": "2",
             "right": "0"
           },
           "o_TX_Active": {
             "direction": "O"
           },
           "o_TX_Serial": {
-            "direction": "O"
-          },
-          "o_TX_Done": {
             "direction": "O"
           }
         }
@@ -435,12 +439,6 @@
           "flash_programmer_0/i_TX_Active"
         ]
       },
-      "UART_TX_0_o_TX_Done": {
-        "ports": [
-          "UART_TX_0/o_TX_Done",
-          "flash_programmer_0/i_TX_Done"
-        ]
-      },
       "UART_TX_0_o_TX_Serial": {
         "ports": [
           "UART_TX_0/o_TX_Serial",
@@ -450,23 +448,17 @@
       "clk_wiz_0_clk_out1": {
         "ports": [
           "clk_wiz_0/clk_out1",
-          "UART_TX_0/i_Clk",
           "nand_controller_0/i_clk",
+          "UART_TX_0/i_Clk",
           "flash_programmer_0/i_clock"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
-          "UART_TX_0/i_reset",
           "nand_controller_0/i_rst",
+          "UART_TX_0/i_reset",
           "flash_programmer_0/i_reset"
-        ]
-      },
-      "flash_programmer_0_i_TX_Byte": {
-        "ports": [
-          "flash_programmer_0/o_TX_Byte",
-          "UART_TX_0/i_TX_Byte"
         ]
       },
       "flash_programmer_0_i_TX_DV": {
@@ -479,6 +471,18 @@
         "ports": [
           "flash_programmer_0/led_light",
           "led_light"
+        ]
+      },
+      "flash_programmer_0_o_TX_Data": {
+        "ports": [
+          "flash_programmer_0/o_TX_Data",
+          "UART_TX_0/i_TX_Data"
+        ]
+      },
+      "flash_programmer_0_o_TX_Num_Bytes": {
+        "ports": [
+          "flash_programmer_0/o_TX_Num_Bytes",
+          "UART_TX_0/i_TX_Num_Bytes"
         ]
       },
       "flash_programmer_0_o_activate": {

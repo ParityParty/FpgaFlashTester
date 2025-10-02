@@ -58,10 +58,10 @@ ENTITY design_1_UART_TX_0_0 IS
     i_reset : IN STD_LOGIC;
     i_Clk : IN STD_LOGIC;
     i_TX_DV : IN STD_LOGIC;
-    i_TX_Byte : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    i_TX_Data : IN STD_LOGIC_VECTOR(55 DOWNTO 0);
+    i_TX_Num_Bytes : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     o_TX_Active : OUT STD_LOGIC;
-    o_TX_Serial : OUT STD_LOGIC;
-    o_TX_Done : OUT STD_LOGIC
+    o_TX_Serial : OUT STD_LOGIC
   );
 END design_1_UART_TX_0_0;
 
@@ -70,16 +70,17 @@ ARCHITECTURE design_1_UART_TX_0_0_arch OF design_1_UART_TX_0_0 IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF design_1_UART_TX_0_0_arch: ARCHITECTURE IS "yes";
   COMPONENT UART_TX IS
     GENERIC (
-      g_CLKS_PER_BIT : INTEGER
+      g_CLKS_PER_BIT : INTEGER;
+      g_MAX_BYTES : INTEGER
     );
     PORT (
       i_reset : IN STD_LOGIC;
       i_Clk : IN STD_LOGIC;
       i_TX_DV : IN STD_LOGIC;
-      i_TX_Byte : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      i_TX_Data : IN STD_LOGIC_VECTOR(55 DOWNTO 0);
+      i_TX_Num_Bytes : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_TX_Active : OUT STD_LOGIC;
-      o_TX_Serial : OUT STD_LOGIC;
-      o_TX_Done : OUT STD_LOGIC
+      o_TX_Serial : OUT STD_LOGIC
     );
   END COMPONENT UART_TX;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -94,15 +95,16 @@ ARCHITECTURE design_1_UART_TX_0_0_arch OF design_1_UART_TX_0_0 IS
 BEGIN
   U0 : UART_TX
     GENERIC MAP (
-      g_CLKS_PER_BIT => 87
+      g_CLKS_PER_BIT => 87,
+      g_MAX_BYTES => 7
     )
     PORT MAP (
       i_reset => i_reset,
       i_Clk => i_Clk,
       i_TX_DV => i_TX_DV,
-      i_TX_Byte => i_TX_Byte,
+      i_TX_Data => i_TX_Data,
+      i_TX_Num_Bytes => i_TX_Num_Bytes,
       o_TX_Active => o_TX_Active,
-      o_TX_Serial => o_TX_Serial,
-      o_TX_Done => o_TX_Done
+      o_TX_Serial => o_TX_Serial
     );
 END design_1_UART_TX_0_0_arch;

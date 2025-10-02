@@ -9,6 +9,7 @@ proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "MAX_FAULTS" -parent ${Page_0}
   ipgui::add_param $IPINST -name "PAGES_IN_BLOCK" -parent ${Page_0}
   ipgui::add_param $IPINST -name "PAGE_SIZE" -parent ${Page_0}
+  ipgui::add_param $IPINST -name "UART_MAX_BYTES" -parent ${Page_0}
 
 
 }
@@ -67,6 +68,15 @@ proc validate_PARAM_VALUE.PAGE_SIZE { PARAM_VALUE.PAGE_SIZE } {
 	return true
 }
 
+proc update_PARAM_VALUE.UART_MAX_BYTES { PARAM_VALUE.UART_MAX_BYTES } {
+	# Procedure called to update UART_MAX_BYTES when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.UART_MAX_BYTES { PARAM_VALUE.UART_MAX_BYTES } {
+	# Procedure called to validate UART_MAX_BYTES
+	return true
+}
+
 
 proc update_MODELPARAM_VALUE.MAX_COUNT { MODELPARAM_VALUE.MAX_COUNT PARAM_VALUE.MAX_COUNT } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
@@ -96,5 +106,10 @@ proc update_MODELPARAM_VALUE.BLOCKS_TO_TEST { MODELPARAM_VALUE.BLOCKS_TO_TEST PA
 proc update_MODELPARAM_VALUE.MAX_FAULTS { MODELPARAM_VALUE.MAX_FAULTS PARAM_VALUE.MAX_FAULTS } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.MAX_FAULTS}] ${MODELPARAM_VALUE.MAX_FAULTS}
+}
+
+proc update_MODELPARAM_VALUE.UART_MAX_BYTES { MODELPARAM_VALUE.UART_MAX_BYTES PARAM_VALUE.UART_MAX_BYTES } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.UART_MAX_BYTES}] ${MODELPARAM_VALUE.UART_MAX_BYTES}
 }
 
