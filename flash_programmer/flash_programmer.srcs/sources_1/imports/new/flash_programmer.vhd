@@ -59,8 +59,8 @@ architecture Behavioral of flash_programmer is
     signal counter : integer := 0;
     signal fault_counter : integer := 0;
 
-	type state_t is (S_IDLE, S_INIT, S_SEND_CHECK, S_NAND_RESET, S_ERASE_BLOCK, S_PROGRAM_BLOCK, S_READ_BLOCK, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
-	type substate_t is (SS_INIT, SS_SEND_CMD, SS_CHECK_RECEIVED, SS_GET_DATA, SS_CHECK_DATA, SS_NEXT_PAGE, SS_DONE);
+	type state_t is (S_IDLE, S_INIT, S_SEND_CHECK, S_NAND_RESET, S_ERASE_BLOCK, S_PROGRAM_PAGE, S_READ_PAGE, S_NEXT_PAGE, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
+	type substate_t is (SS_INIT, SS_SEND_CMD, SS_CHECK_RECEIVED, SS_GET_DATA, SS_CHECK_DATA, SS_DONE);
 	
 	type READ_SUBSTATE_TYPE is (READ_START, READ, EXTRACT, EXTRACT_READBYTE, SEND_ERR, PAGE_READ_DONE);
 	
@@ -221,18 +221,17 @@ begin
                     o_TX_Byte <= x"A1";
                     int_uart_dv <= '1';
                     
-                    state <= S_PROGRAM_BLOCK;
+                    state <= S_PROGRAM_PAGE;
                     substate <= SS_INIT;
                 end if;
             
             when others => state <= S_ERROR;
             end case;
         
-        when S_PROGRAM_BLOCK =>
+        when S_PROGRAM_PAGE =>
             case substate is
             when SS_INIT =>
-                next_state <= S_PROGRAM_BLOCK;
-                page_address <= blocks_tested * PAGES_IN_BLOCK;
+                next_state <= S_PROGRAM_PAGE;
                 substate <= SS_SEND_CMD;
                 fault_counter <= 0;
                 
@@ -249,7 +248,7 @@ begin
                     if i_TX_Active = '0' and int_uart_dv = '0' then
                         o_TX_Byte <= x"E3";
                         int_uart_dv <= '1';
-                        substate <= SS_NEXT_PAGE;
+                        state <= S_NEXT_PAGE;
                     end if;
                 else
                     substate <= SS_GET_DATA;
@@ -269,35 +268,31 @@ begin
                         if i_TX_Active = '0' and int_uart_dv = '0' then
                             o_TX_Byte <= x"E4";
                             int_uart_dv <= '1';
-                            substate <= SS_NEXT_PAGE;
+                            state <= S_NEXT_PAGE;
                         end if;
                     else
-                        substate <= SS_NEXT_PAGE;
+                        substate <= SS_DONE;
                     end if;
                 else
                     substate <= SS_GET_DATA;
                 end if;
             
-            when SS_NEXT_PAGE =>
-                if page_address + 1 < (blocks_tested + 1) * PAGES_IN_BLOCK then
-                    page_address <= page_address + 1;
-                    substate <= SS_SEND_CMD;
-                else
-                    substate <= SS_DONE;
-                end if;
-            
             when SS_DONE =>
-                state <= S_READ_BLOCK;
-                substate <= SS_INIT;
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= x"A2";
+                    int_uart_dv <= '1';
+                    
+                    state <= S_READ_PAGE;
+                    substate <= SS_INIT;
+                end if;
 
             when others => state <= S_ERROR;
             end case;
             
-        when S_READ_BLOCK =>
+        when S_READ_PAGE =>
             case substate is
             when SS_INIT =>
-                next_state <= S_READ_BLOCK;
-                page_address <= blocks_tested * PAGES_IN_BLOCK;
+                next_state <= S_READ_PAGE;
                 substate <= SS_SEND_CMD;
         
             when SS_SEND_CMD =>
@@ -312,7 +307,7 @@ begin
                     if i_TX_Active = '0' and int_uart_dv = '0' then
                         o_TX_Byte <= x"E5";
                         int_uart_dv <= '1';
-                        substate <= SS_NEXT_PAGE;
+                        state <= S_NEXT_PAGE;
                     end if;
                 else
                     substate <= SS_GET_DATA;
@@ -321,7 +316,7 @@ begin
             when SS_GET_DATA =>
                 o_debug <= '1';
                 if i_read_done = '1' then
-                    substate <= SS_NEXT_PAGE;
+                    substate <= SS_DONE;
                 else
                     substate <= SS_CHECK_DATA;
                     state <= S_RELEASE;
@@ -338,19 +333,30 @@ begin
                     end if;
                 end if;
             
-            when SS_NEXT_PAGE =>
-                if page_address + 1 < (blocks_tested + 1) * PAGES_IN_BLOCK then
-                    page_address <= page_address + 1;
-                    substate <= SS_SEND_CMD;
-                else
-                    substate <= SS_DONE;
-                end if;
-            
             when SS_DONE =>
-                state <= S_NEXT_BLOCK;
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= x"A3";
+                    int_uart_dv <= '1';
+                    
+                    state <= S_NEXT_PAGE;
+                end if;
 
             when others => state <= S_ERROR;
             end case;
+        
+        when S_NEXT_PAGE =>
+            if page_address + 1 < (blocks_tested + 1) * PAGES_IN_BLOCK then
+                page_address <= page_address + 1;
+                state <= S_PROGRAM_PAGE;
+                substate <= SS_INIT;
+            else
+                if i_TX_Active = '0' and int_uart_dv = '0' then
+                    o_TX_Byte <= x"A4";
+                    int_uart_dv <= '1';
+                    
+                    state <= S_NEXT_BLOCK;
+                end if;
+            end if;
         
         when S_NEXT_BLOCK =>
             if blocks_tested + 1 < BLOCKS_TO_TEST then
