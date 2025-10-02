@@ -111,7 +111,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "10000000"
+                "value": "50000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -206,7 +206,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "10000000"
+                "value": "50000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -257,13 +257,13 @@
             "value": "Buffer"
           },
           "CLKOUT1_JITTER": {
-            "value": "316.842"
+            "value": "207.962"
           },
           "CLKOUT1_PHASE_ERROR": {
             "value": "222.305"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "10.00"
+            "value": "50.00"
           },
           "CLKOUT2_DRIVES": {
             "value": "Buffer"
@@ -299,7 +299,7 @@
             "value": "10.0"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "120.000"
+            "value": "24.000"
           },
           "MMCM_COMPENSATION": {
             "value": "AUTO"
@@ -343,7 +343,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "10000000"
+                "value": "50000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -449,16 +449,16 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "nand_controller_0/i_clk",
-          "UART_TX_0/i_Clk",
-          "flash_programmer_0/i_clock"
+          "flash_programmer_0/i_clock",
+          "UART_TX_0/i_Clk"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
           "nand_controller_0/i_rst",
-          "UART_TX_0/i_reset",
-          "flash_programmer_0/i_reset"
+          "flash_programmer_0/i_reset",
+          "UART_TX_0/i_reset"
         ]
       },
       "flash_programmer_0_i_TX_DV": {
