@@ -65,8 +65,6 @@ ENTITY design_1_flash_programmer_0_0 IS
     i_data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     i_busy : IN STD_LOGIC;
     i_read_done : IN STD_LOGIC;
-    i_command_received : IN STD_LOGIC;
-    o_debug : OUT STD_LOGIC;
     o_TX_DV : OUT STD_LOGIC;
     o_TX_Data : OUT STD_LOGIC_VECTOR(55 DOWNTO 0);
     o_TX_Num_Bytes : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -98,8 +96,6 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       i_data : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       i_busy : IN STD_LOGIC;
       i_read_done : IN STD_LOGIC;
-      i_command_received : IN STD_LOGIC;
-      o_debug : OUT STD_LOGIC;
       o_TX_DV : OUT STD_LOGIC;
       o_TX_Data : OUT STD_LOGIC_VECTOR(55 DOWNTO 0);
       o_TX_Num_Bytes : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -145,8 +141,6 @@ BEGIN
       i_data => i_data,
       i_busy => i_busy,
       i_read_done => i_read_done,
-      i_command_received => i_command_received,
-      o_debug => o_debug,
       o_TX_DV => o_TX_DV,
       o_TX_Data => o_TX_Data,
       o_TX_Num_Bytes => o_TX_Num_Bytes,

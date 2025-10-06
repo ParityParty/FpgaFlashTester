@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Thu Oct  2 15:13:33 2025
+--Date        : Mon Oct  6 15:36:59 2025
 --Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -46,8 +46,6 @@ architecture STRUCTURE of design_1 is
     i_data : in STD_LOGIC_VECTOR ( 7 downto 0 );
     i_busy : in STD_LOGIC;
     i_read_done : in STD_LOGIC;
-    i_command_received : in STD_LOGIC;
-    o_debug : out STD_LOGIC;
     o_TX_DV : out STD_LOGIC;
     o_TX_Data : out STD_LOGIC_VECTOR ( 55 downto 0 );
     o_TX_Num_Bytes : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -83,7 +81,6 @@ architecture STRUCTURE of design_1 is
     o_data : out STD_LOGIC_VECTOR ( 7 downto 0 );
     o_busy : out STD_LOGIC;
     o_read_done : out STD_LOGIC;
-    o_command_received : out STD_LOGIC;
     i_nand_rb : in STD_LOGIC;
     o_nand_we : out STD_LOGIC;
     o_nand_wp : out STD_LOGIC;
@@ -105,7 +102,6 @@ architecture STRUCTURE of design_1 is
   signal flash_programmer_0_o_cmd : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal flash_programmer_0_o_data : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal nand_controller_0_o_busy : STD_LOGIC;
-  signal nand_controller_0_o_command_received : STD_LOGIC;
   signal nand_controller_0_o_data : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal nand_controller_0_o_read_done : STD_LOGIC;
   attribute X_INTERFACE_INFO : string;
@@ -136,7 +132,6 @@ flash_programmer_0: component design_1_flash_programmer_0_0
       i_TX_Active => UART_TX_0_o_TX_Active,
       i_busy => nand_controller_0_o_busy,
       i_clock => clk_wiz_0_clk_out1,
-      i_command_received => nand_controller_0_o_command_received,
       i_data(7 downto 0) => nand_controller_0_o_data(7 downto 0),
       i_read_done => nand_controller_0_o_read_done,
       i_reset => clk_wiz_0_locked,
@@ -147,8 +142,7 @@ flash_programmer_0: component design_1_flash_programmer_0_0
       o_activate => flash_programmer_0_o_activate,
       o_address(39 downto 0) => flash_programmer_0_o_address(39 downto 0),
       o_cmd(7 downto 0) => flash_programmer_0_o_cmd(7 downto 0),
-      o_data(7 downto 0) => flash_programmer_0_o_data(7 downto 0),
-      o_debug => debug
+      o_data(7 downto 0) => flash_programmer_0_o_data(7 downto 0)
     );
 nand_controller_0: component design_1_nand_controller_0_0
      port map (
@@ -161,7 +155,6 @@ nand_controller_0: component design_1_nand_controller_0_0
       i_rst => clk_wiz_0_locked,
       io_nand_data(7 downto 0) => nand_data(7 downto 0),
       o_busy => nand_controller_0_o_busy,
-      o_command_received => nand_controller_0_o_command_received,
       o_data(7 downto 0) => nand_controller_0_o_data(7 downto 0),
       o_nand_ale => nand_ale,
       o_nand_ce => nand_ce,

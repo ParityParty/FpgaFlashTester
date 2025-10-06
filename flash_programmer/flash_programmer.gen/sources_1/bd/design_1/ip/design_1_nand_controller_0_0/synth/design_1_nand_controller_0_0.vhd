@@ -64,7 +64,6 @@ ENTITY design_1_nand_controller_0_0 IS
     o_data : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     o_busy : OUT STD_LOGIC;
     o_read_done : OUT STD_LOGIC;
-    o_command_received : OUT STD_LOGIC;
     i_nand_rb : IN STD_LOGIC;
     o_nand_we : OUT STD_LOGIC;
     o_nand_wp : OUT STD_LOGIC;
@@ -94,7 +93,6 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
       o_data : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       o_busy : OUT STD_LOGIC;
       o_read_done : OUT STD_LOGIC;
-      o_command_received : OUT STD_LOGIC;
       i_nand_rb : IN STD_LOGIC;
       o_nand_we : OUT STD_LOGIC;
       o_nand_wp : OUT STD_LOGIC;
@@ -138,7 +136,6 @@ BEGIN
       o_data => o_data,
       o_busy => o_busy,
       o_read_done => o_read_done,
-      o_command_received => o_command_received,
       i_nand_rb => i_nand_rb,
       o_nand_we => o_nand_we,
       o_nand_wp => o_nand_wp,

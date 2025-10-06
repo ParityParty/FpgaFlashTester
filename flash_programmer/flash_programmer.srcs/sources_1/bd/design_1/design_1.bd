@@ -156,12 +156,6 @@
           "i_read_done": {
             "direction": "I"
           },
-          "i_command_received": {
-            "direction": "I"
-          },
-          "o_debug": {
-            "direction": "O"
-          },
           "o_TX_DV": {
             "direction": "O"
           },
@@ -388,9 +382,6 @@
           "o_read_done": {
             "direction": "O"
           },
-          "o_command_received": {
-            "direction": "O"
-          },
           "i_nand_rb": {
             "direction": "I"
           },
@@ -448,16 +439,16 @@
       "clk_wiz_0_clk_out1": {
         "ports": [
           "clk_wiz_0/clk_out1",
-          "nand_controller_0/i_clk",
           "UART_TX_0/i_Clk",
+          "nand_controller_0/i_clk",
           "flash_programmer_0/i_clock"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
-          "nand_controller_0/i_rst",
           "UART_TX_0/i_reset",
+          "nand_controller_0/i_rst",
           "flash_programmer_0/i_reset"
         ]
       },
@@ -509,22 +500,10 @@
           "nand_controller_0/i_data"
         ]
       },
-      "flash_programmer_0_o_debug": {
-        "ports": [
-          "flash_programmer_0/o_debug",
-          "debug"
-        ]
-      },
       "nand_controller_0_o_busy": {
         "ports": [
           "nand_controller_0/o_busy",
           "flash_programmer_0/i_busy"
-        ]
-      },
-      "nand_controller_0_o_command_received": {
-        "ports": [
-          "nand_controller_0/o_command_received",
-          "flash_programmer_0/i_command_received"
         ]
       },
       "nand_controller_0_o_data": {

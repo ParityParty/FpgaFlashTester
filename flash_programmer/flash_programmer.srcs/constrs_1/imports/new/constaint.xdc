@@ -800,7 +800,6 @@ set_property IOSTANDARD LVCMOS18 [get_ports CLK25MHZ]
 set_property PACKAGE_PIN W11 [get_ports uart_tx]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_tx]
 
-set_property PACKAGE_PIN AG14 [get_ports debug]
 set_property IOSTANDARD LVCMOS33 [get_ports debug]
 
 set_property IOSTANDARD LVCMOS33 [get_ports nand_ale]
@@ -810,7 +809,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports nand_re]
 set_property IOSTANDARD LVCMOS33 [get_ports nand_we]
 set_property IOSTANDARD LVCMOS33 [get_ports nand_wp]
 set_property IOSTANDARD LVCMOS33 [get_ports nand_rb]
-set_property PACKAGE_PIN AH13 [get_ports nand_re]
 set_property PACKAGE_PIN AF10 [get_ports {nand_ce[0]}]
 set_property PACKAGE_PIN AH10 [get_ports nand_cle]
 set_property PACKAGE_PIN AG10 [get_ports nand_ale]
@@ -832,8 +830,7 @@ set_property PACKAGE_PIN J10 [get_ports {nand_data[5]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {nand_data[5]}]
 set_property PACKAGE_PIN K13 [get_ports {nand_data[6]}]
 set_property PACKAGE_PIN K12 [get_ports {nand_data[7]}]
-set_property PACKAGE_PIN AD14 [get_ports nand_rb]
-set_property PULLTYPE PULLUP [get_ports nand_rb]
+set_property PACKAGE_PIN AH13 [get_ports nand_rb]
 
 #create_clock -period 40.000 -name CLK25MHZ -waveform {0.000 20.000}
 
@@ -860,3 +857,7 @@ set_property DRIVE 12 [get_ports uart_tx]
 
 set_property PACKAGE_PIN AG14 [get_ports debug]
 set_property DRIVE 16 [get_ports debug]
+
+set_property PACKAGE_PIN AC14 [get_ports nand_re]
+set_property PULLTYPE PULLUP [get_ports nand_rb]
+set_input_delay -clock [get_clocks -of_objects [get_pins design_1_i/clk_wiz_0/inst/mmcme4_adv_inst/CLKOUT0]] 100.000 [get_ports nand_rb]

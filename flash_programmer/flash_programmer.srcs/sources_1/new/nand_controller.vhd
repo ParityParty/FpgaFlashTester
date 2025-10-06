@@ -47,7 +47,6 @@ entity nand_controller is
            o_data : out std_logic_vector(7 downto 0) := (others => '0');
            o_busy : out std_logic := '0';
            o_read_done : out std_logic := '0';
-           o_command_received : out std_logic := '0';
            
            i_nand_rb : in std_logic;
            o_nand_we : out std_logic := '1';
@@ -77,10 +76,7 @@ architecture Behavioral of nand_controller is
     
     signal write_with_cle : std_logic := '0';
     signal write_with_ale : std_logic := '0';
-    
-    signal command_received : std_logic := '0';
 begin
-    o_command_received <= command_received;
 
     process(i_clk, i_rst)
     begin
@@ -107,7 +103,6 @@ begin
             write_with_ale <= '0';
             o_busy <= '1';
             
-            command_received <= '0';
             retry_counter <= 0;
             
         when S_READY =>
@@ -140,7 +135,6 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => state <= S_READY;
@@ -202,7 +196,6 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => 
@@ -254,7 +247,6 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                command_received <= '0';
                 substate <= SS_DONE;
                 
             when SS_DONE => 
@@ -292,7 +284,6 @@ begin
             when SS_WAIT =>
                 delay <= t_wb;
                 state <= S_WAIT;
-                command_received <= '0';
                 substate <= SS_DELAY;
             
             when SS_DELAY =>
@@ -389,24 +380,11 @@ begin
         
         -- this state is for waiting for the r/b signal
         when S_WAIT =>
---            if i_nand_rb = '0' then
-                command_received <= '1';
---            end if;
-            
             if delay > 1 then
                 delay <= delay - 1;
             elsif i_nand_rb = '1' then
-                if command_received = '0' and retry_counter < MAX_RETRIES then
-                    state <= n_state;
-                    substate <= SS_INIT;
-                    retry_counter <= retry_counter + 1;
-                elsif command_received = '0' then -- retry count exceeded
-                    state <= S_READY;
-                    retry_counter <= 0;
-                else
-                    state <= n_state;
-                    retry_counter <= 0;
-                end if;
+                state <= n_state;
+                retry_counter <= 0;
             end if;
         
         when S_ERROR => null;
