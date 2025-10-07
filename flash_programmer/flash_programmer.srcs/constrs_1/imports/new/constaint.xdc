@@ -859,5 +859,7 @@ set_property PACKAGE_PIN AG14 [get_ports debug]
 set_property DRIVE 16 [get_ports debug]
 
 set_property PACKAGE_PIN AC14 [get_ports nand_re]
-set_property PULLTYPE PULLUP [get_ports nand_rb]
-set_input_delay -clock [get_clocks -of_objects [get_pins design_1_i/clk_wiz_0/inst/mmcme4_adv_inst/CLKOUT0]] 100.000 [get_ports nand_rb]
+set_input_delay -clock [get_clocks -of_objects [get_pins design_1_i/clk_wiz_0/inst/mmcme4_adv_inst/CLKOUT0]] 200.000 [get_ports nand_rb]
+
+set_input_delay -clock [get_clocks -of_objects [get_pins design_1_i/clk_wiz_0/inst/mmcme4_adv_inst/CLKOUT0]] 40.000 [get_ports -filter { NAME =~  "*" && DIRECTION == "INOUT" }]
+
