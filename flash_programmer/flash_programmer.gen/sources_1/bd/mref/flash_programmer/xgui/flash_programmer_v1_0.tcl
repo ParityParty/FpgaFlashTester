@@ -4,7 +4,6 @@ proc init_gui { IPINST } {
   #Adding Page
   set Page_0 [ipgui::add_page $IPINST -name "Page 0"]
   ipgui::add_param $IPINST -name "BLOCKS_TO_TEST" -parent ${Page_0}
-  ipgui::add_param $IPINST -name "DELAY_MAX_COUNT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MAX_COUNT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "MAX_FAULTS" -parent ${Page_0}
   ipgui::add_param $IPINST -name "PAGES_IN_BLOCK" -parent ${Page_0}
@@ -20,15 +19,6 @@ proc update_PARAM_VALUE.BLOCKS_TO_TEST { PARAM_VALUE.BLOCKS_TO_TEST } {
 
 proc validate_PARAM_VALUE.BLOCKS_TO_TEST { PARAM_VALUE.BLOCKS_TO_TEST } {
 	# Procedure called to validate BLOCKS_TO_TEST
-	return true
-}
-
-proc update_PARAM_VALUE.DELAY_MAX_COUNT { PARAM_VALUE.DELAY_MAX_COUNT } {
-	# Procedure called to update DELAY_MAX_COUNT when any of the dependent parameters in the arguments change
-}
-
-proc validate_PARAM_VALUE.DELAY_MAX_COUNT { PARAM_VALUE.DELAY_MAX_COUNT } {
-	# Procedure called to validate DELAY_MAX_COUNT
 	return true
 }
 
@@ -81,11 +71,6 @@ proc validate_PARAM_VALUE.UART_MAX_BYTES { PARAM_VALUE.UART_MAX_BYTES } {
 proc update_MODELPARAM_VALUE.MAX_COUNT { MODELPARAM_VALUE.MAX_COUNT PARAM_VALUE.MAX_COUNT } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.MAX_COUNT}] ${MODELPARAM_VALUE.MAX_COUNT}
-}
-
-proc update_MODELPARAM_VALUE.DELAY_MAX_COUNT { MODELPARAM_VALUE.DELAY_MAX_COUNT PARAM_VALUE.DELAY_MAX_COUNT } {
-	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
-	set_property value [get_property value ${PARAM_VALUE.DELAY_MAX_COUNT}] ${MODELPARAM_VALUE.DELAY_MAX_COUNT}
 }
 
 proc update_MODELPARAM_VALUE.PAGE_SIZE { MODELPARAM_VALUE.PAGE_SIZE PARAM_VALUE.PAGE_SIZE } {

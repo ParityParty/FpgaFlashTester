@@ -78,7 +78,6 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
   COMPONENT flash_programmer IS
     GENERIC (
       MAX_COUNT : INTEGER;
-      DELAY_MAX_COUNT : INTEGER;
       PAGE_SIZE : INTEGER;
       PAGES_IN_BLOCK : INTEGER;
       BLOCKS_TO_TEST : INTEGER;
@@ -107,7 +106,7 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_flash_programmer_0_0_arch : ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=25000,DELAY_MAX_COUNT=3,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,MAX_FAULTS=5,UART_MAX_BYTES=7}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "design_1_flash_programmer_0_0,flash_programmer,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=flash_programmer,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,MAX_COUNT=50000000,PAGE_SIZE=8640,PAGES_IN_BLOCK=128,BLOCKS_TO_TEST=1024,MAX_FAULTS=5,UART_MAX_BYTES=7}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_flash_programmer_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -115,15 +114,14 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF i_clock: SIGNAL IS "xilinx.com:signal:clock:1.0 i_clock CLK";
   ATTRIBUTE X_INTERFACE_MODE OF i_clock: SIGNAL IS "slave i_clock";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF i_clock: SIGNAL IS "XIL_INTERFACENAME i_clock, ASSOCIATED_RESET i_reset, FREQ_HZ 10000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF i_clock: SIGNAL IS "XIL_INTERFACENAME i_clock, ASSOCIATED_RESET i_reset, FREQ_HZ 50000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0";
   ATTRIBUTE X_INTERFACE_INFO OF i_reset: SIGNAL IS "xilinx.com:signal:reset:1.0 i_reset RST";
   ATTRIBUTE X_INTERFACE_MODE OF i_reset: SIGNAL IS "slave i_reset";
   ATTRIBUTE X_INTERFACE_PARAMETER OF i_reset: SIGNAL IS "XIL_INTERFACENAME i_reset, POLARITY ACTIVE_LOW, INSERT_VIP 0";
 BEGIN
   U0 : flash_programmer
     GENERIC MAP (
-      MAX_COUNT => 25000,
-      DELAY_MAX_COUNT => 3,
+      MAX_COUNT => 50000000,
       PAGE_SIZE => 8640,
       PAGES_IN_BLOCK => 128,
       BLOCKS_TO_TEST => 1024,

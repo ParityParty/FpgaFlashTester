@@ -8,8 +8,7 @@
     "gen_directory": "../../../../../../flash_programmer.gen/sources_1/bd/design_1/ip/design_1_flash_programmer_0_0_2",
     "parameters": {
       "component_parameters": {
-        "MAX_COUNT": [ { "value": "25000", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "DELAY_MAX_COUNT": [ { "value": "3", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "MAX_COUNT": [ { "value": "50000000", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "user", "format": "long", "usage": "all" } ],
@@ -18,8 +17,7 @@
         "Component_Name": [ { "value": "design_1_flash_programmer_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
-        "MAX_COUNT": [ { "value": "25000", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "DELAY_MAX_COUNT": [ { "value": "3", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "MAX_COUNT": [ { "value": "50000000", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "PAGES_IN_BLOCK": [ { "value": "128", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "BLOCKS_TO_TEST": [ { "value": "1024", "resolve_type": "generated", "format": "long", "usage": "all" } ],
