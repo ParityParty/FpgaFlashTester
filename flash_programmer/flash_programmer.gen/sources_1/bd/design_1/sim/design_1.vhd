@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Tue Oct  7 14:26:27 2025
+--Date        : Wed Oct  8 15:16:20 2025
 --Host        : volzotan running 64-bit Ubuntu 20.04.6 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -27,10 +27,10 @@ entity design_1 is
     nand_wp : out STD_LOGIC;
     uart_tx : out STD_LOGIC
   );
-  attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}";
-  attribute HW_HANDOFF : string;
-  attribute HW_HANDOFF of design_1 : entity is "design_1.hwdef";
+  attribute core_generation_info : string;
+  attribute core_generation_info of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_board_cnt=16,da_clkrst_cnt=4,da_zynq_ultra_ps_e_cnt=1,synth_mode=None}";
+  attribute hw_handoff : string;
+  attribute hw_handoff of design_1 : entity is "design_1.hwdef";
 end design_1;
 
 architecture STRUCTURE of design_1 is
@@ -104,12 +104,12 @@ architecture STRUCTURE of design_1 is
   signal nand_controller_0_o_busy : STD_LOGIC;
   signal nand_controller_0_o_data : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal nand_controller_0_o_read_done : STD_LOGIC;
-  attribute X_INTERFACE_INFO : string;
-  attribute X_INTERFACE_INFO of CLK25MHZ : signal is "xilinx.com:signal:clock:1.0 CLK.CLK25MHZ CLK";
-  attribute X_INTERFACE_PARAMETER : string;
-  attribute X_INTERFACE_PARAMETER of CLK25MHZ : signal is "XIL_INTERFACENAME CLK.CLK25MHZ, CLK_DOMAIN design_1_CLK25MHZ, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, INSERT_VIP 0, PHASE 0.0";
-  attribute X_INTERFACE_INFO of nand_data : signal is "xilinx.com:signal:data:1.0 DATA.NAND_DATA DATA";
-  attribute X_INTERFACE_PARAMETER of nand_data : signal is "XIL_INTERFACENAME DATA.NAND_DATA, LAYERED_METADATA undef";
+  attribute x_interface_info : string;
+  attribute x_interface_info of CLK25MHZ : signal is "xilinx.com:signal:clock:1.0 CLK.CLK25MHZ CLK";
+  attribute x_interface_parameter : string;
+  attribute x_interface_parameter of CLK25MHZ : signal is "XIL_INTERFACENAME CLK.CLK25MHZ, CLK_DOMAIN design_1_CLK25MHZ, FREQ_HZ 25000000, FREQ_TOLERANCE_HZ 0, INSERT_VIP 0, PHASE 0.0";
+  attribute x_interface_info of nand_data : signal is "xilinx.com:signal:data:1.0 DATA.NAND_DATA DATA";
+  attribute x_interface_parameter of nand_data : signal is "XIL_INTERFACENAME DATA.NAND_DATA, LAYERED_METADATA undef";
 begin
 UART_TX_0: component design_1_UART_TX_0_0
      port map (

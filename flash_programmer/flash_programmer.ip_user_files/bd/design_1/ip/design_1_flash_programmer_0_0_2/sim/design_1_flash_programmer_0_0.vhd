@@ -82,7 +82,8 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
       PAGES_IN_BLOCK : INTEGER;
       BLOCKS_TO_TEST : INTEGER;
       MAX_FAULTS : INTEGER;
-      UART_MAX_BYTES : INTEGER
+      UART_MAX_BYTES : INTEGER;
+      BLOCK_OFFSET : INTEGER
     );
     PORT (
       led_light : OUT STD_LOGIC;
@@ -118,7 +119,8 @@ BEGIN
       PAGES_IN_BLOCK => 128,
       BLOCKS_TO_TEST => 1024,
       MAX_FAULTS => 5,
-      UART_MAX_BYTES => 7
+      UART_MAX_BYTES => 7,
+      BLOCK_OFFSET => 128
     )
     PORT MAP (
       led_light => led_light,

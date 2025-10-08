@@ -88,7 +88,7 @@ ARCHITECTURE design_1_UART_TX_0_0_arch OF design_1_UART_TX_0_0 IS
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_UART_TX_0_0_arch : ARCHITECTURE IS "design_1_UART_TX_0_0,UART_TX,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_UART_TX_0_0_arch: ARCHITECTURE IS "design_1_UART_TX_0_0,UART_TX,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=UART_TX,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,g_CLKS_PER_BIT=435,g_MAX_BYTES=7}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_UART_TX_0_0_arch: ARCHITECTURE IS "design_1_UART_TX_0_0,UART_TX,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=UART_TX,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,g_CLKS_PER_BIT=217,g_MAX_BYTES=7}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_UART_TX_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -103,7 +103,7 @@ ARCHITECTURE design_1_UART_TX_0_0_arch OF design_1_UART_TX_0_0 IS
 BEGIN
   U0 : UART_TX
     GENERIC MAP (
-      g_CLKS_PER_BIT => 435,
+      g_CLKS_PER_BIT => 217,
       g_MAX_BYTES => 7
     )
     PORT MAP (
