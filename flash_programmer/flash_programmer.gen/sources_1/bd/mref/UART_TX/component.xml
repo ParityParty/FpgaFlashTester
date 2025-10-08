@@ -55,7 +55,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>4e60957b</spirit:value>
+            <spirit:value>1e454600</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -68,7 +68,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>4e60957b</spirit:value>
+            <spirit:value>1e454600</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -189,7 +189,7 @@
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
         <spirit:name>g_CLKS_PER_BIT</spirit:name>
         <spirit:displayName>G Clks Per Bit</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.g_CLKS_PER_BIT">217</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.g_CLKS_PER_BIT">434</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>g_MAX_BYTES</spirit:name>
@@ -214,7 +214,7 @@
     <spirit:parameter>
       <spirit:name>g_CLKS_PER_BIT</spirit:name>
       <spirit:displayName>G Clks Per Bit</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.g_CLKS_PER_BIT">217</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.g_CLKS_PER_BIT">434</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>g_MAX_BYTES</spirit:name>
@@ -241,7 +241,7 @@
         <xilinx:designToolContext>IPI</xilinx:designToolContext>
       </xilinx:designToolContexts>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2025-10-08T13:16:14Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2025-10-08T13:26:37Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2025.1</xilinx:xilinxVersion>
