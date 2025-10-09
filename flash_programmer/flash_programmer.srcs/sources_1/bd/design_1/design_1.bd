@@ -111,7 +111,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "100000000"
+                "value": "60000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -200,7 +200,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "100000000"
+                "value": "60000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -251,13 +251,13 @@
             "value": "Buffer"
           },
           "CLKOUT1_JITTER": {
-            "value": "190.517"
+            "value": "203.173"
           },
           "CLKOUT1_PHASE_ERROR": {
             "value": "222.305"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "100.00"
+            "value": "60.00"
           },
           "CLKOUT2_DRIVES": {
             "value": "Buffer"
@@ -293,7 +293,7 @@
             "value": "10.0"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "12.000"
+            "value": "20.000"
           },
           "MMCM_COMPENSATION": {
             "value": "AUTO"
@@ -337,7 +337,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "100000000"
+                "value": "60000000"
               },
               "PHASE": {
                 "value": "0.0",
