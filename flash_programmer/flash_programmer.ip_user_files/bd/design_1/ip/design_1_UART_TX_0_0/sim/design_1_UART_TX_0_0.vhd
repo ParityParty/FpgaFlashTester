@@ -95,7 +95,7 @@ ARCHITECTURE design_1_UART_TX_0_0_arch OF design_1_UART_TX_0_0 IS
 BEGIN
   U0 : UART_TX
     GENERIC MAP (
-      g_CLKS_PER_BIT => 260,
+      g_CLKS_PER_BIT => 130,
       g_MAX_BYTES => 7
     )
     PORT MAP (
