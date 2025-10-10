@@ -103,8 +103,6 @@ begin
             write_with_ale <= '0';
             o_busy <= '1';
             
-            retry_counter <= 0;
-            
         when S_READY =>
             o_nand_ce <= '0';
             o_nand_wp <= '1';

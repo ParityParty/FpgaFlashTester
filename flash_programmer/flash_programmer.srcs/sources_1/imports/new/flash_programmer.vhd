@@ -263,7 +263,8 @@ begin
                             o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                             int_uart_dv <= '1';
                             
-                            state <= S_NEXT_PAGE;
+                            state <= S_READ_PAGE;
+                            substate <= SS_INIT;
                         end if;
                     else
                         substate <= SS_DONE;

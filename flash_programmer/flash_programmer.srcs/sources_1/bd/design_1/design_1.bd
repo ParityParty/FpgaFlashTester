@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x7C03D2666EA2BC7D",
+      "boundary_crc": "0xFFACECE24D49E6BE",
       "device": "xck26-sfvc784-2LV-c",
       "gen_directory": "../../../../flash_programmer.gen/sources_1/bd/design_1",
       "name": "design_1",
@@ -33,9 +33,6 @@
         "direction": "O"
       },
       "nand_cle": {
-        "direction": "O"
-      },
-      "debug": {
         "direction": "O"
       },
       "led_light": {
@@ -111,7 +108,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "60000000"
+                "value": "100000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -200,7 +197,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "60000000"
+                "value": "100000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -251,13 +248,13 @@
             "value": "Buffer"
           },
           "CLKOUT1_JITTER": {
-            "value": "203.173"
+            "value": "190.517"
           },
           "CLKOUT1_PHASE_ERROR": {
             "value": "222.305"
           },
           "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "60.00"
+            "value": "100.00"
           },
           "CLKOUT2_DRIVES": {
             "value": "Buffer"
@@ -293,7 +290,7 @@
             "value": "10.0"
           },
           "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "20.000"
+            "value": "12.000"
           },
           "MMCM_COMPENSATION": {
             "value": "AUTO"
@@ -337,7 +334,7 @@
                 "value_src": "constant"
               },
               "FREQ_HZ": {
-                "value": "60000000"
+                "value": "100000000"
               },
               "PHASE": {
                 "value": "0.0",
@@ -439,16 +436,16 @@
       "clk_wiz_0_clk_out1": {
         "ports": [
           "clk_wiz_0/clk_out1",
-          "nand_controller_0/i_clk",
           "flash_programmer_0/i_clock",
+          "nand_controller_0/i_clk",
           "UART_TX_0/i_Clk"
         ]
       },
       "clk_wiz_0_locked": {
         "ports": [
           "clk_wiz_0/locked",
-          "nand_controller_0/i_rst",
           "flash_programmer_0/i_reset",
+          "nand_controller_0/i_rst",
           "UART_TX_0/i_reset"
         ]
       },

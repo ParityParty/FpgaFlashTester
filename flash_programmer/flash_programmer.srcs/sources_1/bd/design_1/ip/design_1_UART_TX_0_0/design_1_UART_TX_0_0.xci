@@ -8,12 +8,12 @@
     "gen_directory": "../../../../../../flash_programmer.gen/sources_1/bd/design_1/ip/design_1_UART_TX_0_0",
     "parameters": {
       "component_parameters": {
-        "g_CLKS_PER_BIT": [ { "value": "65", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "g_CLKS_PER_BIT": [ { "value": "217", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "g_MAX_BYTES": [ { "value": "7", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_UART_TX_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
-        "g_CLKS_PER_BIT": [ { "value": "65", "resolve_type": "generated", "format": "long", "usage": "all" } ],
+        "g_CLKS_PER_BIT": [ { "value": "217", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "g_MAX_BYTES": [ { "value": "7", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
@@ -69,7 +69,7 @@
           "mode": "slave",
           "parameters": {
             "ASSOCIATED_RESET": [ { "value": "i_reset", "value_src": "constant", "value_permission": "bd_and_user", "usage": "all" } ],
-            "FREQ_HZ": [ { "value": "60000000", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
+            "FREQ_HZ": [ { "value": "100000000", "value_src": "user", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "FREQ_TOLERANCE_HZ": [ { "value": "0", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "long", "is_ips_inferred": true, "is_static_object": false } ],
             "PHASE": [ { "value": "0.0", "value_src": "ip_propagated", "value_permission": "bd_and_user", "resolve_type": "generated", "format": "float", "is_ips_inferred": true, "is_static_object": false } ],
             "CLK_DOMAIN": [ { "value": "design_1_clk_wiz_0_0_clk_out1", "value_src": "default_prop", "value_permission": "bd_and_user", "resolve_type": "generated", "is_ips_inferred": true, "is_static_object": false } ],
