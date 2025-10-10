@@ -72,6 +72,8 @@ architecture Behavioral of flash_programmer is
 	signal int_activate : std_logic := '0';
 	signal int_uart_dv : std_logic := '0';
 	
+	signal last_bad_byte : std_logic_vector(7 downto 0);
+	signal same_bad_byte_counter : integer range 0 to 2**16 - 1 := 0;
 	signal test_byte : std_logic_vector(7 downto 0) := x"AA";
 	signal test_phase : std_logic := '0'; -- 0 for initial block read, 1 for erase-program-read cycle
 begin
@@ -292,6 +294,8 @@ begin
                 next_state <= S_READ_PAGE;
                 substate <= SS_SEND_CMD;
                 byte_counter <= 0;
+                same_bad_byte_counter <= 0;
+                last_bad_byte <= x"00";
         
             when SS_SEND_CMD =>
                 o_address <= (others => '0');
@@ -309,27 +313,56 @@ begin
                 end if;             
             
             when SS_CHECK_DATA =>
-                if i_data = test_byte then
+                if i_data = test_byte and same_bad_byte_counter = 0 then -- all good
                     substate <= SS_GET_DATA;
                     byte_counter <= byte_counter + 1;
-                else
+                    
+                elsif same_bad_byte_counter = 0 then -- first bad byte in chain
+                    same_bad_byte_counter <= 1;
+                    last_bad_byte <= i_data;
+                    substate <= SS_GET_DATA;
+                    byte_counter <= byte_counter + 1;
+                    
+                elsif i_data /= last_bad_byte then -- chain of bad bytes ended
                     if i_TX_Active = '0' and int_uart_dv = '0' then
                         o_TX_Data <= (others => '0');
                         o_TX_Data(7 downto 0) <= x"E4";
-                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter, 16));
-                        o_TX_Data(31 downto 24) <= i_data;
-                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(4, 3));
+                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter - same_bad_byte_counter, 16));
+                        o_TX_Data(31 downto 24) <= last_bad_byte;
+                        o_TX_Data(47 downto 32) <= std_logic_vector(to_unsigned(same_bad_byte_counter, 16));
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(6, 3));
                         int_uart_dv <= '1';
                         
                         substate <= SS_GET_DATA;
                         byte_counter <= byte_counter + 1;
+                        if i_data = test_byte then
+                            same_bad_byte_counter <= 0;
+                        else 
+                            same_bad_byte_counter <= 1;
+                            last_bad_byte <= i_data;
+                        end if;
                     end if;
+                   
+                else -- chain keeps on going
+                    same_bad_byte_counter <= same_bad_byte_counter + 1;
+                    substate <= SS_GET_DATA;
+                    byte_counter <= byte_counter + 1;
                 end if;
             
             when SS_DONE =>
                 if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Data(7 downto 0) <= x"A3";
-                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
+                    if same_bad_byte_counter = 0 then
+                        o_TX_Data(7 downto 0) <= x"A3";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
+                    else
+                        o_TX_Data <= (others => '0');
+                        o_TX_Data(7 downto 0) <= x"E4";
+                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter - same_bad_byte_counter, 16));
+                        o_TX_Data(31 downto 24) <= last_bad_byte;
+                        o_TX_Data(47 downto 32) <= std_logic_vector(to_unsigned(same_bad_byte_counter, 16));
+                        o_TX_Data(55 downto 48) <= x"A3";
+                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(7, 3));
+                    end if;
                     int_uart_dv <= '1';
                     
                     state <= S_NEXT_PAGE;
