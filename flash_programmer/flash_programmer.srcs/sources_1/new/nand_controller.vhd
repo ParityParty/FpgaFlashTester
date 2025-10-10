@@ -35,8 +35,7 @@ use work.onfi_timings.all;
 
 entity nand_controller is
     Generic (
-        PAGE_SIZE : integer := 8640;
-        MAX_RETRIES : integer := 5
+        PAGE_SIZE : integer := 8640
     );
     Port ( i_clk : in STD_LOGIC;
            i_rst : in STD_LOGIC;
@@ -72,7 +71,6 @@ architecture Behavioral of nand_controller is
     signal byte_to_send : std_logic_vector(7 downto 0) := (others => '0');
     signal stage : integer := 0;
     signal byte_counter : integer := 0;
-    signal retry_counter : integer := 0;
     
     signal write_with_cle : std_logic := '0';
     signal write_with_ale : std_logic := '0';
@@ -382,7 +380,6 @@ begin
                 delay <= delay - 1;
             elsif i_nand_rb = '1' then
                 state <= n_state;
-                retry_counter <= 0;
             end if;
         
         when S_ERROR => null;

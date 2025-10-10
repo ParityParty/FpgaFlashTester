@@ -80,8 +80,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "yes";
   COMPONENT nand_controller IS
     GENERIC (
-      PAGE_SIZE : INTEGER;
-      MAX_RETRIES : INTEGER
+      PAGE_SIZE : INTEGER
     );
     PORT (
       i_clk : IN STD_LOGIC;
@@ -108,15 +107,14 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF i_clk: SIGNAL IS "xilinx.com:signal:clock:1.0 i_clk CLK";
   ATTRIBUTE X_INTERFACE_MODE OF i_clk: SIGNAL IS "slave i_clk";
-  ATTRIBUTE X_INTERFACE_PARAMETER OF i_clk: SIGNAL IS "XIL_INTERFACENAME i_clk, ASSOCIATED_RESET i_rst, FREQ_HZ 10000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0";
+  ATTRIBUTE X_INTERFACE_PARAMETER OF i_clk: SIGNAL IS "XIL_INTERFACENAME i_clk, ASSOCIATED_RESET i_rst, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1, INSERT_VIP 0";
   ATTRIBUTE X_INTERFACE_INFO OF i_rst: SIGNAL IS "xilinx.com:signal:reset:1.0 i_rst RST";
   ATTRIBUTE X_INTERFACE_MODE OF i_rst: SIGNAL IS "slave i_rst";
   ATTRIBUTE X_INTERFACE_PARAMETER OF i_rst: SIGNAL IS "XIL_INTERFACENAME i_rst, POLARITY ACTIVE_LOW, INSERT_VIP 0";
 BEGIN
   U0 : nand_controller
     GENERIC MAP (
-      PAGE_SIZE => 8640,
-      MAX_RETRIES => 5
+      PAGE_SIZE => 8640
     )
     PORT MAP (
       i_clk => i_clk,

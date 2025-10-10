@@ -9,12 +9,10 @@
     "parameters": {
       "component_parameters": {
         "PAGE_SIZE": [ { "value": "8640", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "MAX_RETRIES": [ { "value": "5", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_nand_controller_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
-        "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "MAX_RETRIES": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "PAGE_SIZE": [ { "value": "8640", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynquplus" } ],

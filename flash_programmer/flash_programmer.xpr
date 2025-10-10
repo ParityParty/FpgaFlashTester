@@ -67,12 +67,12 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="84"/>
-    <Option Name="WTModelSimExportSim" Val="84"/>
-    <Option Name="WTQuestaExportSim" Val="84"/>
+    <Option Name="WTXSimExportSim" Val="88"/>
+    <Option Name="WTModelSimExportSim" Val="88"/>
+    <Option Name="WTQuestaExportSim" Val="88"/>
     <Option Name="WTIesExportSim" Val="0"/>
-    <Option Name="WTVcsExportSim" Val="84"/>
-    <Option Name="WTRivieraExportSim" Val="84"/>
+    <Option Name="WTVcsExportSim" Val="88"/>
+    <Option Name="WTRivieraExportSim" Val="88"/>
     <Option Name="WTActivehdlExportSim" Val="0"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
@@ -292,7 +292,7 @@
         <Step Id="power_opt_design"/>
         <Step Id="place_design"/>
         <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
+        <Step Id="phys_opt_design" EnableStepBool="0"/>
         <Step Id="route_design"/>
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
