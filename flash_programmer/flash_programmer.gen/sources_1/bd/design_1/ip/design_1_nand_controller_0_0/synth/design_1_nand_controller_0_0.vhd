@@ -107,7 +107,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF design_1_nand_controller_0_0_arch : ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=nand_controller,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,PAGE_SIZE=8640}";
+  ATTRIBUTE CORE_GENERATION_INFO OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "design_1_nand_controller_0_0,nand_controller,{x_ipProduct=Vivado 2025.1,x_ipVendor=xilinx.com,x_ipLibrary=module_ref,x_ipName=nand_controller,x_ipVersion=1.0,x_ipCoreRevision=1,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,PAGE_SIZE=10}";
   ATTRIBUTE IP_DEFINITION_SOURCE : STRING;
   ATTRIBUTE IP_DEFINITION_SOURCE OF design_1_nand_controller_0_0_arch: ARCHITECTURE IS "module_ref";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
@@ -122,7 +122,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
 BEGIN
   U0 : nand_controller
     GENERIC MAP (
-      PAGE_SIZE => 8640
+      PAGE_SIZE => 10
     )
     PORT MAP (
       i_clk => i_clk,

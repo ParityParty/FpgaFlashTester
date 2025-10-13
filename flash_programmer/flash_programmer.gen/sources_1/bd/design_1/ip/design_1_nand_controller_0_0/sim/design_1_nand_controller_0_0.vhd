@@ -114,7 +114,7 @@ ARCHITECTURE design_1_nand_controller_0_0_arch OF design_1_nand_controller_0_0 I
 BEGIN
   U0 : nand_controller
     GENERIC MAP (
-      PAGE_SIZE => 8640
+      PAGE_SIZE => 10
     )
     PORT MAP (
       i_clk => i_clk,

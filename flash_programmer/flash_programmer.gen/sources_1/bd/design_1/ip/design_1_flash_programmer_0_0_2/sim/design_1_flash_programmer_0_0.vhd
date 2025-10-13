@@ -114,10 +114,10 @@ ARCHITECTURE design_1_flash_programmer_0_0_arch OF design_1_flash_programmer_0_0
 BEGIN
   U0 : flash_programmer
     GENERIC MAP (
-      MAX_COUNT => 50000000,
-      PAGE_SIZE => 8640,
-      PAGES_IN_BLOCK => 128,
-      BLOCKS_TO_TEST => 4096,
+      MAX_COUNT => 10,
+      PAGE_SIZE => 10,
+      PAGES_IN_BLOCK => 3,
+      BLOCKS_TO_TEST => 3,
       MAX_FAULTS => 5,
       UART_MAX_BYTES => 7,
       BLOCK_OFFSET => 0

@@ -11,10 +11,10 @@ use ieee.numeric_std.all;
 use work.onfi_timings.all; -- Use the constants from the provided package
 use std.textio.all;
 
-entity nand_controller_tb is
-end nand_controller_tb;
+entity tb_nand_controller is
+end tb_nand_controller;
 
-architecture behavior of nand_controller_tb is
+architecture behavior of tb_nand_controller is
     -- Component Declaration for the Unit Under Test (UUT)
     constant PAGE_SIZE : integer := 10;
     component nand_controller is

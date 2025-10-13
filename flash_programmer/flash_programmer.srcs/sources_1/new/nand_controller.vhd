@@ -35,7 +35,7 @@ use work.onfi_timings.all;
 
 entity nand_controller is
     Generic (
-        PAGE_SIZE : integer := 8640
+        PAGE_SIZE : integer := 10
     );
     Port ( i_clk : in STD_LOGIC;
            i_rst : in STD_LOGIC;

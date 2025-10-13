@@ -5,7 +5,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity UART_TX is
   generic (
-    g_CLKS_PER_BIT : integer := 868;
+--    g_CLKS_PER_BIT : integer := 868;
+    g_CLKS_PER_BIT : integer := 3;
     g_MAX_BYTES    : integer := 7    
     );
   port (

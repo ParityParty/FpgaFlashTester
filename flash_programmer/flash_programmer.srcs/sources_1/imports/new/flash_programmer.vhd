@@ -25,10 +25,10 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity flash_programmer is
     Generic (
-        MAX_COUNT : integer := 50000000;
-        PAGE_SIZE : integer := 8640;
-        PAGES_IN_BLOCK : integer := 128;
-        BLOCKS_TO_TEST : integer := 4096;
+        MAX_COUNT : integer := 10;
+        PAGE_SIZE : integer := 10;
+        PAGES_IN_BLOCK : integer := 3;
+        BLOCKS_TO_TEST : integer := 3;
         MAX_FAULTS : integer := 5;
         UART_MAX_BYTES : integer := 7;
         BLOCK_OFFSET : integer := 0
