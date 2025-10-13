@@ -58,7 +58,7 @@ architecture Behavioral of flash_programmer is
     signal byte_counter : integer range 0 to 2**16 - 1 := 0;
     signal fault_counter : integer := 0;
 
-	type state_t is (S_IDLE, S_INIT, S_NAND_RESET, S_READ_TEST, S_ERASE_BLOCK, S_PROGRAM_PAGE, S_READ_PAGE, S_NEXT_PAGE, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
+	type state_t is (S_IDLE, S_INIT, S_NAND_RESET, S_ERASE_BLOCK, S_PROGRAM_PAGE, S_NEXT_PAGE, S_RELEASE, S_CTRL_BUSY, S_NEXT_BLOCK, S_DONE, S_ERROR);
 	type substate_t is (SS_INIT, SS_SEND_CMD, SS_GET_DATA, SS_CHECK_DATA, SS_DONE);
 	
 	signal state : state_t := S_IDLE;
@@ -74,8 +74,7 @@ architecture Behavioral of flash_programmer is
 	
 	signal last_bad_byte : std_logic_vector(7 downto 0);
 	signal same_bad_byte_counter : integer range 0 to 2**16 - 1 := 0;
-	signal test_byte : std_logic_vector(7 downto 0) := x"AA";
-	signal test_phase : std_logic := '0'; -- 0 for initial block read, 1 for erase-program-read cycle
+	signal test_byte : std_logic_vector(7 downto 0) := x"55";
 begin
 	o_activate <= int_activate;
 	o_TX_DV <= int_uart_dv;
@@ -101,6 +100,7 @@ begin
             blocks_tested             <= 0;
             int_activate              <= '0';
             int_uart_dv               <= '0';
+            test_byte <= x"55";
     
             led_light                 <= '0';
             o_data                   <= (others => '0');
@@ -149,25 +149,12 @@ begin
                     o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
-                    state <= S_READ_TEST;
+                    state <= S_ERASE_BLOCK;
                     substate <= SS_INIT;
                 end if;
             
             when others => state <= S_ERROR;
             end case;
-        
-        when S_READ_TEST =>
-            if i_TX_Active = '0' and int_uart_dv = '0' then
-                o_TX_Data(7 downto 0) <= x"A6";
-                o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
-                int_uart_dv <= '1';
-                
-                page_address <= (blocks_tested + BLOCK_OFFSET) * PAGES_IN_BLOCK;
-                test_phase <= '0';
-                test_byte <= x"55";
-                state <= S_READ_PAGE;
-                substate <= SS_INIT;
-            end if;
         
         when S_ERASE_BLOCK =>
             case substate is
@@ -176,7 +163,6 @@ begin
                 page_address <= (blocks_tested + BLOCK_OFFSET) * PAGES_IN_BLOCK;
                 substate <= SS_SEND_CMD;
                 fault_counter <= 0;
-                test_phase <= '1';
             
             when SS_SEND_CMD =>
                 o_address <= (others => '0');
@@ -265,7 +251,7 @@ begin
                             o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                             int_uart_dv <= '1';
                             
-                            state <= S_READ_PAGE;
+                            state <= S_NEXT_PAGE;
                             substate <= SS_INIT;
                         end if;
                     else
@@ -281,90 +267,8 @@ begin
                     o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
                     int_uart_dv <= '1';
                     
-                    state <= S_READ_PAGE;
-                    substate <= SS_INIT;
-                end if;
-
-            when others => state <= S_ERROR;
-            end case;
-            
-        when S_READ_PAGE =>
-            case substate is
-            when SS_INIT =>
-                next_state <= S_READ_PAGE;
-                substate <= SS_SEND_CMD;
-                byte_counter <= 0;
-                same_bad_byte_counter <= 0;
-        
-            when SS_SEND_CMD =>
-                o_address <= (others => '0');
-                o_address(34 downto 16) <= std_logic_vector(to_unsigned(page_address, 19));
-                o_cmd <= x"05";
-                state <= S_RELEASE;
-                substate <= SS_GET_DATA;
-            
-            when SS_GET_DATA =>
-                if i_read_done = '1' then
-                    substate <= SS_DONE;
-                else
-                    substate <= SS_CHECK_DATA;
-                    state <= S_RELEASE;
-                end if;             
-            
-            when SS_CHECK_DATA =>
-                if i_data = test_byte and same_bad_byte_counter = 0 then -- all good
-                    substate <= SS_GET_DATA;
-                    byte_counter <= byte_counter + 1;
-                    
-                elsif same_bad_byte_counter = 0 then -- first bad byte in chain
-                    same_bad_byte_counter <= 1;
-                    last_bad_byte <= i_data;
-                    substate <= SS_GET_DATA;
-                    byte_counter <= byte_counter + 1;
-                    
-                elsif i_data /= last_bad_byte then -- chain of bad bytes ended
-                    if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Data <= (others => '0');
-                        o_TX_Data(7 downto 0) <= x"E4";
-                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter - same_bad_byte_counter, 16));
-                        o_TX_Data(31 downto 24) <= last_bad_byte;
-                        o_TX_Data(47 downto 32) <= std_logic_vector(to_unsigned(same_bad_byte_counter, 16));
-                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(6, 3));
-                        int_uart_dv <= '1';
-                        
-                        substate <= SS_GET_DATA;
-                        byte_counter <= byte_counter + 1;
-                        if i_data = test_byte then
-                            same_bad_byte_counter <= 0;
-                        else 
-                            same_bad_byte_counter <= 1;
-                            last_bad_byte <= i_data;
-                        end if;
-                    end if;
-                   
-                else -- chain keeps on going
-                    same_bad_byte_counter <= same_bad_byte_counter + 1;
-                    substate <= SS_GET_DATA;
-                    byte_counter <= byte_counter + 1;
-                end if;
-            
-            when SS_DONE =>
-                if i_TX_Active = '0' and int_uart_dv = '0' then
-                    if same_bad_byte_counter = 0 then
-                        o_TX_Data(7 downto 0) <= x"A3";
-                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
-                    else
-                        o_TX_Data <= (others => '0');
-                        o_TX_Data(7 downto 0) <= x"E4";
-                        o_TX_Data(23 downto 8) <= std_logic_vector(to_unsigned(byte_counter - same_bad_byte_counter, 16));
-                        o_TX_Data(31 downto 24) <= last_bad_byte;
-                        o_TX_Data(47 downto 32) <= std_logic_vector(to_unsigned(same_bad_byte_counter, 16));
-                        o_TX_Data(55 downto 48) <= x"A3";
-                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(7, 3));
-                    end if;
-                    int_uart_dv <= '1';
-                    
                     state <= S_NEXT_PAGE;
+                    substate <= SS_INIT;
                 end if;
 
             when others => state <= S_ERROR;
@@ -374,52 +278,24 @@ begin
             if page_address + 1 < (blocks_tested + BLOCK_OFFSET + 1) * PAGES_IN_BLOCK then
                 page_address <= page_address + 1;
                 substate <= SS_INIT;
-                if test_phase = '0' then
-                    state <= S_READ_PAGE;
-                else 
-                    state <= S_PROGRAM_PAGE;
-                end if;
+                state <= S_PROGRAM_PAGE;
             else
-                if test_phase = '0' then
-                    if i_TX_Active = '0' and int_uart_dv = '0' then
-                        o_TX_Data(7 downto 0) <= x"A7";
-                        o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
-                        int_uart_dv <= '1';
-                        
-                        state <= S_ERASE_BLOCK;
-                        substate <= SS_INIT;
-                        test_byte <= x"AA";
-                    end if;
-                else
-                    state <= S_NEXT_BLOCK;
-                end if;
+                state <= S_NEXT_BLOCK;
             end if;
         
         when S_NEXT_BLOCK =>
-            if test_byte = x"AA" then
-                if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Data(7 downto 0) <= x"A4";
-                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
-                    int_uart_dv <= '1';
-                    
-                    test_byte <= x"55";
+            if i_TX_Active = '0' and int_uart_dv = '0' then
+                o_TX_Data(7 downto 0) <= x"A5";
+                o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
+                int_uart_dv <= '1';
+                
+                if blocks_tested + 1 < BLOCKS_TO_TEST then
                     state <= S_ERASE_BLOCK;
                     substate <= SS_INIT;
-                end if;
-            else
-                if i_TX_Active = '0' and int_uart_dv = '0' then
-                    o_TX_Data(7 downto 0) <= x"A5";
-                    o_TX_Num_Bytes <= std_logic_vector(to_unsigned(1, 3));
-                    int_uart_dv <= '1';
-                    
-                    if blocks_tested + 1 < BLOCKS_TO_TEST then
-                        state <= S_READ_TEST;
-                        substate <= SS_INIT;
-                        blocks_tested <= blocks_tested + 1;
-                    else
-                        counter <= 0;
-                        state <= S_DONE;
-                    end if;
+                    blocks_tested <= blocks_tested + 1;
+                else
+                    counter <= 0;
+                    state <= S_DONE;
                 end if;
             end if;
         
