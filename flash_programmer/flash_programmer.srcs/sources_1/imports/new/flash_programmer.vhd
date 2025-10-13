@@ -295,7 +295,6 @@ begin
                 substate <= SS_SEND_CMD;
                 byte_counter <= 0;
                 same_bad_byte_counter <= 0;
-                last_bad_byte <= x"00";
         
             when SS_SEND_CMD =>
                 o_address <= (others => '0');
