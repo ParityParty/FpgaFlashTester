@@ -31,6 +31,7 @@ end onfi_timings;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 use work.onfi_timings.all;
 
 entity nand_controller is
@@ -229,7 +230,11 @@ begin
             when SS_WRITE =>
                 if byte_counter > 0 then
                     byte_counter <= byte_counter - 1;
-                    byte_to_send <= i_data;
+                    if byte_counter = 100 then
+                        byte_to_send <= x"EE";
+                    else
+                        byte_to_send <= i_data;
+                    end if;
                     stage <= 0;
                     state <= S_WRITE_BYTE;
                 else

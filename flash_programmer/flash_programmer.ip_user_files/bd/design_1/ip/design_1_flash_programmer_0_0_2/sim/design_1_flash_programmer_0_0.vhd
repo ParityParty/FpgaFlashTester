@@ -117,10 +117,10 @@ BEGIN
       MAX_COUNT => 50000000,
       PAGE_SIZE => 8640,
       PAGES_IN_BLOCK => 128,
-      BLOCKS_TO_TEST => 4096,
+      BLOCKS_TO_TEST => 5,
       MAX_FAULTS => 5,
       UART_MAX_BYTES => 7,
-      BLOCK_OFFSET => 0
+      BLOCK_OFFSET => 3
     )
     PORT MAP (
       led_light => led_light,
