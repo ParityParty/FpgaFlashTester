@@ -230,8 +230,10 @@ begin
             when SS_WRITE =>
                 if byte_counter > 0 then
                     byte_counter <= byte_counter - 1;
-                    if byte_counter < 8540 and byte_counter > 8530 then
+                    if byte_counter = 8540 then
                         byte_to_send <= x"EE";
+                    elsif byte_counter = 8539 then
+                        byte_to_send <= x"EF";
                     else
                         byte_to_send <= i_data;
                     end if;
