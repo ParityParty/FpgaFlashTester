@@ -28,10 +28,10 @@ entity flash_programmer is
         MAX_COUNT : integer := 50000000;
         PAGE_SIZE : integer := 8640;
         PAGES_IN_BLOCK : integer := 128;
-        BLOCKS_TO_TEST : integer := 4096;
+        BLOCKS_TO_TEST : integer := 512;
         MAX_FAULTS : integer := 5;
         UART_MAX_BYTES : integer := 7;
-        BLOCK_OFFSET : integer := 0
+        BLOCK_OFFSET : integer := 3072
     );
     Port (
     led_light : out STD_LOGIC := '0';

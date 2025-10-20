@@ -310,7 +310,7 @@ def main():
 
                 else:
                     log_terminal(f"Received unhandled byte: 0x{byte_val:02X}\n", runtime=time.monotonic() - state.test_time)
-                    time.sleep(2)
+                    # time.sleep(2)
 
     except FileNotFoundError:
         print(f"Error: File not found at '{input_filename}'", file=sys.stderr)
