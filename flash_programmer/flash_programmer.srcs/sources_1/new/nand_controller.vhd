@@ -14,9 +14,11 @@ package onfi_timings is
 	constant	t_dh		:	integer	:= integer(20.0		/ clock_cycle);
 	constant	t_als		:	integer	:= integer(50.0	/ clock_cycle);
 	constant	t_alh		:	integer	:= integer(20.0		/ clock_cycle);
-	constant	t_rr		:	integer	:= integer(40.0	/ clock_cycle);
+--	constant	t_rr		:	integer	:= integer(40.0	/ clock_cycle);
+    constant	t_rr		:	integer	:= integer(80.0	/ clock_cycle);
 	constant	t_rea		:	integer	:= integer(40.0	/ clock_cycle);
-	constant	t_rp		:	integer	:= integer(50.0	/ clock_cycle);
+--	constant	t_rp		:	integer	:= integer(50.0	/ clock_cycle);
+    constant	t_rp		:	integer	:= integer(100.0	/ clock_cycle);
 	constant	t_reh		:	integer	:= integer(30.0		/ clock_cycle);
 	constant	t_wb		:	integer	:= integer(200.0	/ clock_cycle);
 	constant	t_rst		:	integer	:= integer(5000.0	/ clock_cycle);

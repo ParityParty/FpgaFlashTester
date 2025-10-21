@@ -3,8 +3,8 @@
 # SW Build 6140274 on Wed May 21 22:58:25 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Fri Oct 17 17:33:39 2025
-# Process ID         : 47723
+# Start of session at: Tue Oct 21 11:10:36 2025
+# Process ID         : 28818
 # Current directory  : /home/agata/FpgaFlashTester/flash_programmer
 # Command line       : vivado
 # Log file           : /home/agata/FpgaFlashTester/flash_programmer/vivado.log
@@ -13,13 +13,13 @@
 # Platform           : Ubuntu
 # Operating System   : Ubuntu 24.04.3 LTS
 # Processor Detail   : 12th Gen Intel(R) Core(TM) i5-1235U
-# CPU Frequency      : 4259.886 MHz
+# CPU Frequency      : 2017.530 MHz
 # CPU Physical cores : 10
 # CPU Logical cores  : 12
 # Host memory        : 7996 MB
 # Swap memory        : 2147 MB
 # Total Virtual      : 10143 MB
-# Available Virtual  : 3582 MB
+# Available Virtual  : 3730 MB
 #-----------------------------------------------------------
 start_gui
 open_project /home/agata/FpgaFlashTester/flash_programmer/flash_programmer.xpr

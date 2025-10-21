@@ -120,7 +120,7 @@ BEGIN
       BLOCKS_TO_TEST => 512,
       MAX_FAULTS => 5,
       UART_MAX_BYTES => 7,
-      BLOCK_OFFSET => 3072
+      BLOCK_OFFSET => 2048
     )
     PORT MAP (
       led_light => led_light,

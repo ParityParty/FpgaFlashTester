@@ -14,7 +14,7 @@
         "BLOCKS_TO_TEST": [ { "value": "512", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "MAX_FAULTS": [ { "value": "5", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "UART_MAX_BYTES": [ { "value": "7", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "BLOCK_OFFSET": [ { "value": "3072", "resolve_type": "user", "format": "long", "usage": "all" } ],
+        "BLOCK_OFFSET": [ { "value": "2048", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "Component_Name": [ { "value": "design_1_flash_programmer_0_0", "resolve_type": "user", "usage": "all" } ]
       },
       "model_parameters": {
@@ -24,7 +24,7 @@
         "BLOCKS_TO_TEST": [ { "value": "512", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "MAX_FAULTS": [ { "value": "5", "resolve_type": "generated", "format": "long", "usage": "all" } ],
         "UART_MAX_BYTES": [ { "value": "7", "resolve_type": "generated", "format": "long", "usage": "all" } ],
-        "BLOCK_OFFSET": [ { "value": "3072", "resolve_type": "generated", "format": "long", "usage": "all" } ]
+        "BLOCK_OFFSET": [ { "value": "2048", "resolve_type": "generated", "format": "long", "usage": "all" } ]
       },
       "project_parameters": {
         "ARCHITECTURE": [ { "value": "zynquplus" } ],

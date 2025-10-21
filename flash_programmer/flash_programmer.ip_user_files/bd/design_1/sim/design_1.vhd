@@ -2,7 +2,7 @@
 --Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2025.1 (lin64) Build 6140274 Wed May 21 22:58:25 MDT 2025
---Date        : Fri Oct 17 17:35:03 2025
+--Date        : Tue Oct 21 12:35:31 2025
 --Host        : agata running 64-bit Ubuntu 24.04.3 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
