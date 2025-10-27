@@ -1,0 +1,982 @@
+agata@agata:~/FpgaFlashTester/monitors$ python3 test_monitor.py 
+[12:25:58.161]    0:00.00   Logging raw bytes to ./logs/uart_log_2025-10-27_12-25-58.bin
+[12:25:58.161]    0:00.00   Attempting to open serial port /dev/ttyUSB0 at 115200.0 baud...
+[12:25:58.161]    0:00.00   Serial port opened successfully. Waiting for data...
+
+[12:26:14.105]    0:00.00   Init complete, reseting... Done
+[12:26:15.049]    0:00.94   Block 0     OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:26:15.240]    0:01.14   Block 1     Testing...   0.191s   Read cycle... 127                                                                    [█████████-----------------------------------------] 
+[12:26:15.241]    0:01.14   Block 1     BAD BYTE in page 127 at 0x14FB (5371) expected 0x55 was 0x5D (x1)
+[12:26:15.992]    0:01.89   Block 1     FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:26:16.921]    0:02.82   Block 2     OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:26:17.864]    0:03.76   Block 3     OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:26:18.808]    0:04.70   Block 4     OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:26:18.872]    0:04.77   Block 5     Testing...   0.064s   Read cycle... 48                                                                     [███-----------------------------------------------] 
+[12:26:18.887]    0:04.78   Block 5     BAD BYTE in page 48 at 0x197A (6522) expected 0x55 was 0x5D (x1)
+[12:26:19.751]    0:05.65   Block 5     FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:26:20.680]    0:06.58   Block 6     OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:26:20.696]    0:06.59   Block 7     Testing...   0.016s   Read cycle... 10                                                                     [--------------------------------------------------] 
+[12:26:20.696]    0:06.59   Block 7     BAD BYTE in page 10 at 0x20F4 (8436) expected 0x55 was 0xD5 (x1)
+[12:26:21.511]    0:07.41   Block 7     Testing...   0.815s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  88 | READ:  88           [███████████████████████████████████████████-------] [12:26:21.511]    0:07.41   Received unhandled byte: 0xE2
+
+[12:26:21.623]    0:07.52   Block 7     FAIL         0.927s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:26:22.566]    0:08.46   Block 8     OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:22.646]    0:08.54   Block 9     Testing...   0.080s   Read cycle... 57                                                                     [████----------------------------------------------] 
+[12:26:22.662]    0:08.56   Block 9     BAD BYTE in page 57 at 0x2042 (8258) expected 0x55 was 0xD5 (x1)
+[12:26:23.510]    0:09.40   Block 9     FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:26:24.454]    0:10.35   Block 10    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:25.381]    0:11.28   Block 11    OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:26.325]    0:12.22   Block 12    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:27.269]    0:13.16   Block 13    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:27.284]    0:13.18   Block 14    Testing...   0.016s   Read cycle... 11                                                                     [--------------------------------------------------] 
+[12:26:27.284]    0:13.18   Block 14    BAD BYTE in page 11 at 0x006C ( 108) expected 0x55 was 0xD5 (x1)
+[12:26:28.213]    0:14.11   Block 14    FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:26:28.932]    0:14.83   Block 15    Testing...   0.719s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  52 | READ:  52           [██████████████████████████████████████------------] [12:26:28.932]    0:14.83   Received unhandled byte: 0xE2
+
+[12:26:28.932]    0:14.83   Received unhandled byte: 0xE2
+[12:26:29.156]    0:15.05   Block 15    OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:26:30.084]    0:15.98   Block 16    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:31.028]    0:16.92   Block 17    OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:26:31.972]    0:17.87   Block 18    OK           0.928s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:26:32.915]    0:18.81   Block 19    OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:33.843]    0:19.74   Block 20    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:33.922]    0:19.82   Block 21    Testing...   0.080s   Read cycle... 48                                                                     [███-----------------------------------------------] 
+[12:26:33.923]    0:19.82   Block 21    BAD BYTE in page 48 at 0x2048 (8264) expected 0x55 was 0x75 (x1)
+[12:26:34.786]    0:20.68   Block 21    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:26:35.730]    0:21.63   Block 22    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:36.673]    0:22.57   Block 23    OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:37.601]    0:23.50   Block 24    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:38.546]    0:24.44   Block 25    OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:26:39.488]    0:25.38   Block 26    OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:26:39.489]    0:25.38   Block 27    Testing...   0.000s   Read cycle... 5                                                                      [--------------------------------------------------] 
+[12:26:39.504]    0:25.40   Block 27    BAD BYTE in page 5 at 0x1DAB (7595) expected 0x55 was 0xD5 (x1)
+[12:26:39.584]    0:25.48   Block 27    Testing...   0.096s   Read cycle... 63                                                                     [████----------------------------------------------] 
+[12:26:39.584]    0:25.48   Block 27    BAD BYTE in page 63 at 0x05CA (1482) expected 0x55 was 0x57 (x1)
+[12:26:39.680]    0:25.58   Block 27    Testing...   0.192s   Read cycle... 127                                                                    [█████████-----------------------------------------] 
+[12:26:39.680]    0:25.58   Block 27    BAD BYTE in page 127 at 0x166B (5739) expected 0x55 was 0x75 (x1)
+[12:26:40.432]    0:26.33   Block 27    FAIL         0.944s   Bad bytes: 3   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:26:40.481]    0:26.38   Block 28    Testing...   0.048s   Read cycle... 38                                                                     [██------------------------------------------------] 
+[12:26:40.496]    0:26.39   Block 28    BAD BYTE in page 38 at 0x1ED0 (7888) expected 0x55 was 0xD5 (x1)
+[12:26:41.375]    0:27.27   Block 28    FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:26:41.504]    0:27.40   Block 29    Testing...   0.129s   Read cycle... 94                                                                     [███████-------------------------------------------] 
+[12:26:41.504]    0:27.40   Block 29    BAD BYTE in page 94 at 0x1292 (4754) expected 0x55 was 0x75 (x1)
+[12:26:42.304]    0:28.20   Block 29    FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:26:43.248]    0:29.14   Block 30    OK           0.944s   RD 0.191s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:26:43.327]    0:29.22   Block 31    Testing...   0.079s   Read cycle... 49                                                                     [███-----------------------------------------------] 
+[12:26:43.327]    0:29.22   Block 31    BAD BYTE in page 49 at 0x0A9B (2715) expected 0x55 was 0x75 (x1)
+[12:26:44.191]    0:30.09   Block 31    FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:26:45.135]    0:31.03   Block 32    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:26:46.063]    0:31.96   Block 33    OK           0.928s   RD 0.193s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:47.006]    0:32.90   Block 34    OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:26:47.949]    0:33.84   Block 35    OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:26:48.893]    0:34.79   Block 36    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:49.821]    0:35.72   Block 37    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:50.765]    0:36.66   Block 38    OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:26:51.709]    0:37.60   Block 39    OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:26:52.652]    0:38.55   Block 40    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:52.764]    0:38.66   Block 41    Testing...   0.112s   Read cycle... 74                                                                     [█████---------------------------------------------] 
+[12:26:52.764]    0:38.66   Block 41    BAD BYTE in page 74 at 0x0D95 (3477) expected 0x55 was 0x57 (x1)
+[12:26:53.580]    0:39.48   Block 41    FAIL         0.928s   Bad bytes: 1   RD 0.193s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:26:54.524]    0:40.42   Block 42    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:54.620]    0:40.52   Block 43    Testing...   0.096s   Read cycle... 61                                                                     [████----------------------------------------------] 
+[12:26:54.620]    0:40.52   Block 43    BAD BYTE in page 61 at 0x0DD6 (3542) expected 0x55 was 0xD5 (x1)
+[12:26:55.468]    0:41.36   Block 43    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:26:56.412]    0:42.31   Block 44    OK           0.944s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:26:57.338]    0:43.23   Block 45    OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.367s                                                                                                                        
+[12:26:58.282]    0:44.18   Block 46    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:26:58.379]    0:44.27   Block 47    Testing...   0.097s   Read cycle... 63                                                                     [████----------------------------------------------] 
+[12:26:58.379]    0:44.27   Block 47    BAD BYTE in page 63 at 0x0EF6 (3830) expected 0x55 was 0xD5 (x1)
+[12:26:59.226]    0:45.12   Block 47    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:00.169]    0:46.06   Block 48    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:01.113]    0:47.01   Block 49    OK           0.944s   RD 0.193s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:27:02.041]    0:47.94   Block 50    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:02.153]    0:48.05   Block 51    Testing...   0.112s   Read cycle... 67                                                                     [█████---------------------------------------------] 
+[12:27:02.153]    0:48.05   Block 51    BAD BYTE in page 67 at 0x02DB ( 731) expected 0x55 was 0xD5 (x1)
+[12:27:02.985]    0:48.88   Block 51    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:27:03.928]    0:49.82   Block 52    OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:27:04.872]    0:50.77   Block 53    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:05.241]    0:51.14   Block 54    Testing...   0.369s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  63 | READ:  63           [███████████████████-------------------------------] [12:27:05.241]    0:51.14   Received unhandled byte: 0xE2
+
+[12:27:05.816]    0:51.71   Block 54    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:06.024]    0:51.92   Block 55    Testing...   0.208s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  10 | READ:  10           [███████████---------------------------------------] [12:27:06.039]    0:51.93   Received unhandled byte: 0xE2
+
+[12:27:06.039]    0:51.93   Received unhandled byte: 0xE2
+[12:27:06.039]    0:51.93   Received unhandled byte: 0xE2
+[12:27:06.039]    0:51.93   Received unhandled byte: 0xE2
+[12:27:06.039]    0:51.93   Received unhandled byte: 0xE2
+[12:27:06.039]    0:51.93   Received unhandled byte: 0xE3
+[12:27:06.759]    0:52.65   Block 55    FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 127 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:27:07.703]    0:53.60   Block 56    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:27:08.631]    0:54.53   Block 57    OK           0.927s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:27:08.759]    0:54.65   Block 58    Testing...   0.128s   Read cycle... 79                                                                     [██████--------------------------------------------] 
+[12:27:08.759]    0:54.65   Block 58    BAD BYTE in page 79 at 0x0558 (1368) expected 0x55 was 0xD5 (x1)
+[12:27:09.575]    0:55.47   Block 58    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:10.518]    0:56.41   Block 59    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:11.462]    0:57.36   Block 60    OK           0.944s   RD 0.193s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:12.390]    0:58.28   Block 61    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:13.333]    0:59.23   Block 62    OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:27:13.397]    0:59.29   Block 63    Testing...   0.064s   Read cycle... 37                                                                     [██------------------------------------------------] 
+[12:27:13.397]    0:59.29   Block 63    BAD BYTE in page 37 at 0x2147 (8519) expected 0x55 was 0x75 (x1)
+[12:27:13.509]    0:59.40   Block 63    Testing...   0.176s   Read cycle... 121                                                                    [█████████-----------------------------------------] 
+[12:27:13.525]    0:59.42   Block 63    BAD BYTE in page 121 at 0x1C81 (7297) expected 0x55 was 0x57 (x1)
+[12:27:14.277]    1:00.17   Block 63    FAIL         0.944s   Bad bytes: 2   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:15.221]    1:01.12   Block 64    OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:15.397]    1:01.29   Block 65    Testing...   0.176s   Read cycle... 125                                                                    [█████████-----------------------------------------] 
+[12:27:15.397]    1:01.29   Block 65    BAD BYTE in page 125 at 0x1528 (5416) expected 0x55 was 0x75 (x1)
+[12:27:16.148]    1:02.04   Block 65    FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:17.092]    1:02.99   Block 66    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:18.036]    1:03.93   Block 67    OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:27:18.228]    1:04.12   Block 68    Testing...   0.192s   Read cycle... 122                                                                    [█████████-----------------------------------------] 
+[12:27:18.228]    1:04.12   Block 68    BAD BYTE in page 122 at 0x0CFE (3326) expected 0x55 was 0x57 (x1)
+[12:27:18.979]    1:04.87   Block 68    FAIL         0.943s   Bad bytes: 1   RD 0.193s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:27:19.411]    1:05.31   Block 69    Testing...   0.432s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  83 | READ:  83           [██████████████████████----------------------------] [12:27:19.411]    1:05.31   Received unhandled byte: 0xE2
+
+[12:27:19.923]    1:05.82   Block 69    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:27:20.851]    1:06.75   Block 70    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:21.795]    1:07.69   Block 71    OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:27:22.738]    1:08.63   Block 72    OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:27:23.681]    1:09.58   Block 73    OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:27:24.609]    1:10.50   Block 74    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:25.554]    1:11.45   Block 75    OK           0.944s   RD 0.193s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:27:26.497]    1:12.39   Block 76    OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:27:27.440]    1:13.34   Block 77    OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:28.384]    1:14.28   Block 78    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:27:29.312]    1:15.21   Block 79    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:30.256]    1:16.15   Block 80    OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:31.199]    1:17.09   Block 81    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:32.144]    1:18.04   Block 82    OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:27:32.191]    1:18.09   Block 83    Testing...   0.047s   Read cycle... 35                                                                     [██------------------------------------------------] 
+[12:27:32.191]    1:18.09   Block 83    BAD BYTE in page 35 at 0x053F (1343) expected 0x55 was 0x75 (x1)
+[12:27:33.071]    1:18.97   Block 83    FAIL         0.927s   Bad bytes: 1   RD 0.192s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:33.631]    1:19.53   Block 84    Testing...   0.544s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG: 126 | READ: 125           [█████████████████████████████---------------------] 
+[12:27:33.631]    1:19.53   Block 84    BAD BYTE in page 125 at 0x2146 (8518) expected 0xAA was 0x8A (x1)
+[12:27:34.014]    1:19.91   Block 84    FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:34.111]    1:20.01   Block 85    Testing...   0.096s   Read cycle... 61                                                                     [████----------------------------------------------] 
+[12:27:34.111]    1:20.01   Block 85    BAD BYTE in page 61 at 0x00EB ( 235) expected 0x55 was 0x75 (x1)
+[12:27:34.958]    1:20.85   Block 85    FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:35.902]    1:21.80   Block 86    OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.385s                                                                                                                        
+[12:27:36.846]    1:22.74   Block 87    OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:27:36.973]    1:22.87   Block 88    Testing...   0.128s   Read cycle... 87                                                                     [██████--------------------------------------------] 
+[12:27:36.973]    1:22.87   Block 88    BAD BYTE in page 87 at 0x02F5 ( 757) expected 0x55 was 0xD5 (x1)
+[12:27:37.470]    1:23.36   Block 88    Testing...   0.624s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  22 | READ:  22           [█████████████████████████████████-----------------] [12:27:37.470]    1:23.36   Received unhandled byte: 0xE2
+
+[12:27:37.470]    1:23.37   Received unhandled byte: 0xE2
+[12:27:37.773]    1:23.67   Block 88    FAIL         0.927s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:37.870]    1:23.77   Block 89    Testing...   0.097s   Read cycle... 61                                                                     [████----------------------------------------------] 
+[12:27:37.870]    1:23.77   Block 89    BAD BYTE in page 61 at 0x0077 ( 119) expected 0x55 was 0x57 (x1)
+[12:27:38.717]    1:24.61   Block 89    FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:39.660]    1:25.56   Block 90    OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:27:40.604]    1:26.50   Block 91    OK           0.944s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:27:41.532]    1:27.43   Block 92    OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:41.629]    1:27.52   Block 93    Testing...   0.096s   Read cycle... 63                                                                     [████----------------------------------------------] 
+[12:27:41.629]    1:27.52   Block 93    BAD BYTE in page 63 at 0x1E11 (7697) expected 0x55 was 0x5D (x1)
+[12:27:42.476]    1:28.37   Block 93    FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:43.420]    1:29.31   Block 94    OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:27:44.363]    1:30.26   Block 95    OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:45.307]    1:31.20   Block 96    OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:27:45.451]    1:31.35   Block 97    Testing...   0.145s   Read cycle... 103                                                                    [████████------------------------------------------] 
+[12:27:45.451]    1:31.35   Block 97    BAD BYTE in page 103 at 0x16AC (5804) expected 0x55 was 0x5D (x1)
+[12:27:46.235]    1:32.13   Block 97    FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:47.178]    1:33.07   Block 98    OK           0.944s   RD 0.193s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:27:47.834]    1:33.73   Block 99    Testing...   0.655s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  32 | READ:  32           [███████████████████████████████████---------------] [12:27:47.850]    1:33.75   Received unhandled byte: 0xE2
+
+[12:27:47.850]    1:33.75   Received unhandled byte: 0xE2
+[12:27:47.850]    1:33.75   Received unhandled byte: 0xE2
+[12:27:47.851]    1:33.75   Received unhandled byte: 0xE2
+[12:27:47.851]    1:33.75   Received unhandled byte: 0xE2
+[12:27:47.851]    1:33.75   Received unhandled byte: 0xE3
+[12:27:47.851]    1:33.75   Block 99    BAD BYTE in page 32 at 0x0241 ( 577) expected 0x55 was 0x5D (x1)
+[12:27:47.963]    1:33.86   Block 99    Testing...   0.784s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  72 | READ:  73           [█████████████████████████████████████████---------] [12:27:47.978]    1:33.87   Received unhandled byte: 0xE2
+
+[12:27:48.138]    1:34.03   Block 99    FAIL         0.959s   Bad bytes: 1   RD 0.193s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:27:48.154]    1:34.05   Block 100   Testing...   0.016s   Read cycle... 13                                                                     [█-------------------------------------------------] 
+[12:27:48.154]    1:34.05   Block 100   BAD BYTE in page 13 at 0x0572 (1394) expected 0x55 was 0x57 (x1)
+[12:27:49.066]    1:34.96   Block 100   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:27:49.465]    1:35.36   Block 101   Testing...   0.400s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  70 | READ:  70           [████████████████████------------------------------] [12:27:49.465]    1:35.36   Received unhandled byte: 0xE2
+
+[12:27:49.705]    1:35.60   Block 101   Testing...   0.639s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  24 | READ:  24           [█████████████████████████████████-----------------] [12:27:49.705]    1:35.60   Received unhandled byte: 0xE2
+
+[12:27:50.010]    1:35.90   Block 101   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:27:50.953]    1:36.85   Block 102   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:27:51.033]    1:36.93   Block 103   Testing...   0.080s   Read cycle... 51                                                                     [███-----------------------------------------------] 
+[12:27:51.033]    1:36.93   Block 103   BAD BYTE in page 51 at 0x1AE9 (6889) expected 0x55 was 0x5D (x1)
+[12:27:51.896]    1:37.79   Block 103   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:27:52.824]    1:38.72   Block 104   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:27:52.904]    1:38.80   Block 105   Testing...   0.080s   Read cycle... 47                                                                     [███-----------------------------------------------] 
+[12:27:52.904]    1:38.80   Block 105   BAD BYTE in page 47 at 0x0678 (1656) expected 0x55 was 0xD5 (x1)
+[12:27:53.769]    1:39.66   Block 105   FAIL         0.944s   Bad bytes: 1   RD 0.208s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:27:54.711]    1:40.61   Block 106   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:27:55.655]    1:41.55   Block 107   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:27:56.599]    1:42.49   Block 108   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:27:57.528]    1:43.42   Block 109   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:27:58.471]    1:44.37   Block 110   OK           0.927s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:27:58.614]    1:44.51   Block 111   Testing...   0.144s   Read cycle... 97                                                                     [███████-------------------------------------------] 
+[12:27:58.615]    1:44.51   Block 111   BAD BYTE in page 97 at 0x0602 (1538) expected 0x55 was 0x75 (x1)
+[12:27:59.414]    1:45.31   Block 111   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:00.357]    1:46.25   Block 112   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:01.302]    1:47.20   Block 113   OK           0.945s   RD 0.193s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:02.229]    1:48.12   Block 114   OK           0.927s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:28:03.174]    1:49.07   Block 115   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:28:04.117]    1:50.01   Block 116   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:05.060]    1:50.96   Block 117   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:28:05.988]    1:51.88   Block 118   OK           0.928s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:28:06.932]    1:52.83   Block 119   OK           0.943s   RD 0.207s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:07.875]    1:53.77   Block 120   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:08.819]    1:54.71   Block 121   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:09.763]    1:55.66   Block 122   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:10.115]    1:56.01   Block 123   Testing...   0.352s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  57 | READ:  57           [██████████████████--------------------------------] [12:28:10.115]    1:56.01   Received unhandled byte: 0xE2
+
+[12:28:10.115]    1:56.01   Received unhandled byte: 0xE2
+[12:28:10.115]    1:56.01   Received unhandled byte: 0xE2
+[12:28:10.115]    1:56.01   Received unhandled byte: 0xE2
+[12:28:10.130]    1:56.03   Received unhandled byte: 0xE2
+[12:28:10.130]    1:56.03   Received unhandled byte: 0xE3
+[12:28:10.467]    1:56.36   Block 123   Testing...   0.688s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  46 | READ:  46           [█████████████████████████████████████-------------] [12:28:10.467]    1:56.36   Received unhandled byte: 0xE2
+
+[12:28:10.706]    1:56.60   Block 123   FAIL         0.928s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 127 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:11.651]    1:57.55   Block 124   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:12.579]    1:58.47   Block 125   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:28:13.522]    1:59.42   Block 126   OK           0.943s   RD 0.207s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:14.465]    2:00.36   Block 127   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:28:15.409]    2:01.30   Block 128   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:28:15.409]    2:01.30   Block 129   Testing...   0.000s   Read cycle... 2                                                                      [--------------------------------------------------] 
+[12:28:15.410]    2:01.31   Block 129   BAD BYTE in page 2 at 0x1BF7 (7159) expected 0x55 was 0x5D (x1)
+[12:28:16.352]    2:02.25   Block 129   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:28:16.465]    2:02.36   Block 130   Testing...   0.112s   Read cycle... 75                                                                     [█████---------------------------------------------] 
+[12:28:16.465]    2:02.36   Block 130   BAD BYTE in page 75 at 0x000C (  12) expected 0x55 was 0x57 (x1)
+[12:28:17.280]    2:03.18   Block 130   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:18.224]    2:04.12   Block 131   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:19.168]    2:05.06   Block 132   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:20.111]    2:06.01   Block 133   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:28:21.039]    2:06.93   Block 134   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:21.983]    2:07.88   Block 135   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:21.999]    2:07.89   Block 136   Testing...   0.016s   Read cycle... 11                                                                     [--------------------------------------------------] 
+[12:28:21.999]    2:07.89   Block 136   BAD BYTE in page 11 at 0x0F84 (3972) expected 0x55 was 0xD5 (x1)
+[12:28:22.926]    2:08.82   Block 136   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:23.870]    2:09.77   Block 137   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:24.814]    2:10.71   Block 138   OK           0.943s   RD 0.193s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:28:25.454]    2:11.35   Block 139   Testing...   0.640s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  26 | READ:  26           [██████████████████████████████████----------------] [12:28:25.454]    2:11.35   Received unhandled byte: 0xE2
+
+[12:28:25.758]    2:11.65   Block 139   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:26.685]    2:12.58   Block 140   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:26.701]    2:12.60   Block 141   Testing...   0.016s   Read cycle... 12                                                                     [--------------------------------------------------] 
+[12:28:26.701]    2:12.60   Block 141   BAD BYTE in page 12 at 0x1164 (4452) expected 0x55 was 0x75 (x1)
+[12:28:26.781]    2:12.68   Block 141   Testing...   0.096s   Read cycle... 62                                                                     [████----------------------------------------------] 
+[12:28:26.782]    2:12.68   Block 141   BAD BYTE in page 62 at 0x0062 (  98) expected 0x55 was 0xD5 (x1)
+[12:28:27.629]    2:13.52   Block 141   FAIL         0.943s   Bad bytes: 2   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:28.573]    2:14.47   Block 142   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:28:29.516]    2:15.41   Block 143   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:28:30.444]    2:16.34   Block 144   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:31.388]    2:17.28   Block 145   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:32.331]    2:18.23   Block 146   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:28:32.459]    2:18.35   Block 147   Testing...   0.128s   Read cycle... 83                                                                     [██████--------------------------------------------] 
+[12:28:32.459]    2:18.35   Block 147   BAD BYTE in page 83 at 0x170C (5900) expected 0x55 was 0x75 (x1)
+[12:28:33.275]    2:19.17   Block 147   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:28:34.203]    2:20.10   Block 148   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:34.811]    2:20.71   Block 149   Testing...   0.608s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  14 | READ:  14           [████████████████████████████████------------------] [12:28:34.826]    2:20.72   Received unhandled byte: 0xE2
+
+[12:28:35.147]    2:21.04   Block 149   OK           0.945s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:28:35.258]    2:21.15   Block 150   Testing...   0.111s   Read cycle... 71                                                                     [█████---------------------------------------------] 
+[12:28:35.259]    2:21.15   Block 150   BAD BYTE in page 71 at 0x115C (4444) expected 0x55 was 0x57 (x1)
+[12:28:36.090]    2:21.99   Block 150   FAIL         0.942s   Bad bytes: 1   RD 0.191s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:37.034]    2:22.93   Block 151   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:37.977]    2:23.87   Block 152   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:28:38.714]    2:24.61   Block 153   Testing...   0.736s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  62 | READ:  62           [███████████████████████████████████████-----------] [12:28:38.714]    2:24.61   Received unhandled byte: 0xE2
+
+[12:28:38.729]    2:24.62   Received unhandled byte: 0xE2
+[12:28:38.921]    2:24.82   Block 153   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:39.001]    2:24.90   Block 154   Testing...   0.079s   Read cycle... 57                                                                     [████----------------------------------------------] 
+[12:28:39.001]    2:24.90   Block 154   BAD BYTE in page 57 at 0x16B1 (5809) expected 0x55 was 0x75 (x1)
+[12:28:39.849]    2:25.74   Block 154   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:40.792]    2:26.69   Block 155   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:41.736]    2:27.63   Block 156   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:28:42.680]    2:28.58   Block 157   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:28:43.607]    2:29.50   Block 158   OK           0.927s   RD 0.193s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:28:44.551]    2:30.45   Block 159   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:45.495]    2:31.39   Block 160   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:45.559]    2:31.45   Block 161   Testing...   0.064s   Read cycle... 40                                                                     [███-----------------------------------------------] 
+[12:28:45.559]    2:31.45   Block 161   BAD BYTE in page 40 at 0x1957 (6487) expected 0x55 was 0x75 (x1)
+[12:28:46.439]    2:32.33   Block 161   FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:28:47.382]    2:33.28   Block 162   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.383s                                                                                                                        
+[12:28:47.750]    2:33.65   Block 163   Testing...   0.368s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  62 | READ:  62           [███████████████████-------------------------------] [12:28:47.750]    2:33.65   Received unhandled byte: 0xE2
+
+[12:28:47.750]    2:33.65   Received unhandled byte: 0xE2
+[12:28:47.750]    2:33.65   Received unhandled byte: 0xE2
+[12:28:47.750]    2:33.65   Received unhandled byte: 0xE2
+[12:28:47.750]    2:33.65   Received unhandled byte: 0xE2
+[12:28:47.766]    2:33.66   Received unhandled byte: 0xE3
+[12:28:48.326]    2:34.22   Block 163   FAIL         0.929s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 127 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:49.255]    2:35.15   Block 164   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:28:49.302]    2:35.20   Block 165   Testing...   0.032s   Read cycle... 27                                                                     [██------------------------------------------------] 
+[12:28:49.302]    2:35.20   Block 165   BAD BYTE in page 27 at 0x0FC3 (4035) expected 0x55 was 0x75 (x1)
+[12:28:49.366]    2:35.26   Block 165   Testing...   0.097s   Read cycle... 69                                                                     [█████---------------------------------------------] 
+[12:28:49.366]    2:35.26   Block 165   BAD BYTE in page 69 at 0x067B (1659) expected 0x55 was 0x75 (x1)
+[12:28:50.198]    2:36.09   Block 165   FAIL         0.929s   Bad bytes: 2   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:28:50.325]    2:36.22   Block 166   Testing...   0.127s   Read cycle... 79                                                                     [██████--------------------------------------------] 
+[12:28:50.325]    2:36.22   Block 166   BAD BYTE in page 79 at 0x069C (1692) expected 0x55 was 0xD5 (x1)
+[12:28:50.565]    2:36.46   Block 166   Testing...   0.367s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  60 | READ:  60           [███████████████████-------------------------------] [12:28:50.565]    2:36.46   Received unhandled byte: 0xE2
+
+[12:28:51.141]    2:37.04   Block 166   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:52.085]    2:37.98   Block 167   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:28:53.028]    2:38.92   Block 168   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:28:53.956]    2:39.85   Block 169   OK           0.928s   RD 0.193s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:28:53.972]    2:39.87   Block 170   Testing...   0.016s   Read cycle... 9                                                                      [--------------------------------------------------] 
+[12:28:53.972]    2:39.87   Block 170   BAD BYTE in page 9 at 0x140D (5133) expected 0x55 was 0x5D (x1)
+[12:28:54.900]    2:40.80   Block 170   FAIL         0.944s   Bad bytes: 1   RD 0.208s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:55.843]    2:41.74   Block 171   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:28:56.788]    2:42.68   Block 172   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:28:57.731]    2:43.63   Block 173   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.383s                                                                                                                        
+[12:28:58.658]    2:44.55   Block 174   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:28:58.706]    2:44.60   Block 175   Testing...   0.048s   Read cycle... 29                                                                     [██------------------------------------------------] 
+[12:28:58.706]    2:44.60   Block 175   BAD BYTE in page 29 at 0x06FF (1791) expected 0x55 was 0x75 (x1)
+[12:28:58.723]    2:44.62   Block 175   Testing...   0.064s   Read cycle... 43                                                                     [███-----------------------------------------------] 
+[12:28:58.723]    2:44.62   Block 175   BAD BYTE in page 43 at 0x0B87 (2951) expected 0x55 was 0xD5 (x1)
+[12:28:59.602]    2:45.50   Block 175   FAIL         0.944s   Bad bytes: 2   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:28:59.650]    2:45.55   Block 176   Testing...   0.048s   Read cycle... 33                                                                     [██------------------------------------------------] 
+[12:28:59.650]    2:45.55   Block 176   BAD BYTE in page 33 at 0x207F (8319) expected 0x55 was 0xD5 (x1)
+[12:29:00.546]    2:46.44   Block 176   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:29:00.610]    2:46.50   Block 177   Testing...   0.063s   Read cycle... 39                                                                     [███-----------------------------------------------] 
+[12:29:00.610]    2:46.51   Block 177   BAD BYTE in page 39 at 0x12D4 (4820) expected 0x55 was 0x57 (x1)
+[12:29:01.489]    2:47.38   Block 177   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:29:02.433]    2:48.33   Block 178   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:02.481]    2:48.38   Block 179   Testing...   0.048s   Read cycle... 36                                                                     [██------------------------------------------------] 
+[12:29:02.481]    2:48.38   Block 179   BAD BYTE in page 36 at 0x0D4A (3402) expected 0x55 was 0x75 (x1)
+[12:29:03.105]    2:49.00   Block 179   Testing...   0.672s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  37 | READ:  36           [███████████████████████████████████---------------] 
+[12:29:03.106]    2:49.00   Block 179   BAD BYTE in page 36 at 0x0D4A (3402) expected 0x55 was 0x75 (x1)
+[12:29:03.361]    2:49.26   Block 179   FAIL         0.928s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:29:04.305]    2:50.20   Block 180   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:29:05.248]    2:51.14   Block 181   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:29:06.192]    2:52.09   Block 182   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:29:07.135]    2:53.03   Block 183   OK           0.944s   RD 0.193s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:29:08.064]    2:53.96   Block 184   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:29:08.080]    2:53.98   Block 185   Testing...   0.017s   Read cycle... 13                                                                     [█-------------------------------------------------] 
+[12:29:08.096]    2:53.99   Block 185   BAD BYTE in page 13 at 0x1E7E (7806) expected 0x55 was 0x5D (x1)
+[12:29:09.007]    2:54.90   Block 185   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:29:09.951]    2:55.85   Block 186   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+
+[12:29:09.951]    2:55.85   Block 187   BAD BYTE in page 0 at 0x1921 (6433) expected 0x55 was 0x5D (x1)
+[12:29:10.175]    2:56.07   Block 187   Testing...   0.224s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  14 | READ:  14           [████████████--------------------------------------] [12:29:10.175]    2:56.07   Received unhandled byte: 0xE2
+
+[12:29:10.190]    2:56.09   Received unhandled byte: 0xE2
+[12:29:10.190]    2:56.09   Received unhandled byte: 0xE2
+[12:29:10.190]    2:56.09   Received unhandled byte: 0xE2
+[12:29:10.190]    2:56.09   Received unhandled byte: 0xE2
+[12:29:10.895]    2:56.79   Block 187   FAIL         0.944s   Bad bytes: 1   RD 0.191s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:29:11.839]    2:57.73   Block 188   OK           0.943s   RD 0.191s   0xAA 0.370s   0x55 0.382s                                                                                                                        
+[12:29:11.918]    2:57.81   Block 189   Testing...   0.079s   Read cycle... 53                                                                     [████----------------------------------------------] 
+[12:29:11.918]    2:57.81   Block 189   BAD BYTE in page 53 at 0x11E3 (4579) expected 0x55 was 0x5D (x1)
+[12:29:12.782]    2:58.68   Block 189   FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:29:13.709]    2:59.60   Block 190   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:14.654]    3:00.55   Block 191   OK           0.945s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:29:15.597]    3:01.49   Block 192   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:15.597]    3:01.49   Block 193   Testing...   0.000s   Read cycle... 5                                                                      [--------------------------------------------------] 
+[12:29:15.597]    3:01.49   Block 193   BAD BYTE in page 5 at 0x1339 (4921) expected 0x55 was 0x75 (x1)
+[12:29:16.541]    3:02.44   Block 193   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:29:17.469]    3:03.36   Block 194   OK           0.928s   RD 0.192s   0xAA 0.367s   0x55 0.369s                                                                                                                        
+[12:29:17.548]    3:03.44   Block 195   Testing...   0.079s   Read cycle... 47                                                                     [███-----------------------------------------------] 
+[12:29:17.548]    3:03.44   Block 195   BAD BYTE in page 47 at 0x2032 (8242) expected 0x55 was 0xD5 (x1)
+[12:29:18.413]    3:04.31   Block 195   FAIL         0.928s   Bad bytes: 1   RD 0.191s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:29:19.356]    3:05.25   Block 196   OK           0.943s   RD 0.192s   0xAA 0.396s   0x55 0.355s                                                                                                                        
+[12:29:20.203]    3:06.10   Block 197   Testing...   0.847s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  94 | READ:  94           [████████████████████████████████████████████------] [12:29:20.203]    3:06.10   Received unhandled byte: 0xE2
+
+[12:29:20.203]    3:06.10   Received unhandled byte: 0xE2
+[12:29:20.203]    3:06.10   Received unhandled byte: 0xE2
+[12:29:20.299]    3:06.19   Block 197   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:20.588]    3:06.48   Block 198   Testing...   0.289s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  34 | READ:  34           [███████████████-----------------------------------] [12:29:20.588]    3:06.48   Received unhandled byte: 0xE2
+
+[12:29:21.243]    3:07.14   Block 198   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:22.187]    3:08.08   Block 199   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.384s                                                                                                                        
+[12:29:23.114]    3:09.01   Block 200   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:23.514]    3:09.41   Block 201   Testing...   0.400s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  70 | READ:  70           [████████████████████------------------------------] [12:29:23.514]    3:09.41   Received unhandled byte: 0xE2
+
+[12:29:23.514]    3:09.41   Received unhandled byte: 0xE2
+[12:29:23.530]    3:09.43   Received unhandled byte: 0xE2
+[12:29:23.530]    3:09.43   Received unhandled byte: 0xE2
+[12:29:23.530]    3:09.43   Received unhandled byte: 0xE2
+[12:29:23.530]    3:09.43   Received unhandled byte: 0xE3
+[12:29:23.530]    3:09.43   Block 201   BAD BYTE in page 70 at 0x04A3 (1187) expected 0xAA was 0xEA (x1)
+[12:29:24.074]    3:09.97   Block 201   FAIL         0.960s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 127 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:29:25.002]    3:10.90   Block 202   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:25.946]    3:11.84   Block 203   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:29:26.889]    3:12.78   Block 204   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:29:27.833]    3:13.73   Block 205   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:29:28.761]    3:14.66   Block 206   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:29.705]    3:15.60   Block 207   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:30.648]    3:16.54   Block 208   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.367s                                                                                                                        
+[12:29:31.591]    3:17.49   Block 209   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:32.535]    3:18.43   Block 210   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:33.479]    3:19.37   Block 211   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:34.407]    3:20.30   Block 212   OK           0.927s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:34.663]    3:20.56   Block 213   Testing...   0.256s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  18 | READ:  18           [████████████--------------------------------------] [12:29:34.663]    3:20.56   Received unhandled byte: 0xE2
+
+[12:29:35.350]    3:21.25   Block 213   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:29:36.295]    3:22.19   Block 214   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:29:37.238]    3:23.13   Block 215   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:38.165]    3:24.06   Block 216   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:39.110]    3:25.00   Block 217   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:29:40.053]    3:25.95   Block 218   OK           0.929s   RD 0.191s   0xAA 0.369s   0x55 0.369s                                                                                                                        
+[12:29:40.213]    3:26.11   Block 219   Testing...   0.159s   Read cycle... 106                                                                    [████████------------------------------------------] 
+[12:29:40.213]    3:26.11   Block 219   BAD BYTE in page 106 at 0x02F5 ( 757) expected 0x55 was 0x75 (x1)
+[12:29:40.997]    3:26.89   Block 219   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:29:41.924]    3:27.82   Block 220   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:42.068]    3:27.96   Block 221   Testing...   0.143s   Read cycle... 90                                                                     [███████-------------------------------------------] 
+[12:29:42.068]    3:27.96   Block 221   BAD BYTE in page 90 at 0x1D99 (7577) expected 0x55 was 0x75 (x1)
+[12:29:42.756]    3:28.65   Block 221   Testing...   0.832s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  90 | READ:  90           [████████████████████████████████████████████------] [12:29:42.756]    3:28.65   Received unhandled byte: 0xE2
+
+[12:29:42.756]    3:28.65   Received unhandled byte: 0xE2
+[12:29:42.772]    3:28.67   Received unhandled byte: 0xE2
+[12:29:42.772]    3:28.67   Received unhandled byte: 0xE2
+[12:29:42.772]    3:28.67   Received unhandled byte: 0xE2
+[12:29:42.772]    3:28.67   Received unhandled byte: 0xE3
+[12:29:42.772]    3:28.67   Block 221   BAD BYTE in page 90 at 0x1D99 (7577) expected 0x55 was 0x75 (x1)
+[12:29:42.884]    3:28.78   Block 221   FAIL         0.959s   Bad bytes: 2   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:29:43.812]    3:29.71   Block 222   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:29:44.099]    3:29.99   Block 223   Testing...   0.271s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  27 | READ:  27           [██████████████------------------------------------] [12:29:44.099]    3:29.99   Received unhandled byte: 0xE2
+
+[12:29:44.099]    3:29.99   Received unhandled byte: 0xE2
+[12:29:44.099]    3:29.99   Received unhandled byte: 0xE2
+[12:29:44.099]    3:29.99   Received unhandled byte: 0xE2
+[12:29:44.099]    3:29.99   Received unhandled byte: 0xE2
+[12:29:44.099]    3:29.99   Received unhandled byte: 0xE3
+[12:29:44.771]    3:30.67   Block 223   FAIL         0.943s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 127 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:29:45.715]    3:31.61   Block 224   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:46.643]    3:32.54   Block 225   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:47.587]    3:33.48   Block 226   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:29:48.530]    3:34.43   Block 227   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:29:49.474]    3:35.37   Block 228   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:49.570]    3:35.46   Block 229   Testing...   0.096s   Read cycle... 63                                                                     [████----------------------------------------------] 
+[12:29:49.570]    3:35.47   Block 229   BAD BYTE in page 63 at 0x0D2E (3374) expected 0x55 was 0xD5 (x1)
+[12:29:50.402]    3:36.30   Block 229   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:29:50.561]    3:36.46   Block 230   Testing...   0.159s   Read cycle... 97                                                                     [███████-------------------------------------------] 
+[12:29:50.561]    3:36.46   Block 230   BAD BYTE in page 97 at 0x1044 (4164) expected 0x55 was 0xD5 (x1)
+[12:29:51.346]    3:37.24   Block 230   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:29:52.289]    3:38.18   Block 231   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:29:53.233]    3:39.13   Block 232   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:29:54.160]    3:40.06   Block 233   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:55.104]    3:41.00   Block 234   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:29:55.167]    3:41.06   Block 235   Testing...   0.063s   Read cycle... 42                                                                     [███-----------------------------------------------] 
+[12:29:55.167]    3:41.06   Block 235   BAD BYTE in page 42 at 0x1AA9 (6825) expected 0x55 was 0xD5 (x1)
+[12:29:55.791]    3:41.69   Block 235   Testing...   0.687s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  42 | READ:  42           [████████████████████████████████████--------------] [12:29:55.791]    3:41.69   Received unhandled byte: 0xE2
+
+[12:29:56.048]    3:41.94   Block 235   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:29:56.991]    3:42.89   Block 236   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:29:57.759]    3:43.65   Block 237   Testing...   0.768s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  68 | READ:  68           [████████████████████████████████████████----------] [12:29:57.759]    3:43.65   Received unhandled byte: 0xE2
+
+[12:29:57.935]    3:43.83   Block 237   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:29:58.864]    3:44.76   Block 238   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:29:59.807]    3:45.70   Block 239   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:00.750]    3:46.65   Block 240   OK           0.943s   RD 0.191s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:30:01.694]    3:47.59   Block 241   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:02.622]    3:48.52   Block 242   OK           0.927s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:02.781]    3:48.68   Block 243   Testing...   0.160s   Read cycle... 100                                                                    [███████-------------------------------------------] 
+[12:30:02.782]    3:48.68   Block 243   BAD BYTE in page 100 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:02.782]    3:48.68   Block 243   Testing...   0.160s   Read cycle... 102                                                                    [███████-------------------------------------------] 
+[12:30:02.782]    3:48.68   Block 243   BAD BYTE in page 102 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:02.797]    3:48.69   Block 243   Testing...   0.176s   Read cycle... 110                                                                    [████████------------------------------------------] 
+[12:30:02.797]    3:48.69   Block 243   BAD BYTE in page 110 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.245]    3:49.14   Block 243   Testing...   0.624s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  17 | READ:  16           [████████████████████████████████------------------] 
+[12:30:03.245]    3:49.14   Block 243   BAD BYTE in page 16 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.485]    3:49.38   Block 243   Testing...   0.864s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG: 101 | READ: 100           [█████████████████████████████████████████████-----] 
+[12:30:03.485]    3:49.38   Block 243   BAD BYTE in page 100 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.517]    3:49.41   Block 243   Testing...   0.895s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG: 111 | READ: 110           [███████████████████████████████████████████████---] 
+[12:30:03.517]    3:49.41   Block 243   BAD BYTE in page 110 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.549]    3:49.44   Block 243   Testing...   0.927s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG: 121 | READ: 120           [████████████████████████████████████████████████--] 
+[12:30:03.549]    3:49.44   Block 243   BAD BYTE in page 120 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.549]    3:49.44   Block 243   Testing...   0.928s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG: 123 | READ: 122           [█████████████████████████████████████████████████-] 
+[12:30:03.549]    3:49.44   Block 243   BAD BYTE in page 122 at 0x0BE3 (3043) expected 0x55 was 0x45 (x1)
+[12:30:03.565]    3:49.46   Block 243   FAIL         0.944s   Bad bytes: 8   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:04.509]    3:50.40   Block 244   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:04.573]    3:50.47   Block 245   Testing...   0.064s   Read cycle... 47                                                                     [███-----------------------------------------------] 
+[12:30:04.573]    3:50.47   Block 245   BAD BYTE in page 47 at 0x0653 (1619) expected 0x55 was 0x75 (x1)
+[12:30:05.452]    3:51.35   Block 245   FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:30:06.396]    3:52.29   Block 246   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:06.461]    3:52.36   Block 247   Testing...   0.065s   Read cycle... 49                                                                     [███-----------------------------------------------] 
+[12:30:06.461]    3:52.36   Block 247   BAD BYTE in page 49 at 0x0827 (2087) expected 0x55 was 0x75 (x1)
+[12:30:06.492]    3:52.39   Block 247   Testing...   0.096s   Read cycle... 65                                                                     [█████---------------------------------------------] 
+[12:30:06.492]    3:52.39   Block 247   BAD BYTE in page 65 at 0x03B1 ( 945) expected 0x55 was 0x57 (x1)
+[12:30:07.324]    3:53.22   Block 247   FAIL         0.928s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:30:07.979]    3:53.87   Block 248   Testing...   0.640s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  29 | READ:  28           [██████████████████████████████████----------------] 
+[12:30:07.979]    3:53.87   Block 248   BAD BYTE in page 28 at 0x1494 (5268) expected 0x55 was 0xD5 (x1)
+[12:30:08.267]    3:54.16   Block 248   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:08.587]    3:54.48   Block 249   Testing...   0.320s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  44 | READ:  44           [████████████████----------------------------------] [12:30:08.587]    3:54.48   Received unhandled byte: 0xE2
+
+[12:30:08.587]    3:54.48   Received unhandled byte: 0xE2
+[12:30:08.603]    3:54.50   Received unhandled byte: 0xE2
+[12:30:08.603]    3:54.50   Received unhandled byte: 0xE2
+[12:30:09.211]    3:55.11   Block 249   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:10.155]    3:56.05   Block 250   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:11.098]    3:56.99   Block 251   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:12.026]    3:57.92   Block 252   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:12.122]    3:58.02   Block 253   Testing...   0.096s   Read cycle... 57                                                                     [████----------------------------------------------] 
+[12:30:12.122]    3:58.02   Block 253   BAD BYTE in page 57 at 0x03F8 (1016) expected 0x55 was 0x57 (x1)
+[12:30:12.970]    3:58.87   Block 253   FAIL         0.944s   Bad bytes: 1   RD 0.208s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:13.914]    3:59.81   Block 254   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:14.857]    4:00.75   Block 255   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:15.801]    4:01.70   Block 256   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:16.409]    4:02.30   Block 257   Testing...   0.608s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  16 | READ:  16           [████████████████████████████████------------------] [12:30:16.409]    4:02.30   Received unhandled byte: 0xE2
+
+[12:30:16.409]    4:02.30   Received unhandled byte: 0xE2
+[12:30:16.409]    4:02.30   Received unhandled byte: 0xE2
+[12:30:16.409]    4:02.30   Received unhandled byte: 0xE2
+[12:30:16.409]    4:02.30   Received unhandled byte: 0xE2
+[12:30:16.409]    4:02.30   Received unhandled byte: 0xE3
+[12:30:16.744]    4:02.64   Block 257   FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:30:17.688]    4:03.58   Block 258   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:18.616]    4:04.51   Block 259   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:19.560]    4:05.45   Block 260   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:20.503]    4:06.40   Block 261   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:20.696]    4:06.59   Block 262   Testing...   0.192s   Read cycle... 126                                                                    [█████████-----------------------------------------] 
+[12:30:20.696]    4:06.59   Block 262   BAD BYTE in page 126 at 0x0645 (1605) expected 0x55 was 0x5D (x1)
+[12:30:21.447]    4:07.34   Block 262   FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:30:22.376]    4:08.27   Block 263   OK           0.928s   RD 0.192s   0xAA 0.367s   0x55 0.369s                                                                                                                        
+[12:30:23.318]    4:09.21   Block 264   OK           0.943s   RD 0.207s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:24.006]    4:09.90   Block 265   Testing...   0.688s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  40 | READ:  40           [████████████████████████████████████--------------] [12:30:24.006]    4:09.90   Received unhandled byte: 0xE2
+
+[12:30:24.006]    4:09.90   Received unhandled byte: 0xE2
+[12:30:24.006]    4:09.90   Received unhandled byte: 0xE2
+[12:30:24.263]    4:10.16   Block 265   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:30:25.206]    4:11.10   Block 266   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:30:25.334]    4:11.23   Block 267   Testing...   0.128s   Read cycle... 84                                                                     [██████--------------------------------------------] 
+[12:30:25.334]    4:11.23   Block 267   BAD BYTE in page 84 at 0x1DD0 (7632) expected 0x55 was 0x5D (x1)
+[12:30:26.150]    4:12.05   Block 267   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:27.093]    4:12.99   Block 268   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:27.269]    4:13.16   Block 269   Testing...   0.176s   Read cycle... 127                                                                    [█████████-----------------------------------------] 
+[12:30:27.269]    4:13.16   Block 269   BAD BYTE in page 127 at 0x02C6 ( 710) expected 0x55 was 0x57 (x1)
+[12:30:28.022]    4:13.92   Block 269   FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:28.965]    4:14.86   Block 270   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:29.909]    4:15.80   Block 271   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:30.852]    4:16.75   Block 272   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:30:31.780]    4:17.68   Block 273   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.367s                                                                                                                        
+[12:30:32.723]    4:18.62   Block 274   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:33.668]    4:19.56   Block 275   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:30:34.611]    4:20.51   Block 276   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:35.539]    4:21.43   Block 277   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:36.482]    4:22.38   Block 278   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:37.426]    4:23.32   Block 279   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:38.369]    4:24.26   Block 280   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:39.298]    4:25.19   Block 281   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:30:40.241]    4:26.14   Block 282   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:41.184]    4:27.08   Block 283   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:30:42.128]    4:28.02   Block 284   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:43.056]    4:28.95   Block 285   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:43.120]    4:29.02   Block 286   Testing...   0.064s   Read cycle... 36                                                                     [██------------------------------------------------] 
+[12:30:43.120]    4:29.02   Block 286   BAD BYTE in page 36 at 0x08E1 (2273) expected 0x55 was 0x5D (x1)
+[12:30:43.120]    4:29.02   Block 286   BAD BYTE in page 36 at 0x15CF (5583) expected 0x55 was 0x75 (x1)
+[12:30:44.000]    4:29.89   Block 286   FAIL         0.928s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:44.048]    4:29.94   Block 287   Testing...   0.048s   Read cycle... 35                                                                     [██------------------------------------------------] 
+[12:30:44.063]    4:29.96   Block 287   BAD BYTE in page 35 at 0x1EF7 (7927) expected 0x55 was 0xD5 (x1)
+[12:30:44.943]    4:30.84   Block 287   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:30:45.888]    4:31.78   Block 288   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:30:46.831]    4:32.73   Block 289   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:30:47.758]    4:33.65   Block 290   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:48.703]    4:34.60   Block 291   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:30:49.647]    4:35.54   Block 292   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:30:50.589]    4:36.48   Block 293   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:30:51.517]    4:37.41   Block 294   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:52.461]    4:38.36   Block 295   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:30:53.405]    4:39.30   Block 296   OK           0.928s   RD 0.193s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:30:54.348]    4:40.24   Block 297   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:30:55.276]    4:41.17   Block 298   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:56.220]    4:42.12   Block 299   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:30:57.163]    4:43.06   Block 300   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:30:57.212]    4:43.11   Block 301   Testing...   0.049s   Read cycle... 32                                                                     [██------------------------------------------------] 
+[12:30:57.212]    4:43.11   Block 301   BAD BYTE in page 32 at 0x08BA (2234) expected 0x55 was 0x75 (x1)
+[12:30:58.107]    4:44.00   Block 301   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:30:59.035]    4:44.93   Block 302   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:30:59.098]    4:44.99   Block 303   Testing...   0.064s   Read cycle... 35                                                                     [██------------------------------------------------] 
+[12:30:59.099]    4:44.99   Block 303   BAD BYTE in page 35 at 0x0B65 (2917) expected 0x55 was 0x75 (x1)
+[12:30:59.706]    4:45.60   Block 303   Testing...   0.656s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  32 | READ:  32           [███████████████████████████████████---------------] [12:30:59.706]    4:45.60   Received unhandled byte: 0xE2
+
+[12:30:59.706]    4:45.60   Received unhandled byte: 0xE2
+[12:30:59.706]    4:45.60   Received unhandled byte: 0xE2
+[12:30:59.706]    4:45.60   Received unhandled byte: 0xE2
+[12:30:59.706]    4:45.60   Received unhandled byte: 0xE2
+[12:30:59.706]    4:45.60   Received unhandled byte: 0xE3
+[12:30:59.994]    4:45.89   Block 303   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:31:00.923]    4:46.82   Block 304   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:00.987]    4:46.88   Block 305   Testing...   0.064s   Read cycle... 43                                                                     [███-----------------------------------------------] 
+[12:31:00.987]    4:46.88   Block 305   BAD BYTE in page 43 at 0x03D3 ( 979) expected 0x55 was 0x5D (x1)
+[12:31:01.338]    4:47.23   Block 305   Testing...   0.415s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  72 | READ:  72           [█████████████████████-----------------------------] [12:31:01.338]    4:47.23   Received unhandled byte: 0xE2
+
+[12:31:01.866]    4:47.76   Block 305   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:02.809]    4:48.70   Block 306   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:31:03.753]    4:49.65   Block 307   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:31:03.833]    4:49.73   Block 308   Testing...   0.080s   Read cycle... 55                                                                     [████----------------------------------------------] 
+[12:31:03.833]    4:49.73   Block 308   BAD BYTE in page 55 at 0x1995 (6549) expected 0x55 was 0x57 (x1)
+[12:31:04.473]    4:50.37   Block 308   Testing...   0.720s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  55 | READ:  55           [██████████████████████████████████████------------] [12:31:04.473]    4:50.37   Received unhandled byte: 0xE2
+
+[12:31:04.488]    4:50.38   Received unhandled byte: 0xE2
+[12:31:04.488]    4:50.38   Received unhandled byte: 0xE2
+[12:31:04.488]    4:50.38   Received unhandled byte: 0xE2
+[12:31:04.488]    4:50.38   Received unhandled byte: 0xE2
+[12:31:04.488]    4:50.38   Received unhandled byte: 0xE3
+[12:31:04.697]    4:50.59   Block 308   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:31:05.640]    4:51.54   Block 309   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:06.584]    4:52.48   Block 310   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:07.528]    4:53.42   Block 311   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:08.455]    4:54.35   Block 312   OK           0.927s   RD 0.191s   0xAA 0.368s   0x55 0.367s                                                                                                                        
+[12:31:09.399]    4:55.29   Block 313   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:31:10.343]    4:56.24   Block 314   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:10.711]    4:56.61   Block 315   Testing...   0.368s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  61 | READ:  61           [███████████████████-------------------------------] [12:31:10.711]    4:56.61   Received unhandled byte: 0xE2
+
+[12:31:10.711]    4:56.61   Received unhandled byte: 0xE2
+[12:31:10.711]    4:56.61   Received unhandled byte: 0xE2
+[12:31:10.711]    4:56.61   Received unhandled byte: 0xE2
+[12:31:10.711]    4:56.61   Received unhandled byte: 0xE2
+[12:31:10.726]    4:56.62   Received unhandled byte: 0xE3
+[12:31:11.287]    4:57.18   Block 315   FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.385s PROG: 127 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:31:12.230]    4:58.13   Block 316   OK           0.943s   RD 0.193s   0xAA 0.368s   0x55 0.382s                                                                                                                        
+[12:31:13.174]    4:59.07   Block 317   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:14.102]    4:60.00   Block 318   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:14.166]    5:00.06   Block 319   Testing...   0.064s   Read cycle... 44                                                                     [███-----------------------------------------------] 
+[12:31:14.166]    5:00.06   Block 319   BAD BYTE in page 44 at 0x13DC (5084) expected 0x55 was 0x5D (x1)
+[12:31:15.045]    5:00.94   Block 319   FAIL         0.943s   Bad bytes: 1   RD 0.193s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:15.989]    5:01.88   Block 320   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:31:16.917]    5:02.81   Block 321   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:17.189]    5:03.08   Block 322   Testing...   0.271s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  24 | READ:  24           [█████████████-------------------------------------] [12:31:17.189]    5:03.08   Received unhandled byte: 0xE2
+
+[12:31:17.189]    5:03.08   Received unhandled byte: 0xE2
+[12:31:17.189]    5:03.08   Received unhandled byte: 0xE2
+[12:31:17.189]    5:03.08   Received unhandled byte: 0xE2
+[12:31:17.189]    5:03.08   Received unhandled byte: 0xE2
+[12:31:17.189]    5:03.08   Received unhandled byte: 0xE3
+[12:31:17.876]    5:03.77   Block 322   FAIL         0.959s   Bad bytes: 0   RD 0.191s   0xAA 0.385s PROG: 127 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:31:18.821]    5:04.72   Block 323   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:19.748]    5:05.64   Block 324   OK           0.928s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:19.876]    5:05.77   Block 325   Testing...   0.127s   Read cycle... 82                                                                     [██████--------------------------------------------] 
+[12:31:19.876]    5:05.77   Block 325   BAD BYTE in page 82 at 0x1271 (4721) expected 0x55 was 0xD5 (x1)
+[12:31:20.691]    5:06.59   Block 325   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:21.636]    5:07.53   Block 326   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.385s                                                                                                                        
+[12:31:22.579]    5:08.47   Block 327   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:31:23.507]    5:09.40   Block 328   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:23.538]    5:09.43   Block 329   Testing...   0.032s   Read cycle... 19                                                                     [█-------------------------------------------------] 
+[12:31:23.539]    5:09.43   Block 329   BAD BYTE in page 19 at 0x10B0 (4272) expected 0x55 was 0x57 (x1)
+[12:31:24.450]    5:10.35   Block 329   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:25.394]    5:11.29   Block 330   OK           0.945s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:26.338]    5:12.23   Block 331   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:31:27.265]    5:13.16   Block 332   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:27.457]    5:13.35   Block 333   Testing...   0.192s   Read cycle... 126                                                                    [█████████-----------------------------------------] 
+[12:31:27.457]    5:13.35   Block 333   BAD BYTE in page 126 at 0x1566 (5478) expected 0x55 was 0x5D (x1)
+[12:31:28.209]    5:14.10   Block 333   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:29.152]    5:15.05   Block 334   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:31:30.096]    5:15.99   Block 335   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:31.024]    5:16.92   Block 336   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:31.968]    5:17.86   Block 337   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:31:32.912]    5:18.81   Block 338   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:31:32.928]    5:18.82   Block 339   Testing...   0.016s   Read cycle... 13                                                                     [█-------------------------------------------------] 
+[12:31:32.928]    5:18.82   Block 339   BAD BYTE in page 13 at 0x1761 (5985) expected 0x55 was 0x75 (x1)
+[12:31:33.855]    5:19.75   Block 339   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:31:34.783]    5:20.68   Block 340   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:34.815]    5:20.71   Block 341   Testing...   0.032s   Read cycle... 21                                                                     [█-------------------------------------------------] 
+[12:31:34.815]    5:20.71   Block 341   BAD BYTE in page 21 at 0x1618 (5656) expected 0x55 was 0xD5 (x1)
+[12:31:35.727]    5:21.62   Block 341   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:31:36.095]    5:21.99   Block 342   Testing...   0.368s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  61 | READ:  61           [███████████████████-------------------------------] [12:31:36.095]    5:21.99   Received unhandled byte: 0xE2
+
+[12:31:36.110]    5:22.01   Received unhandled byte: 0xE2
+[12:31:36.110]    5:22.01   Received unhandled byte: 0xE2
+[12:31:36.110]    5:22.01   Received unhandled byte: 0xE2
+[12:31:36.110]    5:22.01   Received unhandled byte: 0xE2
+[12:31:36.110]    5:22.01   Received unhandled byte: 0xE3
+[12:31:36.671]    5:22.57   Block 342   FAIL         0.943s   Bad bytes: 0   RD 0.191s   0xAA 0.385s PROG: 127 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:31:36.798]    5:22.69   Block 343   Testing...   0.127s   Read cycle... 82                                                                     [██████--------------------------------------------] 
+[12:31:36.798]    5:22.69   Block 343   BAD BYTE in page 82 at 0x0A01 (2561) expected 0x55 was 0xD5 (x1)
+[12:31:36.862]    5:22.76   Block 343   Testing...   0.192s   Read cycle... 127                                                                    [█████████-----------------------------------------] 
+[12:31:36.862]    5:22.76   Block 343   BAD BYTE in page 127 at 0x0940 (2368) expected 0x55 was 0x5D (x1)
+[12:31:37.614]    5:23.51   Block 343   FAIL         0.943s   Bad bytes: 2   RD 0.192s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:38.558]    5:24.45   Block 344   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:31:39.054]    5:24.95   Block 345   Testing...   0.496s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG: 104 | READ: 104           [██████████████████████████------------------------] [12:31:39.054]    5:24.95   Received unhandled byte: 0xE2
+
+[12:31:39.054]    5:24.95   Received unhandled byte: 0xE2
+[12:31:39.501]    5:25.40   Block 345   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:39.517]    5:25.41   Block 346   Testing...   0.016s   Read cycle... 9                                                                      [--------------------------------------------------] 
+[12:31:39.517]    5:25.41   Block 346   BAD BYTE in page 9 at 0x120D (4621) expected 0x55 was 0x5D (x1)
+[12:31:40.445]    5:26.34   Block 346   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:31:41.373]    5:27.27   Block 347   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:41.501]    5:27.40   Block 348   Testing...   0.128s   Read cycle... 80                                                                     [██████--------------------------------------------] 
+[12:31:41.501]    5:27.40   Block 348   BAD BYTE in page 80 at 0x0153 ( 339) expected 0x55 was 0xD5 (x1)
+[12:31:42.316]    5:28.21   Block 348   FAIL         0.943s   Bad bytes: 1   RD 0.208s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:31:43.261]    5:29.16   Block 349   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:31:44.204]    5:30.10   Block 350   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:31:44.236]    5:30.13   Block 351   Testing...   0.032s   Read cycle... 20                                                                     [█-------------------------------------------------] 
+[12:31:44.236]    5:30.13   Block 351   BAD BYTE in page 20 at 0x0C17 (3095) expected 0x55 was 0xD5 (x1)
+[12:31:45.147]    5:31.04   Block 351   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.367s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:31:45.403]    5:31.30   Block 352   Testing...   0.256s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  23 | READ:  23           [█████████████-------------------------------------] [12:31:45.403]    5:31.30   Received unhandled byte: 0xE2
+
+[12:31:45.404]    5:31.30   Received unhandled byte: 0xE2
+[12:31:45.404]    5:31.30   Received unhandled byte: 0xE2
+[12:31:45.404]    5:31.30   Received unhandled byte: 0xE2
+[12:31:45.404]    5:31.30   Received unhandled byte: 0xE2
+[12:31:45.404]    5:31.30   Received unhandled byte: 0xE3
+[12:31:46.091]    5:31.99   Block 352   FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 127 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:31:47.020]    5:32.92   Block 353   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:31:47.963]    5:33.86   Block 354   OK           0.927s   RD 0.191s   0xAA 0.368s   0x55 0.367s                                                                                                                        
+[12:31:48.906]    5:34.80   Block 355   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:31:49.850]    5:35.74   Block 356   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:31:50.778]    5:36.67   Block 357   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:31:51.721]    5:37.62   Block 358   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:31:52.665]    5:38.56   Block 359   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:31:53.609]    5:39.50   Block 360   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:31:53.785]    5:39.68   Block 361   Testing...   0.175s   Read cycle... 116                                                                    [█████████-----------------------------------------] 
+[12:31:53.785]    5:39.68   Block 361   BAD BYTE in page 116 at 0x16E8 (5864) expected 0x55 was 0xD5 (x1)
+[12:31:54.537]    5:40.43   Block 361   FAIL         0.927s   Bad bytes: 1   RD 0.191s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:31:55.304]    5:41.20   Block 362   Testing...   0.752s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  68 | READ:  68           [████████████████████████████████████████----------] [12:31:55.304]    5:41.20   Received unhandled byte: 0xE2
+
+[12:31:55.304]    5:41.20   Received unhandled byte: 0xE2
+[12:31:55.320]    5:41.22   Received unhandled byte: 0xE2
+[12:31:55.320]    5:41.22   Received unhandled byte: 0xE2
+[12:31:55.320]    5:41.22   Received unhandled byte: 0xE2
+[12:31:55.320]    5:41.22   Received unhandled byte: 0xE3
+[12:31:55.496]    5:41.39   Block 362   FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 127 READ: 128                                                                      
+[12:31:56.424]    5:42.32   Block 363   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:31:57.368]    5:43.26   Block 364   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:58.312]    5:44.21   Block 365   OK           0.929s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:31:59.255]    5:45.15   Block 366   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:00.198]    5:46.09   Block 367   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:00.279]    5:46.17   Block 368   Testing...   0.080s   Read cycle... 60                                                                     [████----------------------------------------------] 
+[12:32:00.279]    5:46.17   Block 368   BAD BYTE in page 60 at 0x0084 ( 132) expected 0x55 was 0x75 (x1)
+[12:32:01.127]    5:47.02   Block 368   FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:32:02.070]    5:47.97   Block 369   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.367s                                                                                                                        
+[12:32:02.230]    5:48.13   Block 370   Testing...   0.160s   Read cycle... 109                                                                    [████████------------------------------------------] 
+[12:32:02.230]    5:48.13   Block 370   BAD BYTE in page 109 at 0x1C9A (7322) expected 0x55 was 0xD5 (x1)
+[12:32:03.013]    5:48.91   Block 370   FAIL         0.943s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:32:03.957]    5:49.85   Block 371   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:04.886]    5:50.78   Block 372   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:32:05.829]    5:51.72   Block 373   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:05.893]    5:51.79   Block 374   Testing...   0.064s   Read cycle... 39                                                                     [███-----------------------------------------------] 
+[12:32:05.893]    5:51.79   Block 374   BAD BYTE in page 39 at 0x1755 (5973) expected 0x55 was 0x57 (x1)
+[12:32:05.893]    5:51.79   Block 374   Testing...   0.064s   Read cycle... 47                                                                     [███-----------------------------------------------] 
+[12:32:05.893]    5:51.79   Block 374   BAD BYTE in page 47 at 0x1150 (4432) expected 0x55 was 0x57 (x1)
+[12:32:06.772]    5:52.67   Block 374   FAIL         0.943s   Bad bytes: 2   RD 0.191s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:32:07.716]    5:53.61   Block 375   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:07.828]    5:53.72   Block 376   Testing...   0.112s   Read cycle... 80                                                                     [██████--------------------------------------------] 
+[12:32:07.828]    5:53.72   Block 376   BAD BYTE in page 80 at 0x0C6D (3181) expected 0x55 was 0x5D (x1)
+[12:32:08.644]    5:54.54   Block 376   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.367s PROG: 128 READ: 128                                                                      
+[12:32:09.588]    5:55.48   Block 377   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:32:10.531]    5:56.43   Block 378   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:10.611]    5:56.51   Block 379   Testing...   0.080s   Read cycle... 52                                                                     [████----------------------------------------------] 
+[12:32:10.611]    5:56.51   Block 379   BAD BYTE in page 52 at 0x1275 (4725) expected 0x55 was 0x57 (x1)
+[12:32:11.459]    5:57.35   Block 379   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:32:12.403]    5:58.30   Block 380   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:32:13.346]    5:59.24   Block 381   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:14.290]    6:00.19   Block 382   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:32:14.882]    6:00.78   Block 383   Testing...   0.592s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  10 | READ:  10           [███████████████████████████████-------------------] [12:32:14.882]    6:00.78   Received unhandled byte: 0xE2
+
+[12:32:14.882]    6:00.78   Received unhandled byte: 0xE2
+[12:32:14.882]    6:00.78   Received unhandled byte: 0xE2
+[12:32:14.882]    6:00.78   Received unhandled byte: 0xE2
+[12:32:14.882]    6:00.78   Received unhandled byte: 0xE2
+[12:32:14.882]    6:00.78   Received unhandled byte: 0xE3
+[12:32:15.234]    6:01.13   Block 383   FAIL         0.944s   Bad bytes: 0   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.383s PROG: 127 READ: 128                                                                      
+[12:32:16.178]    6:02.07   Block 384   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:16.802]    6:02.70   Block 385   Testing...   0.624s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  22 | READ:  22           [█████████████████████████████████-----------------] [12:32:16.802]    6:02.70   Received unhandled byte: 0xE2
+
+[12:32:17.105]    6:03.00   Block 385   OK           0.927s   RD 0.191s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:18.049]    6:03.94   Block 386   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:32:18.128]    6:04.02   Block 387   Testing...   0.079s   Read cycle... 47                                                                     [███-----------------------------------------------] 
+[12:32:18.129]    6:04.02   Block 387   BAD BYTE in page 47 at 0x13C3 (5059) expected 0x55 was 0xD5 (x1)
+[12:32:18.992]    6:04.89   Block 387   FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:32:19.936]    6:05.83   Block 388   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:32:20.879]    6:06.77   Block 389   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:21.807]    6:07.70   Block 390   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:22.751]    6:08.65   Block 391   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:23.695]    6:09.59   Block 392   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:24.415]    6:10.31   Block 393   Testing...   0.720s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  55 | READ:  54           [██████████████████████████████████████------------] 
+[12:32:24.430]    6:10.33   Block 393   BAD BYTE in page 54 at 0x0E91 (3729) expected 0x55 was 0xD5 (x1)
+[12:32:24.638]    6:10.53   Block 393   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:32:25.583]    6:11.48   Block 394   OK           0.944s   RD 0.193s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:26.206]    6:12.10   Block 395   Testing...   0.624s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  21 | READ:  21           [█████████████████████████████████-----------------] [12:32:26.206]    6:12.10   Received unhandled byte: 0xE2
+
+[12:32:26.510]    6:12.41   Block 395   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:27.454]    6:13.35   Block 396   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:28.397]    6:14.29   Block 397   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:29.341]    6:15.24   Block 398   OK           0.944s   RD 0.193s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:32:29.341]    6:15.24   Block 399   Testing...   0.000s   Read cycle... 1                                                                      [--------------------------------------------------] 
+[12:32:29.341]    6:15.24   Block 399   BAD BYTE in page 1 at 0x02A8 ( 680) expected 0x55 was 0xD5 (x1)
+[12:32:30.269]    6:16.16   Block 399   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:32:31.212]    6:17.11   Block 400   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:31.277]    6:17.17   Block 401   Testing...   0.065s   Read cycle... 41                                                                     [███-----------------------------------------------] 
+[12:32:31.277]    6:17.17   Block 401   BAD BYTE in page 41 at 0x10B4 (4276) expected 0x55 was 0xD5 (x1)
+[12:32:32.156]    6:18.05   Block 401   FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:32:33.100]    6:19.00   Block 402   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:32:34.028]    6:19.92   Block 403   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:34.059]    6:19.95   Block 404   Testing...   0.032s   Read cycle... 13                                                                     [█-------------------------------------------------] 
+[12:32:34.059]    6:19.95   Block 404   BAD BYTE in page 13 at 0x0C8F (3215) expected 0x55 was 0xD5 (x1)
+[12:32:34.971]    6:20.87   Block 404   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:32:35.916]    6:21.81   Block 405   OK           0.944s   RD 0.193s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:32:36.155]    6:22.05   Block 406   Testing...   0.239s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  14 | READ:  14           [████████████--------------------------------------] [12:32:36.155]    6:22.05   Received unhandled byte: 0xE2
+
+[12:32:36.155]    6:22.05   Received unhandled byte: 0xE2
+[12:32:36.858]    6:22.75   Block 406   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:37.802]    6:23.70   Block 407   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:38.523]    6:24.42   Block 408   Testing...   0.720s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  56 | READ:  56           [██████████████████████████████████████------------] [12:32:38.523]    6:24.42   Received unhandled byte: 0xE2
+
+[12:32:38.730]    6:24.63   Block 408   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:32:39.674]    6:25.57   Block 409   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:40.617]    6:26.51   Block 410   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:32:41.561]    6:27.46   Block 411   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:42.505]    6:28.40   Block 412   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:43.433]    6:29.33   Block 413   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:32:44.376]    6:30.27   Block 414   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:45.320]    6:31.22   Block 415   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:46.263]    6:32.16   Block 416   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:47.191]    6:33.09   Block 417   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:32:47.559]    6:33.45   Block 418   Testing...   0.368s   Read cycle... OK   Program-read cycle... BYTE 0xAA | PROG:  60 | READ:  60           [███████████████████-------------------------------] [12:32:47.559]    6:33.45   Received unhandled byte: 0xE2
+
+[12:32:48.135]    6:34.03   Block 418   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:32:49.079]    6:34.97   Block 419   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:50.022]    6:35.92   Block 420   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:32:50.950]    6:36.85   Block 421   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:51.894]    6:37.79   Block 422   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:32:52.838]    6:38.73   Block 423   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:32:53.781]    6:39.68   Block 424   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:32:54.709]    6:40.60   Block 425   OK           0.927s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:32:55.604]    6:41.50   Block 426   Testing...   0.880s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG: 108 | READ: 108           [██████████████████████████████████████████████----] [12:32:55.604]    6:41.50   Received unhandled byte: 0xE2
+
+[12:32:55.653]    6:41.55   Block 426   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:55.700]    6:41.60   Block 427   Testing...   0.048s   Read cycle... 29                                                                     [██------------------------------------------------] 
+[12:32:55.700]    6:41.60   Block 427   BAD BYTE in page 29 at 0x09C9 (2505) expected 0x55 was 0x57 (x1)
+[12:32:56.596]    6:42.49   Block 427   FAIL         0.943s   Bad bytes: 1   RD 0.191s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:32:57.541]    6:43.44   Block 428   OK           0.945s   RD 0.192s   0xAA 0.369s   0x55 0.384s                                                                                                                        
+[12:32:58.483]    6:44.38   Block 429   OK           0.942s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:32:59.411]    6:45.31   Block 430   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:32:59.540]    6:45.44   Block 431   Testing...   0.129s   Read cycle... 83                                                                     [██████--------------------------------------------] 
+[12:32:59.540]    6:45.44   Block 431   BAD BYTE in page 83 at 0x01BA ( 442) expected 0x55 was 0xD5 (x1)
+[12:33:00.355]    6:46.25   Block 431   FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:00.467]    6:46.36   Block 432   Testing...   0.112s   Read cycle... 78                                                                     [██████--------------------------------------------] 
+[12:33:00.483]    6:46.38   Block 432   BAD BYTE in page 78 at 0x0CEF (3311) expected 0x55 was 0x5D (x1)
+[12:33:01.299]    6:47.19   Block 432   FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.384s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:02.242]    6:48.14   Block 433   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:02.323]    6:48.22   Block 434   Testing...   0.081s   Read cycle... 56                                                                     [████----------------------------------------------] 
+[12:33:02.323]    6:48.22   Block 434   BAD BYTE in page 56 at 0x0470 (1136) expected 0x55 was 0xD5 (x1)
+[12:33:03.170]    6:49.07   Block 434   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:04.114]    6:50.01   Block 435   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.369s                                                                                                                        
+[12:33:05.057]    6:50.95   Block 436   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:33:06.001]    6:51.90   Block 437   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:33:06.928]    6:52.82   Block 438   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:06.944]    6:52.84   Block 439   Testing...   0.016s   Read cycle... 9                                                                      [--------------------------------------------------] 
+[12:33:06.944]    6:52.84   Block 439   BAD BYTE in page 9 at 0x0943 (2371) expected 0x55 was 0x75 (x1)
+[12:33:07.873]    6:53.77   Block 439   FAIL         0.929s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:33:08.816]    6:54.71   Block 440   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:09.760]    6:55.66   Block 441   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:10.703]    6:56.60   Block 442   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:11.631]    6:57.53   Block 443   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:12.575]    6:58.47   Block 444   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:33:13.518]    6:59.41   Block 445   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:13.615]    6:59.51   Block 446   Testing...   0.097s   Read cycle... 66                                                                     [█████---------------------------------------------] 
+[12:33:13.615]    6:59.51   Block 446   BAD BYTE in page 66 at 0x00DC ( 220) expected 0x55 was 0xD5 (x1)
+[12:33:13.694]    6:59.59   Block 446   Testing...   0.176s   Read cycle... 118                                                                    [█████████-----------------------------------------] 
+[12:33:13.694]    6:59.59   Block 446   BAD BYTE in page 118 at 0x1EE5 (7909) expected 0x55 was 0xD5 (x1)
+[12:33:14.462]    7:00.36   Block 446   FAIL         0.944s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:33:15.390]    7:01.29   Block 447   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:33:16.334]    7:02.23   Block 448   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:16.349]    7:02.24   Block 449   Testing...   0.016s   Read cycle... 11                                                                     [--------------------------------------------------] 
+[12:33:16.350]    7:02.24   Block 449   BAD BYTE in page 11 at 0x036F ( 879) expected 0x55 was 0x5D (x1)
+[12:33:16.413]    7:02.31   Block 449   Testing...   0.080s   Read cycle... 49                                                                     [███-----------------------------------------------] 
+[12:33:16.413]    7:02.31   Block 449   BAD BYTE in page 49 at 0x0135 ( 309) expected 0x55 was 0x75 (x1)
+[12:33:17.277]    7:03.17   Block 449   FAIL         0.927s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:17.869]    7:03.76   Block 450   Testing...   0.592s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  11 | READ:  11           [███████████████████████████████-------------------] [12:33:17.869]    7:03.76   Received unhandled byte: 0xE2
+
+[12:33:18.221]    7:04.12   Block 450   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:18.333]    7:04.23   Block 451   Testing...   0.112s   Read cycle... 73                                                                     [█████---------------------------------------------] 
+[12:33:18.333]    7:04.23   Block 451   BAD BYTE in page 73 at 0x01E3 ( 483) expected 0x55 was 0x75 (x1)
+[12:33:19.165]    7:05.06   Block 451   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:33:20.093]    7:05.99   Block 452   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.369s                                                                                                                        
+[12:33:21.036]    7:06.93   Block 453   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:21.980]    7:07.87   Block 454   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:22.924]    7:08.82   Block 455   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:33:23.659]    7:09.55   Block 456   Testing...   0.735s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  59 | READ:  59           [███████████████████████████████████████-----------] [12:33:23.659]    7:09.55   Received unhandled byte: 0xE2
+
+[12:33:23.851]    7:09.75   Block 456   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:24.795]    7:10.69   Block 457   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:25.738]    7:11.63   Block 458   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:26.682]    7:12.58   Block 459   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:27.610]    7:13.51   Block 460   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:28.553]    7:14.45   Block 461   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:29.498]    7:15.39   Block 462   OK           0.945s   RD 0.192s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:33:30.441]    7:16.34   Block 463   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:31.368]    7:17.26   Block 464   OK           0.927s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:33:31.401]    7:17.30   Block 465   Testing...   0.032s   Read cycle... 21                                                                     [█-------------------------------------------------] 
+[12:33:31.416]    7:17.31   Block 465   BAD BYTE in page 21 at 0x0F63 (3939) expected 0x55 was 0x5D (x1)
+[12:33:32.312]    7:18.21   Block 465   FAIL         0.944s   Bad bytes: 1   RD 0.208s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:33.256]    7:19.15   Block 466   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:33.304]    7:19.20   Block 467   Testing...   0.047s   Read cycle... 31                                                                     [██------------------------------------------------] 
+[12:33:33.304]    7:19.20   Block 467   BAD BYTE in page 31 at 0x000D (  13) expected 0x55 was 0x75 (x1)
+[12:33:34.199]    7:20.09   Block 467   FAIL         0.927s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:35.143]    7:21.04   Block 468   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:35.768]    7:21.66   Block 469   Testing...   0.624s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:  24 | READ:  24           [█████████████████████████████████-----------------] [12:33:35.768]    7:21.66   Received unhandled byte: 0xE2
+
+[12:33:36.071]    7:21.97   Block 469   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:37.015]    7:22.91   Block 470   OK           0.929s   RD 0.192s   0xAA 0.369s   0x55 0.368s                                                                                                                        
+[12:33:37.958]    7:23.85   Block 471   OK           0.943s   RD 0.191s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:38.902]    7:24.80   Block 472   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:39.846]    7:25.74   Block 473   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:39.910]    7:25.81   Block 474   Testing...   0.064s   Read cycle... 51                                                                     [███-----------------------------------------------] 
+[12:33:39.910]    7:25.81   Block 474   BAD BYTE in page 51 at 0x00C2 ( 194) expected 0x55 was 0xD5 (x1)
+[12:33:40.774]    7:26.67   Block 474   FAIL         0.928s   Bad bytes: 1   RD 0.192s   0xAA 0.369s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:41.717]    7:27.61   Block 475   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:33:42.661]    7:28.56   Block 476   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:33:42.693]    7:28.59   Block 477   Testing...   0.032s   Read cycle... 27                                                                     [██------------------------------------------------] 
+[12:33:42.709]    7:28.60   Block 477   BAD BYTE in page 27 at 0x1BE3 (7139) expected 0x55 was 0x5D (x1)
+[12:33:43.605]    7:29.50   Block 477   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+[12:33:43.668]    7:29.56   Block 478   Testing...   0.063s   Read cycle... 41                                                                     [███-----------------------------------------------] 
+[12:33:43.668]    7:29.56   Block 478   BAD BYTE in page 41 at 0x132D (4909) expected 0x55 was 0xD5 (x1)
+[12:33:44.532]    7:30.43   Block 478   FAIL         0.927s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.368s PROG: 128 READ: 128                                                                      
+[12:33:45.476]    7:31.37   Block 479   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:46.419]    7:32.31   Block 480   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:47.364]    7:33.26   Block 481   OK           0.944s   RD 0.192s   0xAA 0.369s   0x55 0.383s                                                                                                                        
+[12:33:48.291]    7:34.19   Block 482   OK           0.927s   RD 0.192s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:33:49.235]    7:35.13   Block 483   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:50.178]    7:36.07   Block 484   OK           0.944s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:33:51.122]    7:37.02   Block 485   OK           0.944s   RD 0.193s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:33:52.065]    7:37.96   Block 486   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:33:52.625]    7:38.52   Block 487   Testing...   0.560s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:   0 | READ:   0           [██████████████████████████████--------------------] [12:33:52.626]    7:38.52   Received unhandled byte: 0xE2
+
+[12:33:52.626]    7:38.52   Received unhandled byte: 0xE2
+[12:33:53.009]    7:38.90   Block 487   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:53.937]    7:39.83   Block 488   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:54.882]    7:40.78   Block 489   OK           0.944s   RD 0.193s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:33:55.824]    7:41.72   Block 490   OK           0.943s   RD 0.192s   0xAA 0.367s   0x55 0.384s                                                                                                                        
+[12:33:56.768]    7:42.66   Block 491   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:33:57.696]    7:43.59   Block 492   OK           0.927s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:33:58.640]    7:44.54   Block 493   OK           0.944s   RD 0.192s   0xAA 0.384s   0x55 0.367s                                                                                                                        
+[12:33:59.583]    7:45.48   Block 494   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:33:59.583]    7:45.48   Block 495   Testing...   0.000s   Read cycle... 4                                                                      [--------------------------------------------------] 
+[12:33:59.584]    7:45.48   Block 495   BAD BYTE in page 4 at 0x15FB (5627) expected 0x55 was 0xD5 (x1)
+[12:34:00.159]    7:46.05   Block 495   Testing...   0.576s   Read cycle... OK   Program-read cycle... BYTE 0x55 | PROG:   4 | READ:   4           [██████████████████████████████--------------------] [12:34:00.159]    7:46.05   Received unhandled byte: 0xE2
+
+[12:34:00.159]    7:46.05   Received unhandled byte: 0xE2
+[12:34:00.159]    7:46.05   Received unhandled byte: 0xE2
+[12:34:00.175]    7:46.07   Received unhandled byte: 0xE2
+[12:34:00.175]    7:46.07   Received unhandled byte: 0xE2
+[12:34:00.175]    7:46.07   Received unhandled byte: 0xE3
+[12:34:00.175]    7:46.07   Block 495   BAD BYTE in page 4 at 0x15FB (5627) expected 0x55 was 0xD5 (x1)
+[12:34:00.527]    7:46.42   Block 495   FAIL         0.944s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.385s PROG: 127 READ: 128                                                                      
+[12:34:01.471]    7:47.37   Block 496   OK           0.944s   RD 0.191s   0xAA 0.384s   0x55 0.369s                                                                                                                        
+[12:34:02.414]    7:48.31   Block 497   OK           0.943s   RD 0.191s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:34:03.342]    7:49.24   Block 498   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:34:04.286]    7:50.18   Block 499   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:34:05.229]    7:51.12   Block 500   OK           0.943s   RD 0.192s   0xAA 0.384s   0x55 0.368s                                                                                                                        
+[12:34:06.173]    7:52.07   Block 501   OK           0.944s   RD 0.193s   0xAA 0.368s   0x55 0.383s                                                                                                                        
+[12:34:07.117]    7:53.01   Block 502   OK           0.943s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:34:08.045]    7:53.94   Block 503   OK           0.928s   RD 0.192s   0xAA 0.368s   0x55 0.368s                                                                                                                        
+[12:34:08.173]    7:54.07   Block 504   Testing...   0.128s   Read cycle... 83                                                                     [██████--------------------------------------------] 
+[12:34:08.173]    7:54.07   Block 504   BAD BYTE in page 83 at 0x0238 ( 568) expected 0x55 was 0x5D (x1)
+[12:34:08.989]    7:54.88   Block 504   FAIL         0.944s   Bad bytes: 1   RD 0.193s   0xAA 0.383s PROG: 128 READ: 128   0x55 0.369s PROG: 128 READ: 128                                                                      
+[12:34:09.932]    7:55.83   Block 505   OK           0.927s   RD 0.191s   0xAA 0.367s   0x55 0.368s                                                                                                                        
+[12:34:09.981]    7:55.88   Block 506   Testing...   0.049s   Read cycle... 38                                                                     [██------------------------------------------------] 
+[12:34:09.996]    7:55.89   Block 506   BAD BYTE in page 38 at 0x21A4 (8612) expected 0x55 was 0x5D (x1)
+[12:34:10.875]    7:56.77   Block 506   FAIL         0.944s   Bad bytes: 1   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.383s PROG: 128 READ: 128                                                                      
+[12:34:11.819]    7:57.71   Block 507   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:34:12.747]    7:58.64   Block 508   OK           0.928s   RD 0.192s   0xAA 0.369s   0x55 0.367s                                                                                                                        
+[12:34:13.691]    7:59.59   Block 509   OK           0.943s   RD 0.192s   0xAA 0.383s   0x55 0.368s                                                                                                                        
+[12:34:14.634]    8:00.53   Block 510   OK           0.944s   RD 0.192s   0xAA 0.368s   0x55 0.384s                                                                                                                        
+[12:34:14.746]    8:00.64   Block 511   Testing...   0.112s   Read cycle... 75                                                                     [█████---------------------------------------------] 
+[12:34:14.747]    8:00.64   Block 511   BAD BYTE in page 75 at 0x18B0 (6320) expected 0x55 was 0x57 (x1)
+[12:34:14.826]    8:00.72   Block 511   Testing...   0.192s   Read cycle... 126                                                                    [█████████-----------------------------------------] 
+[12:34:14.826]    8:00.72   Block 511   BAD BYTE in page 126 at 0x1CC7 (7367) expected 0x55 was 0x57 (x1)
+[12:34:15.578]    8:01.47   Block 511   FAIL         0.944s   Bad bytes: 2   RD 0.192s   0xAA 0.368s PROG: 128 READ: 128   0x55 0.384s PROG: 128 READ: 128                                                                      
+
+      .  Test finished in 8 min 1.97 s .       
+     ..  Test finished in 8 min 1.97 s ..      ^C[12:34:20.966]    0:00.00   Exiting program.
+[12:34:20.967]    0:00.00   Serial port closed.
+[12:34:20.967]    0:00.00   Log file closed.
