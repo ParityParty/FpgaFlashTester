@@ -332,7 +332,16 @@ def read_file(file) -> Stats:
     return errors
 
 
+def count_bad_bits(expected, actual):
+    bad_bits = 0
+    for i in range(0,8):
+        if (actual >> i) & 1 != (expected >> i) & 1:
+            bad_bits += 1
+    return bad_bits
+
+
 def analyse_die(die_num, page_num_v_faults_data):
+    bad_bits_per_check = [0,0,0,0]
     for check in range(3,7):
         print(f"--------------------\n\nDie {die_num}, check {check}\n")
         stats = read_file(f'results/check{check}/read/die{die_num}.bin')
@@ -344,9 +353,23 @@ def analyse_die(die_num, page_num_v_faults_data):
         data = stats.plot_page_num_v_faults(f"plots/die{die_num}/p_num_v_faults/check{check}")
         for i, num in enumerate(data):
             page_num_v_faults_data[i] += num
+        
+        for byte in stats.bad_byte_types:
+            bad_bits = count_bad_bits(0x55, byte)
+            bad_bits_per_check[check-3] += bad_bits * stats.bad_byte_types[byte]
+            print(byte, bad_bits, stats.bad_byte_types[byte])
 
         print(stats, '\n')
-
+    
+    plt.figure(figsize=(10, 6))
+    doses = [111.5,178.3,261.8,378.7]
+    plt.plot(doses, list(map(lambda x: x/(512*128*8640*8)*100,bad_bits_per_check)), marker='o')
+    plt.xlabel('Dose [Gy]')
+    plt.yscale('log')
+    plt.ylabel('Error percentage')
+    plt.savefig(f'plots/die{die_num}/errors_v_dose.png')
+    plt.close()
+    
 
 def main():
     page_num_v_faults_data = [0] * 128
