@@ -1,15 +1,8 @@
 import os
-import sys
-import time
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# --- Configuration ---
-# File path is now provided via command-line argument
-SIMULATE_DELAY = 0  # (seconds) Delay between reading bytes to simulate a live feed.
-                    # Set to 0 to process the file as fast as possible.
-
-# --- Protocol Bytes (for clarity) ---
+# --- Protocol Bytes ---
 INIT_COMPLETE = 0x53
 DIE_RESET_SUCCESS = 0xA0
 READ_PHASE_START = 0xA6
@@ -23,6 +16,26 @@ TEST_BYTE_CHANGED_NOTIFICATION = 0xA4
 BLOCK_TEST_COMPLETE = 0xA5
 BAD_BYTE = 0xE4
 FINISHED = 0xDD
+
+PAGES_IN_BLOCK = 128
+BYTES_IN_PAGE = 8640
+
+TOTAL_BLOCKS = 512
+TOTAL_PAGES = TOTAL_BLOCKS * PAGES_IN_BLOCK
+TOTAL_BYTES = TOTAL_PAGES * BYTES_IN_PAGE
+TOTAL_BITS = TOTAL_BYTES * 8
+
+DOSES_IN_WATER = [111.5,178.3,261.8,378.7,646.0]
+DOSES_ADJUSTED = list(map(lambda x: x*0.898, DOSES_IN_WATER))
+
+
+def count_bad_bits(expected, actual):
+    bad_bits = 0
+    for i in range(0,8):
+        if (actual >> i) & 1 != (expected >> i) & 1:
+            bad_bits += 1
+    return bad_bits
+
 
 # --- State Management (Simplified for Read-Only) ---
 class UartState:
@@ -48,7 +61,7 @@ class UartState:
         self.current_block += 1
 
 
-class Stats:
+class CheckStats:
     def __init__(self):
         self.errors = {}
         self.bad_byte_types = {}
@@ -56,8 +69,9 @@ class Stats:
         self.bad_blocks = 0
         self.bad_pages = 0
         self.bad_bytes = 0
+        self.bad_bits = 0
 
-    def add_error(self, block, page, byte, value, number):
+    def add_error(self, block, page, address, value, number):
         if block not in self.errors:
             self.errors[block] = {}
             self.bad_blocks += 1
@@ -66,12 +80,13 @@ class Stats:
             self.errors[block][page] = {}
             self.bad_pages += 1
         
-        self.errors[block][page][byte] = {'value':value, 'number': number}
+        self.errors[block][page][address] = {'value':value, 'number': number}
         self.bad_bytes += number
 
         if value not in self.bad_byte_types:
             self.bad_byte_types[value] = 0
         self.bad_byte_types[value] += number
+        self.bad_bits += count_bad_bits(0x55, value) * number
     
 
     def plot_scatter(self, plot_filename):
@@ -95,9 +110,9 @@ class Stats:
         plot_xz_filename = f'{plot_filename}_xz.png'
         plot_yz_filename = f'{plot_filename}_yz.png'
 
-        min_block, max_block = 0, 511
-        min_page, max_page = 0, 127
-        min_byte, max_byte = 0, 8639
+        min_block, max_block = 0, TOTAL_BLOCKS - 1
+        min_page, max_page = 0, PAGES_IN_BLOCK - 1
+        min_byte, max_byte = 0, BYTES_IN_PAGE - 1
 
         # --- 1. Generate the Main 3D Plot (without projections) ---
         if blocks:
@@ -178,22 +193,13 @@ class Stats:
             print(f"YZ projection plot saved to {plot_yz_filename}")
 
 
-    def plot_page_num_v_faults(self, plot_filename):
+    def get_page_num_v_faults(self):
         data = [0] * 128
         for block in self.errors:
             for page in self.errors[block]:
-                number_of_errors_in_page = 0
-                for byte in self.errors[block][page]:
-                    number_of_errors_in_page += self.errors[block][page][byte]['number']
-                    data[page] += number_of_errors_in_page
-        
-        plt.figure(figsize=(10, 6))
-        # 'values' are the categories on the x-axis, 'counts' are the bar heights
-        plt.bar(range(0,128), data)
-        plt.xlabel('Page number')
-        plt.ylabel('Number of errors')
-        plt.savefig(plot_filename)
-        plt.close()
+                for address in self.errors[block][page]:
+                    error = self.errors[block][page][address]
+                    data[page] += error['number'] * count_bad_bits(0x55, error['value'])
 
         return data
 
@@ -218,27 +224,24 @@ class Stats:
             output_lines.append("  <No errors reported>")
             return "\n".join(output_lines)
         
-        total_blocks = 512
-        total_pages = total_blocks * 128
-        total_bytes = total_pages * 8640
-        output_lines.append(f"Total bad blocks: {len(self.errors)} ({len(self.errors)/total_blocks*100} %)")
+        output_lines.append(f"Total bad blocks: {len(self.errors)} ({len(self.errors)/TOTAL_BLOCKS*100} %)")
         output_lines.append('')
-        output_lines.append(f"Total bad pages: {self.bad_pages} ({self.bad_pages/total_pages*100} %)")
+        output_lines.append(f"Total bad pages: {self.bad_pages} ({self.bad_pages/TOTAL_PAGES*100} %)")
         output_lines.append("Errors per page:")
         self.get_pages_with_errors()
         for err in self.pages_with_errors:
             output_lines.append(f"    {err}: {self.pages_with_errors[err]}")
         output_lines.append('')
-        output_lines.append(f"Total bad bytes: {self.bad_bytes} ({self.bad_bytes/total_bytes*100} %)")
+        output_lines.append(f"Total bad bytes: {self.bad_bytes} ({self.bad_bytes/TOTAL_BYTES*100} %)")
         for err in self.bad_byte_types:
             output_lines.append(f"    0x{err:X}: {self.bad_byte_types[err]}")
         
         return "\n".join(output_lines)
 
 
-def read_file(file) -> Stats:
+def read_file(file) -> CheckStats:
     state = UartState()
-    errors = Stats()
+    errors = CheckStats()
     with open(file, 'rb') as f:
         while True:
             byte = f.read(1)
@@ -282,7 +285,7 @@ def read_file(file) -> Stats:
 
             if byte_val == INIT_COMPLETE:
                 state = UartState()
-                errors = Stats()
+                errors = CheckStats()
                 # state.test_time = time.monotonic() # Removed time measuring
             
             elif byte_val == DIE_RESET_SUCCESS:
@@ -327,66 +330,169 @@ def read_file(file) -> Stats:
                 break
             
             else:
-                print("Unknown byte")
+                print(f"Unknown byte: 0x{byte_val:02X}")
 
     return errors
 
 
-def count_bad_bits(expected, actual):
-    bad_bits = 0
-    for i in range(0,8):
-        if (actual >> i) & 1 != (expected >> i) & 1:
-            bad_bits += 1
-    return bad_bits
+class DieStats:
+    def __init__(self, die_num, check_min = 3, check_max = 6):
+        self.check_min = check_min
+        self.check_max = check_max
+        self.die_num = die_num
+        self.check_stats = []
+    
+    def get_die_data(self):
+        for check in range(self.check_min,self.check_max+1):
+            stats = read_file(f'results/check{check}/read/die{self.die_num}.bin')
+            self.check_stats.append(stats)
+    
+    def print_data(self):
+        for i, check in enumerate(self.check_stats):
+            print(f"--------------------\n\nDie {self.die_num}, check {i+self.check_min}\n")
+            print(check)
+    
+    def gen_scatter_plots(self):
+        os.makedirs(f"plots/die{self.die_num}/scatter", exist_ok=True)
+        for i, check in enumerate(self.check_stats):
+            if self.die_num == 4 and i == 4: continue
+            check.plot_scatter(f"plots/die{self.die_num}/scatter/check{i+self.check_min}")
+
+    def gen_page_num_v_errors_plot(self):
+        os.makedirs(f"plots/die{self.die_num}", exist_ok=True)
+        data = self.check_stats[-1].get_page_num_v_faults()
+
+        for i in range(0,128):
+            data[i] = data[i] / TOTAL_BITS * 100
+
+        plt.figure(figsize=(10, 6))
+        plt.bar(range(0,128), data)
+        plt.xlabel('Page number')
+        plt.ylabel('Average error rate [%]')
+        plt.title(f'Average error rate per page over all blocks (die {self.die_num}, check {self.check_max})')
+        plt.savefig(f"plots/die{self.die_num}/page_num_v_errors.png")
+        plt.close()
+
+        # for i, check in enumerate(self.check_stats):
+        #     check.plot_page_num_v_faults(f"plots/die{self.die_num}/p_num_v_faults/check{i+self.check_min}")
 
 
-def analyse_die(die_num, page_num_v_faults_data):
-    bad_bits_per_check = [0,0,0,0]
-    for check in range(3,7):
-        print(f"--------------------\n\nDie {die_num}, check {check}\n")
-        stats = read_file(f'results/check{check}/read/die{die_num}.bin')
+class GlobalStats:
+    def __init__(self):
+        self.die_stats = []
 
-        os.makedirs(f"plots/die{die_num}/scatter", exist_ok=True)
-        stats.plot_scatter(f"plots/die{die_num}/scatter/check{check}")
-
-        os.makedirs(f"plots/die{die_num}/p_num_v_faults", exist_ok=True)
-        data = stats.plot_page_num_v_faults(f"plots/die{die_num}/p_num_v_faults/check{check}")
-        for i, num in enumerate(data):
-            page_num_v_faults_data[i] += num
+    def load_dice(self):
+        for i in range(1,4):
+            die = DieStats(i)
+            die.get_die_data()
+            self.die_stats.append(die)
         
-        for byte in stats.bad_byte_types:
-            bad_bits = count_bad_bits(0x55, byte)
-            bad_bits_per_check[check-3] += bad_bits * stats.bad_byte_types[byte]
-            print(byte, bad_bits, stats.bad_byte_types[byte])
+        die = DieStats(4, 3, 7)
+        die.get_die_data()
+        self.die_stats.append(die)
 
-        print(stats, '\n')
+        die = DieStats(5)
+        die.get_die_data()
+        self.die_stats.append(die)
+
+        die = DieStats(6, 4, 7)
+        die.get_die_data()
+        self.die_stats.append(die)
     
-    plt.figure(figsize=(10, 6))
-    doses = [111.5,178.3,261.8,378.7]
-    plt.plot(doses, list(map(lambda x: x/(512*128*8640*8)*100,bad_bits_per_check)), marker='o')
-    plt.xlabel('Dose [Gy]')
-    plt.yscale('log')
-    plt.ylabel('Error percentage')
-    plt.savefig(f'plots/die{die_num}/errors_v_dose.png')
-    plt.close()
+    def gen_scatter_plots(self):
+        for die in self.die_stats:
+            die.gen_scatter_plots()
     
+    def gen_page_num_v_errors_plots(self):
+        for die in self.die_stats:
+            die.gen_page_num_v_errors_plot()
+    
+    def gen_avg_page_num_v_errors(self):
+        data = [0] * 128
+        for die in self.die_stats[:-1]:
+            for i, page_faults in enumerate(die.check_stats[3].get_page_num_v_faults()):
+                data[i] += page_faults
+            
+        for i in range(0,128):
+            data[i] = data[i] / TOTAL_BITS * 100
+            data[i] /= 5
+        
+        plt.figure(figsize=(10, 6))
+        plt.bar(range(0,128), data)
+        plt.xlabel('Page number')
+        plt.ylabel('Average error rate [%]')
+        plt.title(f'Average error rate per page over all blocks and dice (dose {(DOSES_ADJUSTED[3]):.2f} Gy)')
+        plt.savefig(f"plots/avg_page_num_v_errors.png")
+        plt.close()
+    
+    def gen_dose_v_errors(self):
+        plt.figure(figsize=(10, 6))
+        for i, die in enumerate(self.die_stats):
+            data = list(map(lambda x: x.bad_bits,die.check_stats))
+            values = list(map(lambda x: x/TOTAL_BITS*100,data))
+
+            if i == 3:
+                plt.plot(DOSES_ADJUSTED,values,marker='o',label=f"Die {i+1}")
+                continue
+            if i == 5:
+                plt.plot(DOSES_ADJUSTED[1:], values, marker='o', label=f"Die {i+1} (control)")
+                continue
+            plt.plot(DOSES_ADJUSTED[:-1], values, marker='o', label=f"Die {i+1}")
+        plt.legend()
+        plt.xlabel('Dose [Gy]')
+        plt.yscale('log')
+        plt.ylabel('Error rate [%]')
+        plt.title('Error rates at given doses')
+        plt.savefig(f'plots/errors_v_dose.png')
+        plt.close()
+    
+    def gen_bias_dose_v_errors(self):
+        biased = [0] * 4
+        unbiased = [0] * 4 
+        for i, die in enumerate(self.die_stats):
+            data = list(map(lambda x: x.bad_bits,die.check_stats))
+            if i == 3:
+                data = data[:-1]
+            values = list(map(lambda x: x/TOTAL_BITS*100,data))
+
+            for j, element in enumerate(values):
+                if i in (0,1,3):
+                    biased[j] += element
+                elif i in (2,4):
+                    unbiased[j] += element
+                
+        for i in range(0,4):
+            biased[i] /= 3
+            unbiased[i] /= 2
+        
+        print(biased)
+        print(unbiased)
+        
+        for i, elem in enumerate(biased):
+            print((elem-unbiased[i])/unbiased[i])
+        
+        plt.figure(figsize=(10, 6))
+        plt.plot(DOSES_ADJUSTED[:-1],biased,marker='o',label=f"Biased dice")
+        plt.plot(DOSES_ADJUSTED[:-1],unbiased,marker='o',label=f"Unbiased dice")
+        plt.legend()
+        plt.xlabel('Dose [Gy]')
+        plt.yscale('log')
+        plt.ylabel('Error rate [%]')
+        plt.title('Error rates at given doses')
+        plt.savefig(f'plots/bias_errors_v_dose.png')
+        plt.close()
+
+
 
 def main():
-    page_num_v_faults_data = [0] * 128
-    for die in range(1,7):
-        analyse_die(die, page_num_v_faults_data)
+    stats = GlobalStats()
+    stats.load_dice()
+    # stats.gen_scatter_plots()
+    # stats.gen_page_num_v_errors_plots()
+    stats.gen_avg_page_num_v_errors()
+    stats.gen_dose_v_errors()
+    stats.gen_bias_dose_v_errors()
 
-    plt.figure(figsize=(10, 6))
-    # 'values' are the categories on the x-axis, 'counts' are the bar heights
-    plt.bar(range(0,128), page_num_v_faults_data)
-    plt.xlabel('Page number')
-    plt.ylabel('Number of errors')
-    plt.savefig('plots/global_p_num_v_faults.png')
-    plt.close()
-    
-    stats = read_file(f'results/check7/read/die4.bin')
-    os.makedirs(f"plots/die4/p_num_v_faults", exist_ok=True)
-    stats.plot_page_num_v_faults(f"plots/die4/p_num_v_faults/check7")
 
 if __name__ == "__main__":
     main()
