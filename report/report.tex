@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, booktabs}
+\usepackage[table]{xcolor}
+\usepackage{amssymb}
+\usepackage{listings}
+
+\usepackage[backend=biber, style=numeric]{biblatex}
+\addbibresource{references.bib} % <-- Add this line
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,  % false: boxed links; true: colored text
+    linkcolor=black,   % color of internal links (e.g., toc)
+    citecolor=blue,   % color of links to bibliography
+    urlcolor=blue     % color of external links
+}
+
+\lstset{
+    language=[5.0]Lua,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    captionpos=b
+}
+
+\setlength{\parskip}{12pt}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{\fill}
+    
+    {\Huge\bfseries TID tests\\of NAND flash memories\par}
+    \vspace{1cm}
+    {\LARGE Final report\par}
+    \vspace{2cm}
+    {\Large Michał Kiedrzyński\par}
+    {\normalsize TEC-EDD, ESA ESTEC\par}
+    \vspace{1cm}
+    {\normalsize 31 October 2025\par}
+
+    \vspace*{\fill}
+    \includegraphics[width=0.4\textwidth]{images/ESA_logo.png} 
+    
+    \vspace*{2cm} 
+
+\end{titlepage}
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+
+\section{Facility}
+
+\section{Setup}
+\subsection{Devices Under Test (DUTs)}
+\subsection{Measurement setup}
+\subsubsection{Custom FPGA controller}
+\subsection{Irradiation setup}
+\subsection{Annealing setup}
+
+\section{Procedure}
+\subsection{Test plan}
+\subsection{Test procedure}
+
+\section{Results}
+<pure data>
+
+\section{Discussion}
+\subsection{Summary}
+\subsection{Biased vs Unbiased}
+\subsection{Annealing effects}
+
+\textcite{einstein1905},
+\parencite{knuth1984}.
+\printbibliography
+
+\end{document}
