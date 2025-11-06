@@ -1,6 +1,5 @@
 import os
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 # --- Protocol Bytes ---
 INIT_COMPLETE = 0x53
@@ -10,6 +9,8 @@ READ_PHASE_END = 0xA7
 BLOCK_ERASE_FAIL = 0xE0
 BLOCK_ERASE_FAIL_MOVE_ON = 0xE1
 BLOCK_ERASE_OK = 0xA1
+PROG_FAIL = 0xE2
+PROG_FAIL_MOVE_ON = 0xE3
 PROG_INCREMENT = 0xA2
 READ_INCREMENT = 0xA3
 TEST_BYTE_CHANGED_NOTIFICATION = 0xA4
@@ -25,9 +26,8 @@ TOTAL_PAGES = TOTAL_BLOCKS * PAGES_IN_BLOCK
 TOTAL_BYTES = TOTAL_PAGES * BYTES_IN_PAGE
 TOTAL_BITS = TOTAL_BYTES * 8
 
-DOSES_IN_WATER = [0, 111.5,178.3,261.8,378.7,646.0]
+DOSES_IN_WATER = [0, 22.28, 89.10, 111.5,178.3,261.8,378.7,646.0]
 DOSES_ADJUSTED = list(map(lambda x: x*0.898, DOSES_IN_WATER))
-STATE_0 = [[], [], [[414, 1, 36, 0x51, 1]], [[113, 1, 4273, 0x51, 1]], [], []]
 
 
 def count_bad_bits(expected, actual):
@@ -44,50 +44,82 @@ class UartState:
     def __init__(self):
         self.current_block = 0
         self.capture_mode = False
-        self.bad_bytes_in_block = 0
         self.capture_buffer = []
         self.done_counter = 0
 
-        self.is_testing_block = False
-        self.block_test_stats = {'read': 0}
-        self.current_test_byte_key = "55" # Byte expected during read phase
+        self.current_read = 0
+        self.current_prog = 0
+        self.current_test_byte_key = 0x55
+        self.phase = 0
 
     def reset_for_next_block(self):
         """Resets the testing stats for the next block."""
-        self.is_testing_block = False
-        self.bad_bytes_in_block = 0
-        self.block_test_stats = {'read': 0}
-        # self.block_start_time = 0 # Removed time measuring
-        self.current_test_byte_key = "55"
+        self.current_read = 0
+        self.current_prog = 0
+        self.current_test_byte_key = 0x55
+        self.phase = 0
         self.current_block += 1
+    
+    def reset_for_next_phase(self):
+        self.current_read = 0
+        self.current_prog = 0
+        self.phase = 1
 
 
 class CheckStats:
     def __init__(self):
         self.errors = {}
+        self.stuck_bits = {}
+        self.stuck_bits_num = 0
         self.bad_byte_types = {}
         self.pages_with_errors = {}  # key - number of errors, value - number of pages with this number of errors
         self.bad_blocks = 0
         self.bad_pages = 0
         self.bad_bytes = 0
         self.bad_bits = 0
+        self.erase_fails = {}
+        self.program_fails = {}
 
-    def add_error(self, block, page, address, value, number):
-        if block not in self.errors:
-            self.errors[block] = {}
-            self.bad_blocks += 1
+    def add_error(self, block, page, address, value, number, expected, phase):
+        if phase == 0:
+            if block not in self.errors:
+                self.errors[block] = {}
+                self.bad_blocks += 1
+            if page not in self.errors[block]:
+                self.errors[block][page] = {}
+                self.bad_pages += 1
+            self.errors[block][page][address] = {'value':value, 'number': number, 'expected': expected}
+            self.bad_bytes += number
 
-        if page not in self.errors[block]:
-            self.errors[block][page] = {}
-            self.bad_pages += 1
-        
-        self.errors[block][page][address] = {'value':value, 'number': number}
-        self.bad_bytes += number
+            if value not in self.bad_byte_types:
+                self.bad_byte_types[value] = 0
+            self.bad_byte_types[value] += number
+            self.bad_bits += count_bad_bits(expected, value) * number
 
-        if value not in self.bad_byte_types:
-            self.bad_byte_types[value] = 0
-        self.bad_byte_types[value] += number
-        self.bad_bits += count_bad_bits(0x55, value) * number
+        if phase == 1:
+            if block not in self.stuck_bits:
+                self.stuck_bits[block] = {}
+            if page not in self.stuck_bits[block]:
+                self.stuck_bits[block][page] = {}
+            self.stuck_bits[block][page][address] = {'value':value, 'number': number, 'expected': expected}
+            self.stuck_bits_num += count_bad_bits(expected, value) * number
+    
+    def add_erase_fail(self, block):
+        if block not in self.erase_fails:
+            self.erase_fails[block] = 0
+        self.erase_fails[block] += 1
+    
+    def add_program_fail(self, block, page, expected):
+        if block not in self.program_fails:
+            self.program_fails[block] = {}
+        if page not in self.program_fails[block]:
+            self.program_fails[block][page] = [0, 0]
+
+        if expected == 0x55:
+            elem = 0
+        else:
+            elem = 1
+        self.program_fails[block][page][elem] += 1
     
 
     def plot_scatter(self, plot_filename):
@@ -216,7 +248,8 @@ class CheckStats:
                     self.pages_with_errors[number_of_errors_in_page] = 0
                 self.pages_with_errors[number_of_errors_in_page] += 1
         return self.pages_with_errors
-    
+
+
     def __str__(self):
         """Returns a user-friendly, pretty-printed string representation of the stats."""
         output_lines = []
@@ -251,7 +284,6 @@ def read_file(file) -> CheckStats:
                 break
 
             byte_val = int.from_bytes(byte, 'big')
-            
 
             if state.capture_mode:
                 state.capture_buffer.append(byte_val)
@@ -275,14 +307,13 @@ def read_file(file) -> CheckStats:
                     #     f"expected 0x{state.current_test_byte_key} was 0x{data:02X} (x{number})\n"
                     # )
                     # log_terminal(message, runtime=time.monotonic() - state.test_time) # Removed printout
-                    state.bad_bytes_in_block += number
-                    errors.add_error(state.current_block, state.block_test_stats['read'], address, data, number)
+                    errors.add_error(state.current_block, state.current_read, address, data, number, state.current_test_byte_key, state.phase)
                     
                     # Reset capture state
                     state.capture_mode = False
                     state.capture_buffer = []
 
-                continue # Skip normal interpretation if currently capturing data
+                continue # Skip normal interpretation if currently capturing data``
 
             if byte_val == INIT_COMPLETE:
                 state = UartState()
@@ -299,36 +330,40 @@ def read_file(file) -> CheckStats:
                 state.bytes_to_capture = 5
 
             elif byte_val == READ_PHASE_START:
-                state.is_testing_block = True
-                state.current_test_byte_key = "55" # This phase reads 0x55
-                # state.block_start_time = time.monotonic() # Removed time measuring
-                # update_block_test_display(state) # Removed printout
+                state.current_test_byte_key = 0x55
         
-            # --- Removed READ_PHASE_END (A7) ---
+            elif byte_val == READ_PHASE_END:
+                state.reset_for_next_phase()
+                state.current_test_byte_key = 0xAA
             
             # --- Removed ERASE/PROG bytes (E0, E1, A1, A2, A4) ---
+            elif byte_val == BLOCK_ERASE_FAIL:
+                state.current_test_byte_key = 0x55
+                errors.add_erase_fail(state.current_block)
+            
+            elif byte_val == BLOCK_ERASE_OK:
+                state.reset_for_next_phase()
 
-            elif byte_val == READ_INCREMENT and state.is_testing_block:
-                state.block_test_stats['read'] += 1
+            elif byte_val == PROG_FAIL:
+                errors.add_program_fail(state.current_block, state.current_prog, state.current_test_byte_key)
+            
+            elif byte_val == PROG_FAIL_MOVE_ON:
+                state.current_prog += 1
+
+            elif byte_val == TEST_BYTE_CHANGED_NOTIFICATION:
+                state.current_test_byte_key = 0x55
+
+            elif byte_val == READ_INCREMENT:
+                state.current_read += 1
+            
+            elif byte_val == PROG_INCREMENT:
+                state.current_prog += 1
             
             elif byte_val == BLOCK_TEST_COMPLETE:
-                stats = state.block_test_stats
-
-                if (state.bad_bytes_in_block == 0
-                    and stats['read'] == 128):
-                    # Use '\r' to overwrite the status line, clear it, and '\n' to finalize.
-                    # msg = f"\rBlock {state.current_block:<5} {'OK':<13}{total_time:.3f}s" + " " * 140 + "\n"
-                    # log_terminal(msg, runtime=time.monotonic() - state.test_time) # Removed printout
-                    state.is_line_busy = True # To prevent timestamp on next line
-                else:
-                    # msg = f"\rBlock {state.current_block:<5} {'FAIL':<13}{total_time:.3f}s   Bad bytes: {state.bad_bytes_in_block}   READ: {stats['read']}{' '* 70}\n"
-                    # log_terminal(msg, runtime=time.monotonic() - state.test_time) # Removed printout
-                    pass
-                
                 state.reset_for_next_block()
 
             elif byte_val == FINISHED:
-                break
+                pass
             
             else:
                 print(f"Unknown byte: 0x{byte_val:02X}")
@@ -337,20 +372,17 @@ def read_file(file) -> CheckStats:
 
 
 class DieStats:
-    def __init__(self, die_num, check_min = 3, check_max = 6):
+    def __init__(self, die_num, check_min = 0, check_max = 6):
         self.check_min = check_min
         self.check_max = check_max
         self.die_num = die_num
         self.check_stats = []
     
     def get_die_data(self):
-        state_0_stats = CheckStats()
-        for err in STATE_0[self.die_num-1]:
-            state_0_stats.add_error(err[0],err[1],err[2],err[3],err[4])
-        self.check_stats.append(state_0_stats)
         for check in range(self.check_min,self.check_max+1):
-            stats = read_file(f'results/check{check}/read/die{self.die_num}.bin')
+            stats = read_file(f'results/check{check}/program/die{self.die_num}.bin')
             self.check_stats.append(stats)
+        self.print_data()
     
     def print_data(self):
         for i, check in enumerate(self.check_stats):
@@ -358,13 +390,13 @@ class DieStats:
             print(check)
     
     def gen_scatter_plots(self):
-        os.makedirs(f"plots/sector_A/die{self.die_num}/scatter", exist_ok=True)
+        os.makedirs(f"plots/sector_B/die{self.die_num}/scatter", exist_ok=True)
         for i, check in enumerate(self.check_stats):
             if self.die_num == 4 and i == 4: continue
-            check.plot_scatter(f"plots/sector_A/die{self.die_num}/scatter/check{i+self.check_min}")
+            check.plot_scatter(f"plots/sector_B/die{self.die_num}/scatter/check{i+self.check_min}")
 
     def gen_page_num_v_errors_plot(self):
-        os.makedirs(f"plots/sector_A/die{self.die_num}", exist_ok=True)
+        os.makedirs(f"plots/sector_B/die{self.die_num}", exist_ok=True)
         data = self.check_stats[-1].get_page_num_v_faults()
 
         for i in range(0,128):
@@ -375,13 +407,88 @@ class DieStats:
         plt.xlabel('Page number')
         plt.ylabel('Average error rate [%]')
         plt.title(f'Average error rate per page over all blocks (die {self.die_num}, check {self.check_max})')
-        plt.savefig(f"plots/sector_A/die{self.die_num}/page_num_v_errors.png")
+        plt.savefig(f"plots/sector_B/die{self.die_num}/page_num_v_errors.png")
         plt.close()
 
         # for i, check in enumerate(self.check_stats):
-        #     check.plot_page_num_v_faults(f"plots/sector_A/die{self.die_num}/p_num_v_faults/check{i+self.check_min}")
+        #     check.plot_page_num_v_faults(f"plots/sector_B/die{self.die_num}/p_num_v_faults/check{i+self.check_min}")
 
 
+    def get_reoccuring_errors(self):
+        result = {}
+        for i, check in enumerate(self.check_stats):
+            for block in check.errors:
+                for page in check.errors[block]:
+                    for address in check.errors[block][page]:
+                        if (block,page,address) not in result:
+                            result[(block,page,address)] = []
+                        result[(block,page,address)].append((i, check.errors[block][page][address]['value']))
+        return result
+
+    def gen_reoccuring_errors_table(self):
+        data_dict = self.get_reoccuring_errors()
+        sorted_keys = sorted(data_dict.keys())
+        row_labels = [f'{k[0]}, {k[1]}, {k[2]}' for k in sorted_keys]
+        num_rows = len(row_labels)
+        num_cols = 7
+        # Column labels
+        col_labels = [f'{DOSES_ADJUSTED[i]:.2f}' for i in range(num_cols)]
+        cell_text = [['' for _ in range(num_cols)] for _ in range(num_rows)]
+
+        # Cell colors
+        cell_colors = []
+        color_red = '#F08080'  # LightCoral (red)
+        color_green = '#90EE90' # LightGreen
+
+        # Iterate over the dictionary items to build the color list
+        for i, key in enumerate(sorted_keys):
+            # Get the errors corresponding to the sorted key
+            errors = data_dict[key]
+            row_colors = []
+            for j in range(num_cols):
+                if j in map(lambda x: x[0], errors):
+                    row_colors.append(color_red)
+                else:
+                    row_colors.append(color_green)
+            cell_colors.append(row_colors)
+            for error in errors:
+                cell_text[i][error[0]] = f'0x{error[1]:02X}'
+
+
+        # --- 3. Create and save the table plot ---
+
+        # Create figure and axes
+        fig, ax = plt.subplots(figsize=(10, 4))
+
+        # Hide the axes
+        ax.axis('off')
+        ax.axis('tight')
+
+        # Create the table
+        table = ax.table(
+            cellText=cell_text,
+            cellColours=cell_colors,
+            rowLabels=row_labels,
+            colLabels=col_labels,
+            loc='center',
+            cellLoc='center'
+        )
+
+        # Adjust layout
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        # Scale the table (width, height) to make row labels fit
+        table.scale(1.8, 1.5) 
+        fig.tight_layout()
+
+        # Save the figure
+        os.makedirs(f"plots/sector_B/error_tables/", exist_ok=True)
+        file_path = f'plots/sector_B/error_tables/die{self.die_num}.png'
+        # Use bbox_inches='tight' to minimize whitespace
+        plt.savefig(file_path, bbox_inches='tight', pad_inches=0.1)
+        plt.close()
+
+                
 class GlobalStats:
     def __init__(self):
         self.die_stats = []
@@ -403,7 +510,7 @@ class GlobalStats:
     def gen_avg_page_num_v_errors(self):
         data = [0] * 128
         for die in self.die_stats[:-1]:
-            for i, page_faults in enumerate(die.check_stats[4].get_page_num_v_faults()):
+            for i, page_faults in enumerate(die.check_stats[6].get_page_num_v_faults()):
                 data[i] += page_faults
             
         for i in range(0,128):
@@ -414,8 +521,8 @@ class GlobalStats:
         plt.bar(range(0,128), data)
         plt.xlabel('Page number')
         plt.ylabel('Average error rate [%]')
-        plt.title(f'Average error rate per page over all blocks and dice (dose {(DOSES_ADJUSTED[4]):.2f} Gy)')
-        plt.savefig(f"plots/sector_A/avg_page_num_v_errors.png")
+        plt.title(f'Average error rate per page over all blocks and dice (dose {(DOSES_ADJUSTED[6]):.2f} Gy)')
+        plt.savefig(f"plots/sector_B/avg_page_num_v_errors.png")
         plt.close()
     
     def gen_dose_v_errors(self):
@@ -425,16 +532,31 @@ class GlobalStats:
             values = list(map(lambda x: x/TOTAL_BITS*100,data))
             plt.plot(DOSES_ADJUSTED[:-1], values, marker='o', label=f"Die {i+1}")
         plt.legend()
+        plt.minorticks_on()
         plt.xlabel('Dose [Gy]')
-        plt.yscale('symlog', linthresh=9e-8)
+        # plt.yscale('symlog', linthresh=9e-8)
         plt.ylabel('Error rate [%]')
         plt.title('Error rates at given doses')
-        plt.savefig(f'plots/sector_A/errors_v_dose.png')
+        plt.savefig(f'plots/sector_B/errors_v_dose.png')
+        plt.close()
+    
+    def gen_dose_v_stuck_bits(self):
+        plt.figure(figsize=(10, 6))
+        for i, die in enumerate(self.die_stats):
+            data = list(map(lambda x: x.stuck_bits_num,die.check_stats))
+            values = list(map(lambda x: x/TOTAL_BITS*100,data))
+            plt.plot(DOSES_ADJUSTED[:-1], values, marker='o', label=f"Die {i+1}")
+        plt.legend()
+        plt.minorticks_on()
+        plt.xlabel('Dose [Gy]')
+        plt.ylabel('Stuck bits rate [%]')
+        plt.title('Stuck bit rates at given doses')
+        plt.savefig(f'plots/sector_B/stuck_bits_v_dose.png')
         plt.close()
     
     def gen_bias_dose_v_errors(self):
-        biased = [0] * 5
-        unbiased = [0] * 5 
+        biased = [0] * 7
+        unbiased = [0] * 7
         for i, die in enumerate(self.die_stats):
             data = list(map(lambda x: x.bad_bits,die.check_stats))
             if i == 3:
@@ -451,34 +573,42 @@ class GlobalStats:
             biased[i] /= 3
             unbiased[i] /= 2
         
-        print(biased)
-        print(unbiased)
+        # print(biased)
+        # print(unbiased)
         
-        for i, elem in enumerate(biased):
-            print((elem-unbiased[i])/unbiased[i])
+        # for i, elem in enumerate(biased):
+        #     print((elem-unbiased[i])/unbiased[i])
         
         plt.figure(figsize=(10, 6))
         plt.plot(DOSES_ADJUSTED[:-1],biased,marker='o',label=f"Biased dice")
         plt.plot(DOSES_ADJUSTED[:-1],unbiased,marker='o',label=f"Unbiased dice")
         plt.legend()
         plt.xlabel('Dose [Gy]')
-        plt.yscale('log')
+        # plt.yscale('symlog', linthresh=9e-8)
         plt.ylabel('Error rate [%]')
         plt.title('Error rates at given doses')
-        plt.savefig(f'plots/sector_A/bias_errors_v_dose.png')
+        plt.savefig(f'plots/sector_B/bias_errors_v_dose.png')
         plt.close()
+    
+    def gen_reoccuring_errors_table(self):
+        for die in self.die_stats[:-1]:
+            die.gen_reoccuring_errors_table()
+
+        
 
 
 
 def main():
     stats = GlobalStats()
     stats.load_dice()
+    os.makedirs(f"plots/sector_B", exist_ok=True)
     # stats.gen_scatter_plots()
     # stats.gen_page_num_v_errors_plots()
-    os.makedirs(f"plots/sector_A", exist_ok=True)
-    stats.gen_avg_page_num_v_errors()
+    # stats.gen_avg_page_num_v_errors()
+    stats.gen_dose_v_stuck_bits()
     stats.gen_dose_v_errors()
     stats.gen_bias_dose_v_errors()
+    stats.gen_reoccuring_errors_table()
 
 
 if __name__ == "__main__":

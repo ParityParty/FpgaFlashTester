@@ -2,3 +2,4 @@ logs
 venv
 issues
 plots
+__pycache__
