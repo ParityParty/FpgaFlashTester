@@ -82,7 +82,7 @@ The source consists of multiple small rods about 50 mm long, held around the per
     \label{fig:source_schematic}
 \end{figure}
 
-The facility consists of the radiation cell a and large external control room with 14 cable feed-throughs that enable the remote monitoring and controlling of experiments. Additionally, it features a Remote Positioning System, consisting of a trolley on a rail, for easy dose rate manipulation. The facility layout can be found in figure \ref{fig:facility_plan} \parencite{escies}, and photographs in figure \ref{fig:irradiation_setup}.
+The facility consists of the radiation cell and a large external control room with 14 cable feed-throughs that enable the remote monitoring and controlling of experiments. Additionally, it features a Remote Positioning System, consisting of a trolley on a rail, for easy dose rate manipulation. The facility layout can be found in figure \ref{fig:facility_plan} \parencite{escies}, and photographs in figure \ref{fig:irradiation_setup}.
 
 
 \begin{figure}[h]
@@ -90,22 +90,6 @@ The facility consists of the radiation cell a and large external control room wi
     \includegraphics[width=0.9\textwidth]{images/facility_schematic.jpg}
     \caption{Co-60 facility layout}
     \label{fig:facility_plan}
-\end{figure}
-
-\begin{figure}[h]
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=1\textwidth]{images/irr0.jpg}
-        \caption{Devices prepared for irradiation}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=1\textwidth]{images/irr1.jpg}
-        \caption{Irradiation chamber}
-    \end{subfigure}
-    \hfill
-    \caption{Irradiation setup}
-    \label{fig:irradiation_setup}
 \end{figure}
 
 \section{Setup}
@@ -162,9 +146,81 @@ A total of 6 devices were tested - 3 were biased, 2 unbiased, and 1 was used as 
     \label{tab:devices}
 \end{table}
 
+\subsection{Irradiation setup}
+For irradiation, the DUTs were placed on a breakout board and connected to a 3-channel power supply. The connection diagram is presented in figure \ref{fig:irr_diagram}. For biased devices, voltage of 3.3V was applied to $V_{cc}$ pins, $V_{ss}$ pins were grounded, and the rest were left floating. Unbiased devices had all their pins grounded. No reading or writing operations were performed during irradiation.
+
+Upon making appropriate connections and checking the power lines with a multimeter, the breakout board was carefully positioned inside the irradiation chamber using three laser levels to ensure correct alignment. Tape measures and rulers were additionally used to verify the distance from the source.
+
+A dosimeter was placed alongside the DUTs to monitor the received dose in real-time and keep an accurate record of the accumulated dose. The chamber was then closed, and the irradiation process commenced according to the test plan. Photographs depicting the irradiation setup can be found in figure \ref{fig:irradiation_setup}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/irr_diagram.drawio.png}
+    \caption{Irradiation setup diagram}
+    \label{fig:irr_diagram}
+\end{figure}
+
+\begin{figure}[h]
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/irr0.jpg}
+        \caption{Devices prepared for irradiation}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/irr1.jpg}
+        \caption{Irradiation chamber}
+    \end{subfigure}
+    \hfill
+    \caption{Irradiation setup}
+    \label{fig:irradiation_setup}
+\end{figure}
+
 \subsection{Measurement setup}
 \subsubsection{Custom FPGA controller}
-\subsection{Irradiation setup}
+Since Micron's NAND Flash memories use the well-documented ONFI interface and budget constraints were a consideration, a custom FPGA-based controller was designed to facilitate reading and writing operations. The design was implemented on an already available, UltraScale+ -based Kria KR260 Robotics Starter Kit using VHDL.
+
+The block diagram of the controller is presented in figure \ref{fig:fpga_design}. The architecture consists of four modules:
+\begin{itemize}
+    \item \textbf{NAND Controller} - Performs low-level operations such as page read, page program, and block erase, acting directly on the interface signals.
+    \item \textbf{Flash Programmer} - Contains the higher-level test logic to execute the test plan, including sequences of read/write/erase operations and error checking.
+    \item \textbf{UART TX} - facilitates serial communication between the FPGA and a host PC for sending the status updates (capable only of transmitting data).
+    \item \textbf{Clocking Wizard} - Generates the required clock frequency for the design and provides the reset signal from one of the oscillators present on the KR260 board.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/fpga_design.png}
+    \caption{FPGA design for NAND flash tests}
+    \label{fig:fpga_design}
+\end{figure}
+
+\subsubsection{Measurement station}
+The measurement station consisted of the KR260 board with the custom FPGA controller, a host PC, a power supply, and a breakout board for easy connection to the DUTs. The setup diagram is depicted in figure \ref{fig:measurement_diagram} and the photographs in figure \ref{fig:measurement_setup}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/meas_diagram.drawio.png}
+    \caption{Measurement station setup diagram}
+    \label{fig:measurement_diagram}
+\end{figure}
+
+\begin{figure}[h]
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/setup0.jpg}
+        \caption{Memory die connected to the FPGA}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/setup1.jpg}
+        \caption{Measurement station}
+    \end{subfigure}
+    \hfill
+    \caption{Measurement setup}
+    \label{fig:measurement_setup}
+\end{figure}
+
 \subsection{Annealing setup}
 
 \section{Procedure}
