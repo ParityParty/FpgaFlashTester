@@ -5,7 +5,10 @@
 \usepackage{amsmath, amssymb, booktabs}
 \usepackage[table]{xcolor}
 \usepackage{amssymb}
+\usepackage{subcaption}
 \usepackage{listings}
+\usepackage{booktabs}
+\usepackage{caption}
 
 \usepackage[backend=biber, style=numeric]{biblatex}
 \addbibresource{references.bib} % <-- Add this line
@@ -63,19 +66,14 @@
 \newpage
 
 \section{Introduction}
-This document presents the procedure and results of Total Ionizing Dose (TID) tests of 32Gb NAND Flash memories from Micron (MT29F32G08ABAAAWP-ITZ:A). This model was chosen as it is expected to be used in the PW-Sat3 satellite, developed by Students' Space Association at Warsaw University of Technology.
+This document presents the procedure and results of Total Ionizing Dose (TID) tests of 32Gbit NAND Flash memories from Micron (MT29F32G08ABAAAWP-ITZ:A). The model was chosen as it is expected to be used in the PW-Sat3 satellite, developed by Students' Space Association at Warsaw University of Technology.
 
 The tests were conducted from 20.10.2025 to 31.10.2025 in the Co-60 facility at the European Space Agency's (ESA) European Space Research and Technology Centre (ESTEC) in Noordwijk, Netherlands.
 
 \section{Facility}
-The Co-60 facility at ESTEC is an ISO17025-accredited gamma radiation testing and calibration laboratory. 
+The Co-60 facility at ESTEC is an ISO17025-accredited gamma radiation testing and calibration laboratory. It uses Cobalt-60 (Co-60) as the radiation source, which is a radioactive isotope with half-life of 5.25 years. Co-60 decays by beta decay to an excited state of Nickel-60 (Ni-60), which then emits two gamma rays with energies of approximately 1.173 MeV and 1.332 MeV. \parencite{escies}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\textwidth]{images/facility_schematic.jpg}
-    \caption{Co-60 facility schematic}
-    \label{fig:facility_plan}
-\end{figure}
+The source consists of multiple small rods about 50 mm long, held around the periphery of a 30mm diameter container. When the source is raised to the irradiation position, the gamma beam produced by the Co-60 decay exits the irradiator unit through a collimator window into the radiation cell. The source schematic can be found in figure \ref{fig:source_schematic}. \parencite{escies}
 
 \begin{figure}[h]
     \centering
@@ -84,8 +82,86 @@ The Co-60 facility at ESTEC is an ISO17025-accredited gamma radiation testing an
     \label{fig:source_schematic}
 \end{figure}
 
+The facility consists of the radiation cell a and large external control room with 14 cable feed-throughs that enable the remote monitoring and controlling of experiments. Additionally, it features a Remote Positioning System, consisting of a trolley on a rail, for easy dose rate manipulation. The facility layout can be found in figure \ref{fig:facility_plan} \parencite{escies}, and photographs in figure \ref{fig:irradiation_setup}.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/facility_schematic.jpg}
+    \caption{Co-60 facility layout}
+    \label{fig:facility_plan}
+\end{figure}
+
+\begin{figure}[h]
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/irr0.jpg}
+        \caption{Devices prepared for irradiation}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=1\textwidth]{images/irr1.jpg}
+        \caption{Irradiation chamber}
+    \end{subfigure}
+    \hfill
+    \caption{Irradiation setup}
+    \label{fig:irradiation_setup}
+\end{figure}
+
 \section{Setup}
 \subsection{Devices Under Test (DUTs)}
+The test device was Micron's MT29F32G08ABAAAWP-ITZ:A 32Gbit NAND Flash memory die. It consists of 4096 blocks of 128 pages, with each page containing 8640 bytes (8192 bytes data + 448 bytes spare). The memory uses Open NAND Flash Interface (ONFI) 2.2 for communication and comes in a 48-pin TSOP package. The key parameters of the memory are listed in table \ref{tab:memory_params}. For convenient access to the memory pins, the devices were soldered onto dedicated TSOP-48 to DIP-48 adapters, as depicted in figure \ref{fig:soldered}.
+
+\begin{table}[h]
+    \centering
+    \caption{Key parameters of MT29F32G08ABAAAWP-ITZ:A memory}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Parameter} &  \textbf{Value} \\
+        \midrule
+        Memory size & 32 Gbit (4 GB) \\
+        Page size & 8192 bytes + 448 bytes spare \\
+        Block size & 128 pages (1 MB) \\
+        Number of blocks & 4096 \\
+        Interface & ONFI 2.2 \\
+        Package type & 48-pin TSOP \\
+        Operating voltage & 2.7V - 3.6V \\
+        Endurance & Up to 80,000 program/erase cycles \\
+        Operating temperature & -40°C to +85°C \\
+        Device width & 8 bits \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:memory_params}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/soldered.jpg}
+    \caption{DUTs soldered onto TSOP-48 to DIP-48 adapters}
+    \label{fig:soldered}
+\end{figure}
+
+A total of 6 devices were tested - 3 were biased, 2 unbiased, and 1 was used as a control sample (not irradiated). The DUTs overview is presented in table \ref{tab:devices}.
+\begin{table}[h]
+    \centering
+    \caption{Devices Under Test (DUTs) overview}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Device ID} &  \textbf{Bias Condition} & \textbf{Purpose} \\
+        \midrule
+        DUT1 & Biased   & Test sample \\
+        DUT2 & Biased   & Test sample \\
+        DUT3 & Unbiased   & Test sample \\
+        DUT4 & Biased & Test sample \\
+        DUT5 & Unbiased & Test sample \\
+        CTRL & N/A      & Control sample \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:devices}
+\end{table}
+
 \subsection{Measurement setup}
 \subsubsection{Custom FPGA controller}
 \subsection{Irradiation setup}
@@ -103,8 +179,6 @@ The Co-60 facility at ESTEC is an ISO17025-accredited gamma radiation testing an
 \subsection{Biased vs Unbiased}
 \subsection{Annealing effects}
 
-\textcite{einstein1905},
-\parencite{knuth1984}.
 \printbibliography
 
 \end{document}
