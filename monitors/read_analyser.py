@@ -230,7 +230,7 @@ class CheckStats:
         output_lines.append(f"Total bad pages: {self.bad_pages} ({self.bad_pages/TOTAL_PAGES*100} %)")
         output_lines.append("Errors per page:")
         self.get_pages_with_errors()
-        for err in self.pages_with_errors:
+        for err in sorted(self.pages_with_errors):
             output_lines.append(f"    {err}: {self.pages_with_errors[err]}")
         output_lines.append('')
         output_lines.append(f"Total bad bytes: {self.bad_bytes} ({self.bad_bytes/TOTAL_BYTES*100} %)")
@@ -351,10 +351,14 @@ class DieStats:
         for check in range(self.check_min,self.check_max+1):
             stats = read_file(f'results/check{check}/read/die{self.die_num}.bin')
             self.check_stats.append(stats)
+        self.print_data()
     
     def print_data(self):
         for i, check in enumerate(self.check_stats):
-            print(f"--------------------\n\nDie {self.die_num}, check {i+self.check_min}\n")
+            if i == 0:
+                print(f"--------------------\n\nDie {self.die_num}, check 0\n")
+            else:
+                print(f"--------------------\n\nDie {self.die_num}, check {i+self.check_min-1}\n")
             print(check)
     
     def gen_scatter_plots(self):
